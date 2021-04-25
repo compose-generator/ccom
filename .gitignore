@@ -1,0 +1,6 @@
+# VSCode
+.vscode/*
+
+# Build output
+bin/*
+*.exe

@@ -1,0 +1,40 @@
+{
+    "comment-char": "#",
+    "delete-comments-on-false": true,
+    "data": {
+        "version": "0.7.0",
+        "service": {
+            "frontend": [
+                {
+                    "label": "Spring Maven",
+                    "name": "spring-maven",
+                    "dir": "./spring-maven",
+                    "type": "frontend",
+                    "preselected": false
+                },
+                {
+                    "label": "Spring Gradle",
+                    "name": "spring-gradle",
+                    "dir": "./spring-gradle",
+                    "type": "frontend",
+                    "preselected": false
+                }
+            ],
+            "backend": []
+        },
+        "var": [
+            {
+                "name": "SPRING_MAVEN_SOURCE_DIRECTORY",
+                "value": "./backend"
+            },
+            {
+                "name": "SPRING_MAVEN_PACKAGE_NAME",
+                "value": "com.chillibits.test-app"
+            },
+            {
+                "name": "SPRING_MAVEN_LANGUAGE",
+                "value": "groovy"
+            }
+        ]
+    }
+}
