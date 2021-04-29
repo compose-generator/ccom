@@ -1,6 +1,6 @@
 # CCom (Conditional Comments) language
 
-*Note: This language is part of the Compose Generator project, but also can be used independently.*
+*Note: This language is part of the [Compose Generator](https://github.com/compose-generator/compose-generator) project, but also can be used independently.*
 
 ## Introduction
 CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or JSON, but can also be used for a variety of programming languages with support for comments.
