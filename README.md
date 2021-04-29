@@ -6,7 +6,7 @@
 CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or JSON, but can also be used for a variety of programming languages with support for comments.
 
 ### Input
-CCom requests two input parameters. A source file/string of any language, containing conditional sections and a JSON file/string, which holds data for the evaluation and some configuration for CCom.
+CCom requests two input parameters. A source file/string of any language, containing conditional sections and a JSON file/string, which holds data for the evaluation.
 
 #### Source file
 Here is an example YAML file, which can be evaluated by CCom:
@@ -37,42 +37,42 @@ public class Example {
 #### Data input
 ```json
 {
-    "comment-char": "#",
-    "delete-comments-on-false": true,
-    "data": {
-        "version": "0.7.0",
-        "service": {
-            "frontend": [
-                {
-                    "label": "Spring Maven",
-                    "name": "spring-maven",
-                    "dir": "./spring-maven",
-                    "type": "frontend",
-                    "preselected": false
-                },
-                {
-                    "label": "Spring Gradle",
-                    "name": "spring-gradle",
-                    "dir": "./spring-gradle",
-                    "type": "frontend",
-                    "preselected": false
-                }
-            ],
-            "backend": []
-        },
-        "var": [
+    "version": "0.7.0",
+    "service": {
+        "frontend": [
             {
-                "name": "SPRING_MAVEN_SOURCE_DIRECTORY",
-                "value": "./backend"
+                "label": "Spring Maven",
+                "name": "spring-maven",
+                "dir": "./spring-maven",
+                "type": "frontend",
+                "preselected": false
             },
             {
-                "name": "SPRING_MAVEN_PACKAGE_NAME",
-                "value": "com.chillibits.test-app"
+                "label": "Spring Gradle",
+                "name": "spring-gradle",
+                "dir": "./spring-gradle",
+                "type": "frontend",
+                "preselected": false
             }
-        ]
-    }
+        ],
+        "backend": []
+    },
+    "var": [
+        {
+            "name": "SPRING_MAVEN_SOURCE_DIRECTORY",
+            "value": "./backend"
+        },
+        {
+            "name": "SPRING_MAVEN_PACKAGE_NAME",
+            "value": "com.chillibits.test-app"
+        }
+    ]
 }
 ```
+
+#### CLI flags
+-   `--comment-char="#"`
+-   `--delete-comments-on-false=true`
 
 ### Single condition + data input => boolean output
 You also have the option to feed CCom with a single condition and get a boolean output, whether this condition is true or false.
@@ -98,12 +98,13 @@ NUMBER     --> DIGIT NUMBER | DIGIT
 SOMETHING  --> CHAR SOMETHING | DIGIT SOMETHING | SCHAR SOMETHING | CHAR | DIGIT | SCHAR
 CHAR       --> a|b|...|y|z|A|B|...|Y|Z
 DIGIT      --> 0|1|2|3|4|5|6|7|8|9
-SCHAR      --> -|.|_|[|]|{|}
+SCHAR      --> -| |.|_|[|]|{|}|/|\
 ```
 
 ## Keywords
 -   `if`
 -   `has`
+-   `not`
 
 ## Special characters
 -   `!`
@@ -116,7 +117,7 @@ SCHAR      --> -|.|_|[|]|{|}
 The first thing CCom does is to analyze the input and determine, whether it is a single condition or a source file.
 
 ### Source file
-CCom takes only the individual conditional sections and feeds them into the interpreter one by one, starting by the `SECTION` grammar node. <br>
+CCom takes only the individual conditional sections and feeds them into the interpreter one by one, starting by the `SECTION` grammar node. After the interpreter came up with a result from the conditional section, the original conditional section will be replaced with the interpreter output. This output will either be empty or it contains the condition `PAYLOAD` <br>
 So, one input to the `SECTION` node can look like this:
 
 ```yaml
