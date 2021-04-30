@@ -4,8 +4,6 @@ import (
 	"log"
 	"os"
 
-	"ccom/analyzer"
-
 	"github.com/urfave/cli/v2"
 )
 
@@ -34,9 +32,7 @@ func main() {
 			&cli.BoolFlag{Name: "preserve-comments-on-false", Aliases: []string{"p"}, Usage: "Do not delete conditional section after evaluating. Default is to delete them"},
 		},
 		Action: func(c *cli.Context) error {
-			inputFile := c.Args().Get(0)
-			println(inputFile)
-			analyzer.AnalyzeInput()
+			processInput(c.Args().Get(0), c.String("data"), c.String("comment-char"), c.Bool("preserve-comments-on-false"))
 			return nil
 		},
 		UseShortOptionHandling: true,

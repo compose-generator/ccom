@@ -27,7 +27,7 @@ public class Example {
         //! if has property_name {
         //! System.out.println("True");
         //! }
-		//! if not has property_name {
+        //! if not has property_name {
         //! System.out.println("False");
         //! }
 	}
@@ -83,6 +83,7 @@ has service.angular | has service.mysql | has backend
 In combination with the data input from above, this condition would be `false`, because the data collection does not fulfill any of the three sub-conditions.
 
 ## Grammar
+*Note a grammar is dependent from the comment char. In this particular case the comment char is `#`*
 ```
 SECTION    --> #! if STMT_LST {\nPAYLOAD\n#! }
 PAYLOAD    --> #! SOMETHING\nPAYLOAD | #! SOMETHING
