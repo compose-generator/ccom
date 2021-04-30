@@ -116,7 +116,7 @@ In combination with the data input from above, this condition would be `false`, 
 *Note a grammar is dependent from the comment char. In this particular case the comment char is `#`*
 *Start symbol: CONTENT*
 ```
-CONTENT               --> (SOMETHING SECTION)* SOMETHING
+CONTENT               --> (CHARS SECTION)* CHARS
 SECTION               --> COM_LINE_BLOCK* COM_BLOCK_BLOCK*
 COM_LINE_BLOCK        --> COM_LINE_IDEN if STMT_LST COM_LINE_IDEN? { COM_LINE_IDEN? PAYLOAD COM_LINE_IDEN? }
 COM_BLOCK_BLOCK       --> COM_BLOCK_IDEN_OPEN IF_BLOCK* COM_BLOCK_IDEN_CLOSE
@@ -125,21 +125,21 @@ COM_LINE_IDEN         --> //!
 COM_IDEN_PAYLOAD      --> //!!
 COM_BLOCK_IDEN_OPEN   --> /*!
 COM_BLOCK_IDEN_CLOSE  --> */
-PAYLOAD               --> (COM_IDEN_PAYLOAD SOMETHING)+
+PAYLOAD               --> (COM_IDEN_PAYLOAD CHARS)+
 STMT_LST              --> STMT (`|` STMT)*
 STMT                  --> HAS_STMT | COMP_STMT
 HAS_STMT              --> has KEY | not has KEY
 COMP_STMT             --> KEY == VALUE | KEY != VALUE
 KEY                   --> IDENTIFIER(.IDENTIFIER)*
-IDENTIFIER            --> CHAR+
+IDENTIFIER            --> LETTER+
 VALUE                 --> STRING | NUMBER
-STRING                --> "SOMETHING_EXCEPT"
+STRING                --> "CHARS_LIMITED"
 NUMBER                --> DIGIT+
-SOMETHING             --> UNICODE*
-SOMETHING_EXCEPT      --> (CHAR* DIGIT* SCHAR*)*
-CHAR                  --> a|b|...|y|z|A|B|...|Y|Z
+CHARS                 --> UNICODE*
+CHARS_LIMITED         --> (LETTER* DIGIT* SCHAR*)*
+LETTER                --> a|b|...|y|z|A|B|...|Y|Z
 DIGIT                 --> 0|1|2|3|4|5|6|7|8|9
-SCHAR                 --> -| |.|_|[|]|{|}|/|\|'
+SCHAR                 --> -|.|_|[|]|{|}|/|\|'
 UNICODE               --> Any unicode character
 ```
 
