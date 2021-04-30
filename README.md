@@ -24,12 +24,41 @@ Another example for Java (whatever you want to achive with that)
 ```java
 public class Example {
 	public static void main(String[] args) {
-        //! if has property_name {
-        //! System.out.println("True");
+        //! if has property_name | has property
+        //! {
+        //!! if () {
+        //!!    System.out.println("True");
+        //!! }
         //! }
         //! if not has property_name {
         //! System.out.println("False");
         //! }
+	}
+}
+```
+
+Java example:
+```java
+public class Example {
+	public static void main(String[] args) {
+        /*! if has property_name {
+                //!!if () {
+                //!!    System.out.println("True");
+                //!!}
+            }
+            if not has property_name {
+                System.out.println("False");
+            }
+        */
+        /*! if has property_name {
+                //!!if () {
+                //!!    System.out.println("True");
+                //!!}
+            }
+            if not has property_name {
+                System.out.println("False");
+            }
+        */
 	}
 }
 ```
@@ -82,24 +111,34 @@ has service.angular | has service.mysql | has backend
 
 In combination with the data input from above, this condition would be `false`, because the data collection does not fulfill any of the three sub-conditions.
 
+
 ## Grammar
 *Note a grammar is dependent from the comment char. In this particular case the comment char is `#`*
+*Start symbol: CONTENT*
 ```
-SECTION    --> #! if STMT_LST {\nPAYLOAD\n#! }
-PAYLOAD    --> #! SOMETHING\nPAYLOAD | #! SOMETHING
-STMT_LST   --> STMT `|` STMT_LST | STMT
-STMT       --> HAS_STMT | VAR_STMT
-HAS_STMT   --> has KEY | not has KEY
-VAR_STMT   --> KEY == VALUE | KEY != VALUE
-KEY        --> IDENTIFIER.KEY | IDENTIFIER
-IDENTIFIER --> CHAR IDENTIFIER | CHAR
-VALUE      --> STRING | NUMBER
-STRING     --> "SOMETHING"
-NUMBER     --> DIGIT NUMBER | DIGIT
-SOMETHING  --> CHAR SOMETHING | DIGIT SOMETHING | SCHAR SOMETHING | CHAR | DIGIT | SCHAR
-CHAR       --> a|b|...|y|z|A|B|...|Y|Z
-DIGIT      --> 0|1|2|3|4|5|6|7|8|9
-SCHAR      --> -| |.|_|[|]|{|}|/|\
+CONTENT               --> SOMETHING* SECTION CONTENT | SOMETHING*
+SECTION               --> COM_LINE_BLOCK* COM_BLOCK_BLOCK*
+COM_LINE_BLOCK        --> COM_LINE_IDEN if STMT_LST COM_LINE_IDEN? { COM_LINE_IDEN? PAYLOAD COM_LINE_IDEN? }
+COM_BLOCK_BLOCK       --> COM_BLOCK_IDEN_OPEN IF_BLOCK* COM_BLOCK_IDEN_CLOSE
+IF_BLOCK              --> if STMT_LST { PAYLOAD }
+COM_LINE_IDEN         --> //!
+COM_IDEN_PAYLOAD      --> //!!
+COM_BLOCK_IDEN_OPEN   --> /*!
+COM_BLOCK_IDEN_CLOSE  --> */
+PAYLOAD               --> COM_IDEN_PAYLOAD SOMETHING PAYLOAD | COM_IDEN_PAYLOAD SOMETHING
+STMT_LST              --> STMT `|` STMT_LST | STMT
+STMT                  --> HAS_STMT | COMP_STMT
+HAS_STMT              --> has KEY | not has KEY
+COMP_STMT             --> KEY == VALUE | KEY != VALUE
+KEY                   --> IDENTIFIER(.IDENTIFIER)*
+IDENTIFIER            --> CHAR*
+VALUE                 --> STRING | NUMBER
+STRING                --> "SOMETHING"
+NUMBER                --> DIGIT*
+SOMETHING             --> CHAR SOMETHING | DIGIT SOMETHING | SCHAR SOMETHING | CHAR | DIGIT | SCHAR
+CHAR                  --> a|b|...|y|z|A|B|...|Y|Z
+DIGIT                 --> 0|1|2|3|4|5|6|7|8|9
+SCHAR                 --> -| |.|_|[|]|{|}|/|\
 ```
 
 ## Keywords
