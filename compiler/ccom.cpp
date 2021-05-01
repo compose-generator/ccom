@@ -1,6 +1,8 @@
 #include <string>
 #include <cstdio>
+#include <algorithm>
 #include <iostream>
+#include <vector>
 
 enum Token {
     // End of file
@@ -33,7 +35,7 @@ enum Token {
     TOK_COM_IDEN_PAYLOAD            = -19, // //!!
 };
 
-static std::string InputString;
+static std::string FileInput;
 static int InputStringPos = -1;
 static int CurrentChar = 0;
 
@@ -49,10 +51,10 @@ static int NumVal;
 
 static int advance() {
     InputStringPos++;
-    if (InputStringPos > InputString.length() -1) {
+    if (InputStringPos > FileInput.length() - 1) {
         CurrentChar = EOF; // Return EOF, when string ends
     } else {
-        CurrentChar = (unsigned char) InputString[InputStringPos];
+        CurrentChar = (unsigned char) FileInput[InputStringPos];
     }
     return CurrentChar;
 }
@@ -63,6 +65,11 @@ static int expect(int input) {
             + std::string(1, (char) CurrentChar) +"'");
     advance();
     return input;
+}
+
+static std::string variableLookahead(unsigned int length) {
+    length = std::min((int)FileInput.length() - InputStringPos, (int)length);
+    return FileInput.substr(InputStringPos, length);
 }
 
 static int getTok() {
@@ -140,7 +147,24 @@ static int getTok() {
     }
 
     // Is it a conditional comment identifier?
-    // TODO: Add lexical analysis for comment identifiers
+    std::string laResult;
+    //std::cout << "Lookahead: " << variableLookahead(4) << std::endl;
+    if ((laResult = variableLookahead(PayloadCommentChars.length())) == PayloadCommentChars) {
+        for (int i = 0; i < laResult.length(); i++) advance();
+        return TOK_COM_IDEN_PAYLOAD;
+    }
+    if ((laResult = variableLookahead(LineCommentChars.length())) == LineCommentChars) {
+        for (int i = 0; i < laResult.length(); i++) advance();
+        return TOK_COM_LINE_IDEN;
+    }
+    if ((laResult = variableLookahead(BlockCommentCharsOpen.length())) == BlockCommentCharsOpen) {
+        for (int i = 0; i < laResult.length(); i++) advance();
+        return TOK_COM_BLOCK_IDEN_OPEN;
+    }
+    if ((laResult = variableLookahead(BlockCommentCharsClose.length())) == BlockCommentCharsClose) {
+        for (int i = 0; i < laResult.length(); i++) advance();
+        return TOK_COM_BLOCK_IDEN_CLOSE;
+    }
 
     // Otherwise, just return the character as its ascii value.
     int ThisChar = CurrentChar;
@@ -158,18 +182,24 @@ static int getNextToken() { return CurTok = getTok(); }
 
 // ---------------------------------------------------- Main program ---------------------------------------------------
 
-int main() {
-    // Test input string
-    //InputString = "property1: value\n//! if has frontend | has service.backend | var.FlaskPort == 8080 {\n//!! test payload\n//! }\nattribute2: value2";
-    InputString = "has frontend | has service.backend | var.FlaskPort != 8080 {\n\n}";
+// CLI call: ./ccom <file-input> <data-input> <line-com-chars> <block-com-open-chars> <block-com-close-chars>
+int main(int argc, char** argv) {
+    // Parse cli args
+    std::vector<std::string> args;
+    for (size_t iArg = 0; iArg < argc; ++iArg)
+        args.emplace_back(argv[iArg]);
 
-    // Comment chars (temporarily constant)
-    std::string lineCommentChars = "//";
-    std::string blockCommentOpenChars = "/*";
-    std::string blockCommentCloseChars = "*/";
-    LineCommentChars = lineCommentChars + "!";
-    BlockCommentCharsOpen = blockCommentOpenChars + "!";
+    FileInput = args[1];
+    std::string dataInput = args[2];
+
+    // Build conditional comment chars, based on comment chars input
+    LineCommentChars = args[3] + "!";
+    BlockCommentCharsOpen = args[4] + "!";
+    BlockCommentCharsClose = args[5];
     PayloadCommentChars = LineCommentChars + "!";
+
+    // Replace file input with test string
+    FileInput = "property1: value\n//! if has frontend | has service.backend | var.FlaskPort == 8080 {\n//!! test payload\n//! }\nattribute2: value2";
 
     // Load first char into the buffer
     advance();
@@ -177,7 +207,7 @@ int main() {
     // Test lexer
     int next;
     while ((next = getNextToken()) != TOK_EOF) {
-        std::cout << "Got token: " + std::to_string(next) + "\n";
+        std::cout << "Got token: " << std::to_string(next) << std::endl;
     }
 
     return 0;
