@@ -118,7 +118,7 @@ In combination with the data input from above, this condition would be `false`, 
 ```
 CONTENT               --> (CHARS SECTION)* CHARS
 SECTION               --> COM_LINE_BLOCK* COM_BLOCK_BLOCK*
-COM_LINE_BLOCK        --> COM_LINE_IDEN if STMT_LST COM_LINE_IDEN? { COM_LINE_IDEN? PAYLOAD COM_LINE_IDEN? }
+COM_LINE_BLOCK        --> COM_LINE_IDEN if STMT_LST COM_LINE_IDEN? { PAYLOAD COM_LINE_IDEN }
 COM_BLOCK_BLOCK       --> COM_BLOCK_IDEN_OPEN IF_BLOCK* COM_BLOCK_IDEN_CLOSE
 IF_BLOCK              --> if STMT_LST { PAYLOAD }
 COM_LINE_IDEN         --> //!
@@ -135,7 +135,7 @@ IDENTIFIER            --> LETTER+
 VALUE                 --> STRING | NUMBER
 STRING                --> "CHARS_LIMITED"
 NUMBER                --> DIGIT+
-CHARS                 --> UNICODE*
+CHARS                 --> ({UNICODE}\{COM_LINE_IDEN, COM_BLOCK_IDEN_OPEN})*
 CHARS_LIMITED         --> (LETTER* DIGIT* SCHAR*)*
 LETTER                --> a|b|...|y|z|A|B|...|Y|Z
 DIGIT                 --> 0|1|2|3|4|5|6|7|8|9
