@@ -1,75 +1,175 @@
 #include <string>
 #include <cstdio>
+#include <iostream>
 
 enum Token {
-    tok_eof                     = -1,
+    // End of file
+    TOK_EOF                         = -1,
 
-    // keywords
-    tok_if                      = -2,
-    tok_has                     = -3,
-    tok_not                     = -4,
+    // Keywords
+    TOK_IF                          = -2, // if
+    TOK_HAS                         = -3, // has
+    TOK_NOT                         = -4, // not
 
-    // primary
-    tok_identifier              = -5,
-    tok_number                  = -6,
-    tok_string                  = -7,
-    tok_com_line_iden           = -8,
-    tok_com_iden_payload        = -9,
-    tok_com_block_iden_open     = -10,
-    tok_com_block_iden_close    = -11,
+    // Boolean values
+    TOK_TRUE                        = -5, // true
+    TOK_FALSE                       = -6, // false
+
+    // Operators
+    TOK_OR                          = -7, // |
+    TOK_EQUALS                      = -8, // ==
+    TOK_NOT_EQUALS                  = -9, // !=
+
+    // Misc
+    TOK_IDENTIFIER                  = -10, // e.g. test
+    TOK_NUMBER                      = -11, // e.g. 123
+    TOK_STRING                      = -12, // "test"
+    TOK_DOT                         = -13, // .
+    TOK_BRACE_OPEN                  = -14, // {
+    TOK_BRACE_CLOSE                 = -15, // }
+    TOK_COM_LINE_IDEN               = -16, // //!
+    TOK_COM_BLOCK_IDEN_OPEN         = -17, // /*!
+    TOK_COM_BLOCK_IDEN_CLOSE        = -18, // */
+    TOK_COM_IDEN_PAYLOAD            = -19, // //!!
 };
 
+static std::string InputString;
+static int InputStringPos = -1;
+static int CurrentChar = 0;
+
+static std::string LineCommentChars;
+static std::string BlockCommentCharsOpen;
+static std::string BlockCommentCharsClose;
+static std::string PayloadCommentChars;
+
 static std::string IdentifierStr;
-static double NumVal;
+static int NumVal;
+
+// ------------------------------------------------------- Lexer -------------------------------------------------------
+
+static int advance() {
+    InputStringPos++;
+    if (InputStringPos > InputString.length() -1) {
+        CurrentChar = EOF; // Return EOF, when string ends
+    } else {
+        CurrentChar = (unsigned char) InputString[InputStringPos];
+    }
+    return CurrentChar;
+}
+
+static int expect(int input) {
+    if (CurrentChar != input)
+        throw std::runtime_error("Expected " + std::to_string(input) + ", but got " + std::to_string(CurrentChar));
+    advance();
+    return input;
+}
 
 static int getTok() {
-    static int LastChar = ' ';
-
     // Skip any whitespace
-    while (isspace(LastChar))
-        LastChar = getchar();
-
-    if (isalpha(LastChar)) { // [a-zA-Z][a-zA-Z0-9]*
-        IdentifierStr = std::to_string(LastChar);
-        while (isalnum(LastChar = getchar()))
-            IdentifierStr += std::to_string(LastChar);
-
-        // Is keyword?
-        if (IdentifierStr == "if")
-            return tok_if;
-        if (IdentifierStr == "has")
-            return tok_has;
-        if (IdentifierStr == "not")
-            return tok_not;
-        return tok_identifier;
-    }
-
-    if (isdigit(LastChar) || LastChar == '.') { // [0-9.]+
-        std::string NumStr;
-        do {
-            NumStr += std::to_string(LastChar);
-            LastChar = getchar();
-        } while (isdigit(LastChar) || LastChar == '.');
-
-        NumVal = strtod(NumStr.c_str(), 0);
-        return tok_number;
-    }
+    while (isspace(CurrentChar)) advance();
 
     // Check for EOF
-    if (LastChar == EOF)
-        return tok_eof;
+    if (CurrentChar == EOF) return TOK_EOF;
 
-    // Otherwise, return char as its ascii value
-    int ThisChar = LastChar;
-    LastChar = getchar();
+    // Is it a char array?
+    if (isalpha(CurrentChar)) { // [a-zA-Z]
+        IdentifierStr = (char) CurrentChar;
+        while (isalnum(advance())) // [a-zA-Z0-9]*
+            IdentifierStr.push_back((char) CurrentChar);
+
+        // Is keyword?
+        if (IdentifierStr == "if") return TOK_IF;
+        if (IdentifierStr == "has") return TOK_HAS;
+        if (IdentifierStr == "not") return TOK_NOT;
+        if (IdentifierStr == "true") return TOK_TRUE;
+        if (IdentifierStr == "false") return TOK_FALSE;
+        return TOK_IDENTIFIER;
+    }
+
+    // Is it an integer?
+    if (isdigit(CurrentChar)) { // [0-9]+
+        std::string NumStr;
+        do {
+            NumStr += std::to_string(CurrentChar);
+            advance();
+        } while (isdigit(CurrentChar));
+        NumVal = std::stoi(NumStr);
+        return TOK_NUMBER;
+    }
+
+    // Is it a single char, that can be returned immediately?
+    if (CurrentChar == '.' || CurrentChar == '{' || CurrentChar == '}' || CurrentChar == '|') {
+        int result = TOK_OR;
+        if (CurrentChar == '.') result = TOK_DOT;
+        if (CurrentChar == '{') result = TOK_BRACE_OPEN;
+        if (CurrentChar == '}') result = TOK_BRACE_CLOSE;
+        advance();
+        return result;
+    }
+
+    // Is it '!='?
+    if (CurrentChar == '!') {
+        expect('!');
+        expect('=');
+        return TOK_NOT_EQUALS;
+    }
+
+    // Is it '=='?
+    if (CurrentChar == '=') {
+        expect('=');
+        expect('=');
+        return TOK_EQUALS;
+    }
+
+    // Is it a string literal?
+    if (CurrentChar == '"') {
+        expect('"');
+        while(CurrentChar != '"' && CurrentChar != EOF)
+            CurrentChar = advance();
+        expect('"');
+        return TOK_STRING;
+    }
+
+    // Is it a conditional comment identifier?
+    // TODO: Add lexical analysis for comment identifiers
+
+    // Otherwise, just return the character as its ascii value.
+    int ThisChar = CurrentChar;
+    advance();
     return ThisChar;
 }
 
-int main() {
-    // Prompt user for input
-    fprintf(stderr, "ready> ");
+// ------------------------------------------------------- Parser ------------------------------------------------------
 
-    int token = getTok();
+// Token buffer
+static int CurTok;
+static int getNextToken() { return CurTok = getTok(); }
+
+
+
+// ---------------------------------------------------- Main program ---------------------------------------------------
+
+int main() {
+    // Test input string
+    //InputString = "property1: value\n//! if has frontend | has service.backend | var.FlaskPort == 8080 {\n//!! test payload\n//! }\nattribute2: value2";
+    InputString = "has frontend | has service.backend | var.FlaskPort == 8080";
+
+    // Comment chars (temporarily constant)
+    std::string lineCommentChars = "//";
+    std::string blockCommentOpenChars = "/*";
+    std::string blockCommentCloseChars = "*/";
+    LineCommentChars = lineCommentChars + "!";
+    BlockCommentCharsOpen = blockCommentOpenChars + "!";
+    PayloadCommentChars = LineCommentChars + "!";
+
+    // Load first char into the buffer
+    advance();
+
+    // Test lexer
+    int next;
+    while ((next = getNextToken()) != TOK_EOF) {
+        std::cout << "Got token: " + std::to_string(next) + "\n";
+    }
 
     return 0;
 }
