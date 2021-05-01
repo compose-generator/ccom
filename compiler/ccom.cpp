@@ -59,7 +59,8 @@ static int advance() {
 
 static int expect(int input) {
     if (CurrentChar != input)
-        throw std::runtime_error("Expected " + std::to_string(input) + ", but got " + std::to_string(CurrentChar));
+        throw std::runtime_error("Expected '" + std::string(1, (char) input) + "', but got '"
+            + std::string(1, (char) CurrentChar) +"'");
     advance();
     return input;
 }
@@ -98,13 +99,21 @@ static int getTok() {
     }
 
     // Is it a single char, that can be returned immediately?
-    if (CurrentChar == '.' || CurrentChar == '{' || CurrentChar == '}' || CurrentChar == '|') {
-        int result = TOK_OR;
-        if (CurrentChar == '.') result = TOK_DOT;
-        if (CurrentChar == '{') result = TOK_BRACE_OPEN;
-        if (CurrentChar == '}') result = TOK_BRACE_CLOSE;
+    if (CurrentChar == '.') {
         advance();
-        return result;
+        return TOK_DOT;
+    }
+    if (CurrentChar == '{') {
+        advance();
+        return TOK_BRACE_OPEN;
+    }
+    if (CurrentChar == '}') {
+        advance();
+        return TOK_BRACE_CLOSE;
+    }
+    if (CurrentChar == '|') {
+        advance();
+        return TOK_OR;
     }
 
     // Is it '!='?
@@ -152,7 +161,7 @@ static int getNextToken() { return CurTok = getTok(); }
 int main() {
     // Test input string
     //InputString = "property1: value\n//! if has frontend | has service.backend | var.FlaskPort == 8080 {\n//!! test payload\n//! }\nattribute2: value2";
-    InputString = "has frontend | has service.backend | var.FlaskPort == 8080";
+    InputString = "has frontend | has service.backend | var.FlaskPort != 8080 {\n\n}";
 
     // Comment chars (temporarily constant)
     std::string lineCommentChars = "//";
