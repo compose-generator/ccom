@@ -1,0 +1,5 @@
+# Clion
+.idea/*
+
+# Cmake debug
+cmake-build-debug/*
