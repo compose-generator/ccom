@@ -3,10 +3,8 @@
 //
 
 #include <string>
-#include <utility>
 #include <stdexcept>
 #include "lexer.h"
-#include "Token.h"
 
 // CommentChars, built from user input
 std::string LineCommentChars;
@@ -122,8 +120,13 @@ Token getTok() {
         expect('"');
         std::string stringStr;
         stringStr.push_back((char) CurrentChar);
-        while(CurrentChar != '"' && CurrentChar != EOF)
+        while(CurrentChar != '"' && CurrentChar != EOF) {
             stringStr.push_back((char) advance());
+            if (CurrentChar == '\\') {
+                advance();
+                stringStr.push_back((char) advance());
+            }
+        }
         expect('"');
         return Token(TOK_STRING, LineNum, ColNum);
     }
