@@ -1,3 +1,6 @@
+|:warning: | This language is under construction and doesn't work in the current state. Do NOT use it in production. |
+|----------|:-------------------------------|
+
 # CCom (Conditional Comments) language
 
 *Note: This language is part of the [Compose Generator](https://github.com/compose-generator/compose-generator) project, but also can be used independently.*
