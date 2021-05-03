@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
     std::string dataInput = args[2];
 
     // Replace file input with test string
-    fileInput = "property1: value\n//! if has frontend | has service.backend | var.FlaskPort == 8080 {\n//!! test payload\n//! }\nattribute2: value2";
+    fileInput = "property1: value\n//! if has frontend | has service.backend | var.FlaskPort = 8080 {\n//!! test payload\n//! }\nattribute2: value2";
 
     initParser(fileInput, dataInput, args[3], args[4], args[5]);
 

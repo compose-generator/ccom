@@ -18,6 +18,8 @@ std::string PayloadCommentChars;
 std::string FileInput;
 int InputStringPos = -1;
 int CurrentChar = 0;
+int LineNum = 1;
+int ColNum = 0;
 
 int advance() {
     InputStringPos++;
@@ -25,6 +27,7 @@ int advance() {
         CurrentChar = EOF; // Return EOF, when string ends
     } else {
         CurrentChar = (unsigned char) FileInput[InputStringPos];
+        ColNum++;
     }
     return CurrentChar;
 }
@@ -32,7 +35,8 @@ int advance() {
 int expect(int input) {
     if (CurrentChar != input)
         throw std::runtime_error("Expected '" + std::string(1, (char) input) + "', but got '"
-                                 + std::string(1, (char) CurrentChar) +"'");
+                                 + std::string(1, (char) CurrentChar) +"' at L"
+                                 + std::to_string(LineNum) + "C" + std::to_string(ColNum));
     advance();
     return input;
 }
@@ -44,10 +48,16 @@ std::string variableLookahead(unsigned int length) {
 
 Token getTok() {
     // Skip any whitespace
-    while (isspace(CurrentChar)) advance();
+    while (isspace(CurrentChar)) {
+        if (CurrentChar == '\n') {
+            ColNum = -1;
+            LineNum++;
+        }
+        advance();
+    }
 
     // Check for EOF
-    if (CurrentChar == EOF) return Token(TOK_EOF);
+    if (CurrentChar == EOF) return Token(TOK_EOF, LineNum, ColNum);
 
     // Is it a char array?
     if (isalpha(CurrentChar)) { // [a-zA-Z]
@@ -57,12 +67,12 @@ Token getTok() {
             identifierStr.push_back((char) CurrentChar);
 
         // Is keyword?
-        if (identifierStr == "if") return Token(TOK_IF);
-        if (identifierStr == "has") return Token(TOK_HAS);
-        if (identifierStr == "not") return Token(TOK_NOT);
-        if (identifierStr == "true") return Token(TOK_TRUE);
-        if (identifierStr == "false") return Token(TOK_FALSE);
-        return Token(TOK_IDENTIFIER, identifierStr);
+        if (identifierStr == "if") return Token(TOK_IF, LineNum, ColNum);
+        if (identifierStr == "has") return Token(TOK_HAS, LineNum, ColNum);
+        if (identifierStr == "not") return Token(TOK_NOT, LineNum, ColNum);
+        if (identifierStr == "true") return Token(TOK_TRUE, LineNum, ColNum);
+        if (identifierStr == "false") return Token(TOK_FALSE, LineNum, ColNum);
+        return Token(TOK_IDENTIFIER, identifierStr, LineNum, ColNum);
     }
 
     // Is it an integer?
@@ -72,39 +82,39 @@ Token getTok() {
             NumStr += std::to_string(CurrentChar);
             advance();
         } while (isdigit(CurrentChar));
-        return Token(TOK_NUMBER, NumStr);
+        return Token(TOK_NUMBER, NumStr, LineNum, ColNum);
     }
 
     // Is it a single char, that can be returned immediately?
     if (CurrentChar == '.') {
         advance();
-        return Token(TOK_DOT);
+        return Token(TOK_DOT, LineNum, ColNum);
     }
     if (CurrentChar == '{') {
         advance();
-        return Token(TOK_BRACE_OPEN);
+        return Token(TOK_BRACE_OPEN, LineNum, ColNum);
     }
     if (CurrentChar == '}') {
         advance();
-        return Token(TOK_BRACE_CLOSE);
+        return Token(TOK_BRACE_CLOSE, LineNum, ColNum);
     }
     if (CurrentChar == '|') {
         advance();
-        return Token(TOK_OR);
+        return Token(TOK_OR, LineNum, ColNum);
     }
 
     // Is it '!='?
     if (CurrentChar == '!') {
         expect('!');
         expect('=');
-        return Token(TOK_NOT_EQUALS);
+        return Token(TOK_NOT_EQUALS, LineNum, ColNum);
     }
 
     // Is it '=='?
     if (CurrentChar == '=') {
         expect('=');
         expect('=');
-        return Token(TOK_EQUALS);
+        return Token(TOK_EQUALS, LineNum, ColNum);
     }
 
     // Is it a string literal?
@@ -115,30 +125,30 @@ Token getTok() {
         while(CurrentChar != '"' && CurrentChar != EOF)
             stringStr.push_back((char) advance());
         expect('"');
-        return Token(TOK_STRING);
+        return Token(TOK_STRING, LineNum, ColNum);
     }
 
     // Is it a conditional comment identifier?
     std::string laResult;
     if ((laResult = variableLookahead(PayloadCommentChars.length())) == PayloadCommentChars) {
         for (int i = 0; i < laResult.length(); i++) advance();
-        return Token(TOK_COM_IDEN_PAYLOAD);
+        return Token(TOK_COM_IDEN_PAYLOAD, LineNum, ColNum);
     }
     if ((laResult = variableLookahead(LineCommentChars.length())) == LineCommentChars) {
         for (int i = 0; i < laResult.length(); i++) advance();
-        return Token(TOK_COM_LINE_IDEN);
+        return Token(TOK_COM_LINE_IDEN, LineNum, ColNum);
     }
     if ((laResult = variableLookahead(BlockCommentCharsOpen.length())) == BlockCommentCharsOpen) {
         for (int i = 0; i < laResult.length(); i++) advance();
-        return Token(TOK_COM_BLOCK_IDEN_OPEN);
+        return Token(TOK_COM_BLOCK_IDEN_OPEN, LineNum, ColNum);
     }
     if ((laResult = variableLookahead(BlockCommentCharsClose.length())) == BlockCommentCharsClose) {
         for (int i = 0; i < laResult.length(); i++) advance();
-        return Token(TOK_COM_BLOCK_IDEN_CLOSE);
+        return Token(TOK_COM_BLOCK_IDEN_CLOSE, LineNum, ColNum);
     }
 
     // Otherwise, just return the character as its ascii value.
-    Token result = Token(TOK_UNKNOWN, std::string(1, (char) CurrentChar));
+    Token result = Token(TOK_UNKNOWN, std::string(1, (char) CurrentChar), LineNum, ColNum);
     advance();
     return result;
 }
