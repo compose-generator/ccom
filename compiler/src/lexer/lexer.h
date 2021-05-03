@@ -34,10 +34,10 @@ enum TokenType {
     TOK_DOT                         = -13, // .
     TOK_BRACE_OPEN                  = -14, // {
     TOK_BRACE_CLOSE                 = -15, // }
-    TOK_COM_LINE_IDEN               = -16, // //!
-    TOK_COM_BLOCK_IDEN_OPEN         = -17, // /*!
+    TOK_COM_LINE_IDEN               = -16, // //?
+    TOK_COM_BLOCK_IDEN_OPEN         = -17, // /*?
     TOK_COM_BLOCK_IDEN_CLOSE        = -18, // */
-    TOK_COM_IDEN_PAYLOAD            = -19, // //!!
+    TOK_COM_IDEN_PAYLOAD            = -19, // //??
 };
 
 int advance();

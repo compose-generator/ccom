@@ -1,5 +1,0 @@
-inSection=false, inPayload=false, value='property:' => tok_arbit
-inSection=false, inPayload=false, value='"value"' => tok_arbit
-inSection=false, inPayload=false, value='#!' => tok_com_line_iden, set inSection=true
-insection=true,  inPayload=false, value='if' => tok_if
-

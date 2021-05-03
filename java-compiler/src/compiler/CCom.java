@@ -2,10 +2,10 @@ package compiler;
 
 public class CCom implements CComIntf {
 
-    private static final String COM_LINE_IDEN = "//!"; // must be 3 characters long
-    private static final String COM_BLOCK_IDEN_OPEN = "/*!"; // must be 3 characters long
+    private static final String COM_LINE_IDEN = "//?"; // must be 3 characters long
+    private static final String COM_BLOCK_IDEN_OPEN = "/*?"; // must be 3 characters long
     private static final String COM_BLOCK_IDEN_CLOSE = "*/"; // must be 2 characters long
-    private static final String COM_IDEN_PAYLOAD = "//!!"; // must be 4 characters long, must be an extension to
+    private static final String COM_IDEN_PAYLOAD = "//??"; // must be 4 characters long, must be an extension to
                                                            // COM_LINE_IDEN
 
     private FileReaderIntf reader;

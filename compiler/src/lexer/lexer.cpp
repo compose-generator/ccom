@@ -160,10 +160,10 @@ void initLexer(std::string fileInput,
     FileInput = std::move(fileInput);
 
     // Build conditional comment chars, based on comment chars input
-    LineCommentChars = lineCommentChars + "!";
-    BlockCommentCharsOpen = blockCommentCharsOpen + "!";
+    LineCommentChars = lineCommentChars + "?";
+    BlockCommentCharsOpen = blockCommentCharsOpen + "?";
     BlockCommentCharsClose = std::move(blockCommentCharsClose);
-    PayloadCommentChars = LineCommentChars + "!";
+    PayloadCommentChars = LineCommentChars + "?";
 
     // Load first char into the buffer
     advance();

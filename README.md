@@ -31,10 +31,10 @@ Here is an example YAML file, which can be evaluated by CCom:
 ```yaml
 ...
 property1: "value1"
-#! if has service.angular | has service.mysql {
-#! property2:
-#! 	property3: true
-#! }
+#? if has service.angular | has service.mysql {
+#? property2:
+#? 	property3: true
+#? }
 ...
 ```
 
@@ -42,15 +42,15 @@ Another example for Java (whatever you want to achive with that)
 ```java
 public class Example {
 	public static void main(String[] args) {
-        //! if has property_name | has property
-        //! {
-        //!! if () {
-        //!!    System.out.println("True");
-        //!! }
-        //! }
-        //! if not has property_name {
-        //! System.out.println("False");
-        //! }
+        //? if has property_name | has property
+        //? {
+        //?? if () {
+        //??    System.out.println("True");
+        //?? }
+        //? }
+        //? if not has property_name {
+        //? System.out.println("False");
+        //? }
 	}
 }
 ```
@@ -59,19 +59,19 @@ Java example:
 ```java
 public class Example {
 	public static void main(String[] args) {
-        /*! if has property_name {
-                //!!if () {
-                //!!    System.out.println("True");
-                //!!}
+        /*? if has property_name {
+                //??if () {
+                //??    System.out.println("True");
+                //??}
             }
             if not has property_name {
                 System.out.println("False");
             }
         */
-        /*! if has property_name {
-                //!!if () {
-                //!!    System.out.println("True");
-                //!!}
+        /*? if has property_name {
+                //??if () {
+                //??    System.out.println("True");
+                //??}
             }
             if not has property_name {
                 System.out.println("False");
@@ -144,9 +144,9 @@ SECTION               --> COM_LINE_BLOCK* COM_BLOCK_BLOCK*
 COM_LINE_BLOCK        --> COM_LINE_IDEN if STMT_LST COM_LINE_IDEN? { PAYLOAD COM_LINE_IDEN }
 COM_BLOCK_BLOCK       --> COM_BLOCK_IDEN_OPEN IF_BLOCK* COM_BLOCK_IDEN_CLOSE
 IF_BLOCK              --> if STMT_LST { PAYLOAD }
-COM_LINE_IDEN         --> //!
-COM_IDEN_PAYLOAD      --> //!!
-COM_BLOCK_IDEN_OPEN   --> /*!
+COM_LINE_IDEN         --> //?
+COM_IDEN_PAYLOAD      --> //??
+COM_BLOCK_IDEN_OPEN   --> /*?
 COM_BLOCK_IDEN_CLOSE  --> */
 PAYLOAD               --> (COM_IDEN_PAYLOAD CHARS)+
 STMT_LST              --> STMT (`|` STMT)*
@@ -172,7 +172,7 @@ UNICODE               --> Any unicode character
 -   `not`
 
 ## Special characters
--   `!`
+-   `?`
 -   `|`
 -   `.`
 -   `"`

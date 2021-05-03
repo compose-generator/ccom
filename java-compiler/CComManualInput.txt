@@ -1,6 +1,6 @@
-//!ifnothasmarc.dominic.MARc.dominic{//!//!!meine schöne java Klasse ist hier implements marc.Interface.dominic
-//!//!!und das ist die 553258/098f0f5%32809fdfdffjvnm.,cmx.c-
-//!//!!{
-//!//!!das ist ein Test.init()
-//!//!!}
-//!}
+//?ifnothasmarc.dominic.MARc.dominic{//?//??meine schöne java Klasse ist hier implements marc.Interface.dominic
+//?//??und das ist die 553258/098f0f5%32809fdfdffjvnm.,cmx.c-
+//?//??{
+//?//??das ist ein Test.init()
+//?//??}
+//?}
