@@ -5,6 +5,19 @@
 ## Introduction
 CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or JSON, but can also be used for a variety of programming languages with support for comments.
 
+### Supported data formats
+|            | Line comment chars | Block comment chars open | Block comment chars close |
+|------------|--------------------|--------------------------|---------------------------|
+| YAML       | #                  | -                        | -                         |
+| Java       | //                 | /*                       | */                        |
+| Go         | //                 | /*                       | */                        |
+| C          | //                 | /*                       | */                        |
+| C++        | //                 | /*                       | */                        |
+| JavaScript | //                 | /*                       | */                        |
+| TypeScript | //                 | /*                       | */                        |
+| Dockerfile | #                  | -                        | -                         |
+| HTML       | -                  | <!--                     | -->                       |
+
 ### Input
 CCom requests two input parameters. A source file/string of any language, containing conditional sections and a JSON file/string, which holds data for the evaluation.
 
@@ -100,7 +113,9 @@ public class Example {
 ```
 
 #### CLI flags
--   `--comment-char="#"`
+-   `--line-comment-char="//"`
+-   `--block-comment-char-open="/*"`
+-   `--block-comment-char-close="*/"`
 -   `--preserve-comments-on-false`
 
 ### Single condition + data input => boolean output
@@ -113,7 +128,7 @@ In combination with the data input from above, this condition would be `false`, 
 
 
 ## Grammar
-*Note a grammar is dependent from the comment char. In this particular case the comment char is `#`*
+*Note a grammar is dependent on the line comment chars and the block comment chars. In this particular case the line comment char is `//`, the block comment char open is `/*` and the block comment char close is `*/`*
 *Start symbol: CONTENT*
 ```
 CONTENT               --> (CHARS SECTION)* CHARS
