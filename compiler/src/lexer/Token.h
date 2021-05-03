@@ -10,16 +10,13 @@
 class Token {
 private:
     int type{};
-    std::string stringValue;
-    int intValue{};
+    std::string value;
 public:
     Token();
     explicit Token(int);
-    Token(int, int);
     Token(int, std::string);
     int getType();
-    std::string getStringValue();
-    int getIntValue();
+    std::string getValue();
 };
 
 #endif //COMPILER_TOKEN_H

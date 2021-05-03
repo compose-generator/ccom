@@ -12,24 +12,15 @@ Token::Token(int type) {
     this->type = type;
 }
 
-Token::Token(int type, int valueInt) {
+Token::Token(int type, std::string value) {
     this->type = type;
-    this->intValue = valueInt;
-}
-
-Token::Token(int type, std::string valueString) {
-    this->type = type;
-    this->stringValue = std::move(valueString);
+    this->value = std::move(value);
 }
 
 int Token::getType() {
     return type;
 }
 
-int Token::getIntValue() {
-    return intValue;
-}
-
-std::string Token::getStringValue() {
-    return stringValue;
+std::string Token::getValue() {
+    return value;
 }

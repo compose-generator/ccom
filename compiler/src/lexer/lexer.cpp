@@ -72,7 +72,7 @@ Token getTok() {
             NumStr += std::to_string(CurrentChar);
             advance();
         } while (isdigit(CurrentChar));
-        return Token(TOK_NUMBER, std::stoi(NumStr));
+        return Token(TOK_NUMBER, NumStr);
     }
 
     // Is it a single char, that can be returned immediately?
@@ -138,9 +138,9 @@ Token getTok() {
     }
 
     // Otherwise, just return the character as its ascii value.
-    int ThisChar = CurrentChar;
+    Token result = Token(TOK_UNKNOWN, std::string(1, (char) CurrentChar));
     advance();
-    return Token(TOK_UNKNOWN, ThisChar);
+    return result;
 }
 
 void initLexer(std::string fileInput,
