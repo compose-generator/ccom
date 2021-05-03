@@ -9,15 +9,15 @@
 
 class Token {
 private:
-    int type{};
+    int type = 0;
     std::string value;
-    int lineNum;
-    int colNum;
+    unsigned int lineNum = 0;
+    unsigned int colNum = 0;
 public:
     Token();
-    Token(int, int, int);
-    Token(int, std::string, int, int);
-    int getType();
+    Token(int, unsigned int, unsigned int);
+    Token(int, std::string, unsigned int, unsigned int);
+    int getType() const;
     std::string getValue();
     std::string getCodePos();
 };

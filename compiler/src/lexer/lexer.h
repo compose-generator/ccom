@@ -45,7 +45,7 @@ int advance();
 
 int expect(int);
 
-int variableLookahead(int);
+std::string getLookahead();
 
 Token getTok();
 

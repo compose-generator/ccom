@@ -4,6 +4,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <algorithm>
 #include "lexer.h"
 
 // CommentChars, built from user input
@@ -11,13 +12,14 @@ std::string LineCommentChars;
 std::string BlockCommentCharsOpen;
 std::string BlockCommentCharsClose;
 std::string PayloadCommentChars;
+unsigned int MaxLookahead;
 
 // Input data to be worked with
 std::string FileInput;
 int InputStringPos = -1;
 int CurrentChar = 0;
-int LineNum = 1;
-int ColNum = 0;
+unsigned int LineNum = 1;
+unsigned int ColNum = 0;
 
 int advance() {
     InputStringPos++;
@@ -39,8 +41,8 @@ int expect(int input) {
     return input;
 }
 
-std::string variableLookahead(unsigned int length) {
-    length = std::min((int)FileInput.length() - InputStringPos, (int)length);
+std::string getLookahead() {
+    int length = std::min((int) FileInput.length() - InputStringPos, (int) MaxLookahead);
     return FileInput.substr(InputStringPos, length);
 }
 
@@ -133,19 +135,19 @@ Token getTok() {
 
     // Is it a conditional comment identifier?
     std::string laResult;
-    if ((laResult = variableLookahead(PayloadCommentChars.length())) == PayloadCommentChars) {
+    if ((laResult = getLookahead().substr(0, PayloadCommentChars.length())) == PayloadCommentChars) {
         for (int i = 0; i < laResult.length(); i++) advance();
         return Token(TOK_COM_IDEN_PAYLOAD, LineNum, ColNum);
     }
-    if ((laResult = variableLookahead(LineCommentChars.length())) == LineCommentChars) {
+    if ((laResult = getLookahead().substr(0, LineCommentChars.length())) == LineCommentChars) {
         for (int i = 0; i < laResult.length(); i++) advance();
         return Token(TOK_COM_LINE_IDEN, LineNum, ColNum);
     }
-    if ((laResult = variableLookahead(BlockCommentCharsOpen.length())) == BlockCommentCharsOpen) {
+    if ((laResult = getLookahead().substr(0, BlockCommentCharsOpen.length())) == BlockCommentCharsOpen) {
         for (int i = 0; i < laResult.length(); i++) advance();
         return Token(TOK_COM_BLOCK_IDEN_OPEN, LineNum, ColNum);
     }
-    if ((laResult = variableLookahead(BlockCommentCharsClose.length())) == BlockCommentCharsClose) {
+    if ((laResult = getLookahead().substr(0, BlockCommentCharsClose.length())) == BlockCommentCharsClose) {
         for (int i = 0; i < laResult.length(); i++) advance();
         return Token(TOK_COM_BLOCK_IDEN_CLOSE, LineNum, ColNum);
     }
@@ -167,6 +169,7 @@ void initLexer(std::string fileInput,
     BlockCommentCharsOpen = blockCommentCharsOpen + "?";
     BlockCommentCharsClose = std::move(blockCommentCharsClose);
     PayloadCommentChars = LineCommentChars + "?";
+    MaxLookahead = std::max({BlockCommentCharsOpen.length(), BlockCommentCharsClose.length(), PayloadCommentChars.length()});
 
     // Load first char into the buffer
     advance();
