@@ -6,7 +6,7 @@
 *Note: This language is part of the [Compose Generator](https://github.com/compose-generator/compose-generator) project, but also can be used independently.*
 
 ## Introduction
-CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or JSON, but can also be used for a variety of programming languages with support for comments.
+CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or XML, but can also be used for a variety of programming languages with support for comments.
 
 ### Supported data formats
 |            | Line comment chars | Block comment chars open | Block comment chars close |
@@ -20,6 +20,8 @@ CCom is a language for pre-processing source files. It's primary purpose is to e
 | TypeScript | //                 | /*                       | */                        |
 | Dockerfile | #                  | -                        | -                         |
 | HTML       | -                  | <!--                     | -->                       |
+| XML        | -                  | <!--                     | -->                       |
+| Rust       | //                 | /*                       | */                        |
 
 ### Input
 CCom requests two input parameters. A source file/string of any language, containing conditional sections and a JSON file/string, which holds data for the evaluation.
@@ -116,6 +118,7 @@ public class Example {
 ```
 
 #### CLI flags
+-	`--mode="single" / --mode="file"`
 -   `--line-comment-char="//"`
 -   `--block-comment-char-open="/*"`
 -   `--block-comment-char-close="*/"`
@@ -132,7 +135,9 @@ In combination with the data input from above, this condition would be `false`, 
 
 ## Grammar
 *Note a grammar is dependent on the line comment chars and the block comment chars. In this particular case the line comment char is `//`, the block comment char open is `/*` and the block comment char close is `*/`*
-*Start symbol: CONTENT*
+
+Start symbol: `CONTENT`.
+
 ```
 CONTENT               --> (CHARS SECTION)* CHARS
 SECTION               --> COM_LINE_BLOCK* COM_BLOCK_BLOCK*
@@ -174,21 +179,13 @@ UNICODE               --> Any unicode character
 -   `{` / `}`
 
 ## Work process
-The first thing CCom does is to analyze the input and determine, whether it is a single condition or a source file.
+The first thing CCom does, is to analyze the input and determine, whether it is a single condition or a source file. Depending on that, the CLI interface will call the main compiler with `--mode="single"` or `--mode="file"`.
 
 ### Source file
-CCom takes only the individual conditional sections and feeds them into the interpreter one by one, starting by the `SECTION` grammar node. After the interpreter came up with a result from the conditional section, the original conditional section will be replaced with the interpreter output. This output will either be empty or it contains the condition `PAYLOAD` <br>
-So, one input to the `SECTION` node can look like this:
-
-```yaml
-#! if has frontend | has service.backend-flask | var.FLASK_PORT == 8080 {
-#! - attribute
-#! - attribute2
-#! } 
-```
+CCom takes the whole file and feeds it into the interpreter, starting with the `CONTENT` grammar node.
 
 ### Single condition
-CCom feeds the condition into the interpreter, starting by the `STMT` grammar node.
+CCom feeds the condition into the interpreter, starting by the `STMT_LST` grammar node.
 
 ## Usage
 *To be extended...*
