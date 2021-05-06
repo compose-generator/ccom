@@ -4,9 +4,7 @@
 // Created by Marc on 02.05.2021.
 //
 
-#include <string>
-#include <stdexcept>
-#include <algorithm>
+#include <iostream>
 #include "lexer.h"
 
 // CommentChars, built from user input
@@ -146,7 +144,7 @@ void skipWhitespaces() {
 
 Token consumeArbitrary() {
     std::string arbitraryStr;
-    while(!isLookaheadBlockCommentCharOpen() && !isLookaheadLineCommentChars() && !isEOF()) {
+    while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharOpen() && !isEOF()) {
         arbitraryStr.push_back((char) CurrentChar);
         advance();
     }
@@ -157,9 +155,12 @@ Token consumeArbitrary() {
 Token consumePayload() {
     std::string payloadStr;
     while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharClose() && !isEOF()) {
-        if (isLookaheadPayloadCommentChars()) {
-            advance();
-            advance();
+        if (CurrentChar == '\n') {
+            ColNum = -1;
+            LineNum++;
+        } else if (isLookaheadPayloadCommentChars()) {
+            // Consume PayloadCommentChars
+            for (int i = 0; i < PayloadCommentChars.length(); i++) advance();
         }
         payloadStr.push_back((char) CurrentChar);
         advance();
@@ -213,15 +214,17 @@ bool isLookaheadPayloadCommentChars() {
 }
 
 bool isLookaheadLineCommentChars() {
-    return getLookahead().substr(0, LineCommentChars.length()) == LineCommentChars;
+    return !LineCommentChars.empty() && getLookahead().substr(0, LineCommentChars.length()) == LineCommentChars;
 }
 
 bool isLookaheadBlockCommentCharOpen() {
-    return getLookahead().substr(0, BlockCommentCharsOpen.length()) == BlockCommentCharsOpen;
+    return !BlockCommentCharsOpen.empty() && !BlockCommentCharsClose.empty()
+        && getLookahead().substr(0, BlockCommentCharsOpen.length()) == BlockCommentCharsOpen;
 }
 
 bool isLookaheadBlockCommentCharClose() {
-    return getLookahead().substr(0, BlockCommentCharsClose.length()) == BlockCommentCharsClose;
+    return !BlockCommentCharsOpen.empty() && !BlockCommentCharsClose.empty()
+        && getLookahead().substr(0, BlockCommentCharsClose.length()) == BlockCommentCharsClose;
 }
 
 void initLexer(const std::string& fileInput, const std::string& lineCommentChars,
@@ -234,6 +237,11 @@ void initLexer(const std::string& fileInput, const std::string& lineCommentChars
     BlockCommentCharsClose = blockCommentCharsClose;
     PayloadCommentChars = lineCommentChars;
     MaxLookahead = std::max({BlockCommentCharsOpen.length(), BlockCommentCharsClose.length(), PayloadCommentChars.length()});
+
+    std::cout << "LineCommentChars: " << LineCommentChars << std::endl;
+    std::cout << "BlockCommentCharsOpen: " << BlockCommentCharsOpen << std::endl;
+    std::cout << "BlockCommentCharsClose: " << BlockCommentCharsClose << std::endl;
+    std::cout << "PayloadCommentChars: " << PayloadCommentChars << std::endl;
 
     // Load first char into the buffer
     advance();

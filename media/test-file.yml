@@ -3,14 +3,14 @@ container_name: ${{PROJECT_NAME_CONTAINER}}-backend-spring-maven
 restart: always
 networks:
 #? if has frontend {
-#?  - frontend-backend
+#  - frontend-backend
 #? }
 #? if has database {
-#?  - backend-database
+#  - backend-database
 #? }
 ports:
   - ${{SPRING_MAVEN_PORT}}:8080
 env_file:
 #? if var.ENV == "File" {
-#?   - environment.env
+#   - environment.env
 #? }

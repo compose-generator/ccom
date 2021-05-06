@@ -4,10 +4,7 @@
 // Created by Marc on 02.05.2021.
 //
 
-#include <string>
-#include <iostream>
 #include "parser.h"
-#include "../lexer/lexer.h"
 
 // Token buffer
 Token CurTok;

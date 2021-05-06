@@ -8,56 +8,68 @@ import (
 	"strings"
 )
 
-func processInput(inputFile string, inputData string, commentChar string, preserveFlag bool) {
+func processInput(
+	fileInput string,
+	dataInput string,
+	lang string,
+	lineCommentChars string,
+	blockCommentCharsOpen string,
+	blockCommentCharsClose string,
+	preserveFlag bool,
+) {
 	// Analyze correctness of inputs
-	sections := analyze(&inputFile, &inputData, &commentChar)
+	fmt.Print("Analyzing inputs ... ")
+	analyze(&fileInput, &dataInput, lang, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose)
+	fmt.Println("done")
 
 	// Feed the compiler with the individual sections
-	processSections(inputFile, inputData, sections, preserveFlag)
-}
-
-func analyze(inputFile *string, inputData *string, commentChar *string) []string {
-	// Ensure value of input data
-	if *inputData == "" {
-		*inputData = "{}"
-	}
-	// Ensure value of comment char
-	if *commentChar == "" {
-		*commentChar = "#"
-	}
-	// Get raw data strings
-	ensureInputString(inputFile)
-	ensureDataString(inputData)
-
-	// Remove any Windows line breaks
-	*inputFile = strings.ReplaceAll(*inputFile, "\r\n", "\n")
-	*inputData = strings.ReplaceAll(*inputData, "\r\n", "\n")
-
-	// Get conditional sections from inputFile
-	sections := []string{}
-	currentSection := ""
-	for _, line := range strings.Split(*inputFile, "\n") {
-		if strings.HasPrefix(line, *commentChar+"! ") {
-			// Found conditional line
-			currentSection += line + "\n"
-			if line == *commentChar+"! }" {
-				sections = append(sections, strings.TrimSuffix(currentSection, "\n"))
-				currentSection = ""
-			}
-		}
-	}
-	return sections
-}
-
-func processSections(inputFile string, inputData string, conditionalSections []string, preserveFlag bool) {
-	// Call coompiler for each conditional section
-	for _, section := range conditionalSections {
-		result := util.ExecuteAndWaitWithOutput("./ccom", section, inputData)
-		strings.ReplaceAll(inputFile, section, result)
-	}
+	fmt.Print("Compiling ... ")
+	result := util.ExecuteAndWaitWithOutput("./ccomc", fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+	fmt.Println("done")
 
 	// Temporarily print preprocessed output
-	fmt.Println(inputFile)
+	fmt.Println(result)
+}
+
+func analyze(fileInput *string, dataInput *string, lang string, lineCommentChars *string, blockCommentCharsOpen *string, blockCommentCharsClose *string) {
+	// Ensure value of input data
+	if *dataInput == "" {
+		*dataInput = "{}"
+	}
+	if lang != "" {
+		*lineCommentChars, *blockCommentCharsOpen, *blockCommentCharsClose = getCommentCharsFromLang(lang)
+	}
+	// Ensure value of comment char
+	if *lineCommentChars == "" && *blockCommentCharsOpen == "" && *blockCommentCharsClose == "" {
+		*lineCommentChars = "#"
+		*blockCommentCharsOpen = ""
+		*blockCommentCharsClose = ""
+	}
+	// Get raw data strings
+	ensureInputString(fileInput)
+	ensureDataString(dataInput)
+
+	// Replace any Windows line breaks with Linux line breaks
+	*fileInput = strings.ReplaceAll(*fileInput, "\r\n", "\n")
+	*dataInput = strings.ReplaceAll(*dataInput, "\r\n", "\n")
+}
+
+func getCommentCharsFromLang(lang string) (lineCommentChars string, blockCommentCharsOpen string, blockCommentCharsClose string) {
+	switch lang {
+	case "yaml", "yml", "python", "docker", "dockerfile":
+		lineCommentChars = "#"
+		blockCommentCharsOpen = ""
+		blockCommentCharsClose = ""
+	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust":
+		lineCommentChars = "//"
+		blockCommentCharsOpen = "/*"
+		blockCommentCharsClose = "*/"
+	case "html", "xml":
+		lineCommentChars = ""
+		blockCommentCharsOpen = "<!--"
+		blockCommentCharsClose = "-->"
+	}
+	return
 }
 
 func ensureInputString(text *string) {

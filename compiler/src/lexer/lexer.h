@@ -7,6 +7,9 @@
 #ifndef COMPILER_LEXER_H
 #define COMPILER_LEXER_H
 
+#include <string>
+#include <stdexcept>
+#include <algorithm>
 #include "Token.h"
 
 enum TokenType {

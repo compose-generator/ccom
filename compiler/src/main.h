@@ -7,6 +7,10 @@
 #ifndef COMPILER_MAIN_H
 #define COMPILER_MAIN_H
 
+#include <iostream>
+#include <vector>
+#include "parser/parser.h"
+
 int main(int, char**);
 
 #endif //COMPILER_MAIN_H

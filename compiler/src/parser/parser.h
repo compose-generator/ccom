@@ -7,7 +7,11 @@
 #ifndef COMPILER_PARSER_H
 #define COMPILER_PARSER_H
 
+#include <string>
+#include <iostream>
 #include "../lexer/Token.h"
+#include "../lexer/lexer.h"
+
 
 Token getNextToken();
 

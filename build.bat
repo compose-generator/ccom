@@ -4,6 +4,12 @@ cd cli
 
 go env -w GOOS=windows
 go env -w GOARCH=amd64
-go build -o ../bin/ccom-amd64.exe main.go
+go build -o ../bin/ccom.exe .
+
+cd ../bin
+cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" ../compiler
+mingw32-make
+
+move compiler.exe ccomc.exe
 
 cd ..
