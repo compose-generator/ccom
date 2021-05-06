@@ -59,16 +59,16 @@ Java example:
 ```java
 public class Example {
 	public static void main(String[] args) {
-        /*? if has property_name {
-            if () {
-                System.out.println("True");
-            }
-        }*/
-        /*? if has property_name {
-            if () {
-                System.out.println("True");
-            }
-        }*/
+		/*? if has property_name {
+			if () {
+				System.out.println("True");
+			}
+		}*/
+		/*? if has property_name {
+			if () {
+				System.out.println("True");
+			}
+		}*/
 	}
 }
 ```

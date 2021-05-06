@@ -21,6 +21,7 @@ int main(int argc, char** argv) {
 
     // Replace file input with test string
     fileInput = "property1:= value\n//? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\n// test payload\n// - another test payload\n//? }\nattribute2: value2";
+    //fileInput = "property1:= value\n/*? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\ntest payload\n- another test payload\n}*/\nattribute2: value2";
 
     initParser(fileInput, dataInput, args[3], args[4], args[5]);
 

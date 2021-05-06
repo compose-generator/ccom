@@ -156,7 +156,11 @@ Token consumeArbitrary() {
 
 Token consumePayload() {
     std::string payloadStr;
-    while(!isLookaheadLineCommentChars() && CurrentChar != '\n' && !isEOF()) {
+    while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharClose() && !isEOF()) {
+        if (isLookaheadPayloadCommentChars()) {
+            advance();
+            advance();
+        }
         payloadStr.push_back((char) CurrentChar);
         advance();
     }
