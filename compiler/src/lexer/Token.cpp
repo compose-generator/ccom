@@ -1,3 +1,5 @@
+// Copyright (c) Marc Auberer 2021. All rights reserved.
+
 //
 // Created by Marc on 02.05.2021.
 //

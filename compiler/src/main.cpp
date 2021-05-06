@@ -1,3 +1,5 @@
+// Copyright (c) Marc Auberer 2021. All rights reserved.
+
 //
 // Created by Marc on 02.05.2021.
 //
@@ -18,7 +20,7 @@ int main(int argc, char** argv) {
     std::string dataInput = args[2];
 
     // Replace file input with test string
-    fileInput = "property1: value\n//? if has frontend | has service.backend | var.FlaskPort == \"8\\\"080\" {\n//?? test payload\n//? }\nattribute2: value2";
+    fileInput = "property1:= value\n//? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\n// test payload\n// - another test payload\n//? }\nattribute2: value2";
 
     initParser(fileInput, dataInput, args[3], args[4], args[5]);
 

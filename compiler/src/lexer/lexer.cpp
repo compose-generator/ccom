@@ -1,3 +1,5 @@
+// Copyright (c) Marc Auberer 2021. All rights reserved.
+
 //
 // Created by Marc on 02.05.2021.
 //
@@ -20,6 +22,9 @@ int InputStringPos = -1;
 int CurrentChar = 0;
 unsigned int LineNum = 1;
 unsigned int ColNum = 0;
+
+Context currentContext = ARBITRARY;
+
 
 int advance() {
     InputStringPos++;
@@ -48,108 +53,75 @@ std::string getLookahead() {
 
 Token getTok() {
     // Skip any whitespace
-    while (isspace(CurrentChar)) {
-        if (CurrentChar == '\n') {
-            ColNum = -1;
-            LineNum++;
-        }
-        advance();
-    }
+    skipWhitespaces();
 
     // Check for EOF
-    if (CurrentChar == EOF) return Token(TOK_EOF, LineNum, ColNum);
+    if (isEOF()) return Token(TOK_EOF, LineNum, ColNum);
 
-    // Is it a char array?
-    if (isalpha(CurrentChar)) { // [a-zA-Z]
-        std::string identifierStr;
-        identifierStr.push_back((char) CurrentChar);
-        while (isalnum(advance())) // [a-zA-Z0-9]*
-            identifierStr.push_back((char) CurrentChar);
+    // Are we in arbitrary context?
+    if (currentContext == ARBITRARY) return consumeArbitrary();
 
-        // Is keyword?
-        if (identifierStr == "if") return Token(TOK_IF, LineNum, ColNum);
-        if (identifierStr == "has") return Token(TOK_HAS, LineNum, ColNum);
-        if (identifierStr == "not") return Token(TOK_NOT, LineNum, ColNum);
-        if (identifierStr == "true") return Token(TOK_TRUE, LineNum, ColNum);
-        if (identifierStr == "false") return Token(TOK_FALSE, LineNum, ColNum);
-        return Token(TOK_IDENTIFIER, identifierStr, LineNum, ColNum);
-    }
+    // Are we in payload context?
+    if (currentContext == PAYLOAD) return consumePayload();
 
-    // Is it an integer?
-    if (isdigit(CurrentChar)) { // [0-9]+
-        std::string NumStr;
-        do {
-            NumStr += std::to_string(CurrentChar);
-            advance();
-        } while (isdigit(CurrentChar));
-        return Token(TOK_NUMBER, NumStr, LineNum, ColNum);
-    }
+    // Is it a primitive char, that can be returned immediately?
+    switch (CurrentChar) {
+        case '.':
+            expect('.');
+            return Token(TOK_DOT, LineNum, ColNum);
+        case '{':
+            expect('{');
+            currentContext = PAYLOAD;
+            return Token(TOK_BRACE_OPEN, LineNum, ColNum);
+        case '}':
+            expect('}');
+            currentContext = ARBITRARY;
+            return Token(TOK_BRACE_CLOSE, LineNum, ColNum);
+        case '|':
+            expect('|');
+            return Token(TOK_OR, LineNum, ColNum);
+        case '!': // !=
+            expect('!');
+            expect('=');
+            return Token(TOK_NOT_EQUALS, LineNum, ColNum);
+        case '=': // ==
+            expect('=');
+            expect('=');
+            return Token(TOK_EQUALS, LineNum, ColNum);
+        case '"': // String literal
+            return consumeStringLiteral();
+        default:
+            // Is it a char array?
+            if (isalpha(CurrentChar)) return consumeIdentifierOrKeyword();
 
-    // Is it a single char, that can be returned immediately?
-    if (CurrentChar == '.') {
-        advance();
-        return Token(TOK_DOT, LineNum, ColNum);
-    }
-    if (CurrentChar == '{') {
-        advance();
-        return Token(TOK_BRACE_OPEN, LineNum, ColNum);
-    }
-    if (CurrentChar == '}') {
-        advance();
-        return Token(TOK_BRACE_CLOSE, LineNum, ColNum);
-    }
-    if (CurrentChar == '|') {
-        advance();
-        return Token(TOK_OR, LineNum, ColNum);
-    }
+            // Is it an integer?
+            if (isdigit(CurrentChar)) return consumeNumber();
 
-    // Is it '!='?
-    if (CurrentChar == '!') {
-        expect('!');
-        expect('=');
-        return Token(TOK_NOT_EQUALS, LineNum, ColNum);
-    }
-
-    // Is it '=='?
-    if (CurrentChar == '=') {
-        expect('=');
-        expect('=');
-        return Token(TOK_EQUALS, LineNum, ColNum);
-    }
-
-    // Is it a string literal?
-    if (CurrentChar == '"') {
-        expect('"');
-        std::string stringStr;
-        stringStr.push_back((char) CurrentChar);
-        while(CurrentChar != '"' && CurrentChar != EOF) {
-            stringStr.push_back((char) advance());
-            if (CurrentChar == '\\') {
-                advance();
-                stringStr.push_back((char) advance());
+            // Is it a conditional comment identifier?
+            std::string laResult;
+            if (isLookaheadLineCommentChars()) {
+                // Consume LineCommentChars
+                for (int i = 0; i < LineCommentChars.length(); i++) advance();
+                // Update context
+                currentContext = SECTION;
+                return Token(TOK_COM_LINE_IDEN, LineNum, ColNum);
+            } else if (isLookaheadPayloadCommentChars()) {
+                // Consume PayloadCommentChars
+                for (int i = 0; i < PayloadCommentChars.length(); i++) advance();
+                return Token(TOK_COM_IDEN_PAYLOAD, LineNum, ColNum);
+            } else if (isLookaheadBlockCommentCharOpen()) {
+                // Consume BlockCommentCharsOpen
+                for (int i = 0; i < BlockCommentCharsOpen.length(); i++) advance();
+                // Update context
+                currentContext = SECTION;
+                return Token(TOK_COM_BLOCK_IDEN_OPEN, LineNum, ColNum);
+            } else if (isLookaheadBlockCommentCharClose()) {
+                // Consume BlockCommentCharsClose
+                for (int i = 0; i < BlockCommentCharsClose.length(); i++) advance();
+                // Update context
+                currentContext = ARBITRARY;
+                return Token(TOK_COM_BLOCK_IDEN_CLOSE, LineNum, ColNum);
             }
-        }
-        expect('"');
-        return Token(TOK_STRING, LineNum, ColNum);
-    }
-
-    // Is it a conditional comment identifier?
-    std::string laResult;
-    if ((laResult = getLookahead().substr(0, PayloadCommentChars.length())) == PayloadCommentChars) {
-        for (int i = 0; i < laResult.length(); i++) advance();
-        return Token(TOK_COM_IDEN_PAYLOAD, LineNum, ColNum);
-    }
-    if ((laResult = getLookahead().substr(0, LineCommentChars.length())) == LineCommentChars) {
-        for (int i = 0; i < laResult.length(); i++) advance();
-        return Token(TOK_COM_LINE_IDEN, LineNum, ColNum);
-    }
-    if ((laResult = getLookahead().substr(0, BlockCommentCharsOpen.length())) == BlockCommentCharsOpen) {
-        for (int i = 0; i < laResult.length(); i++) advance();
-        return Token(TOK_COM_BLOCK_IDEN_OPEN, LineNum, ColNum);
-    }
-    if ((laResult = getLookahead().substr(0, BlockCommentCharsClose.length())) == BlockCommentCharsClose) {
-        for (int i = 0; i < laResult.length(); i++) advance();
-        return Token(TOK_COM_BLOCK_IDEN_CLOSE, LineNum, ColNum);
     }
 
     // Otherwise, just return the character as its ascii value.
@@ -158,17 +130,105 @@ Token getTok() {
     return result;
 }
 
-void initLexer(std::string fileInput,
-               const std::string& lineCommentChars,
-               const std::string& blockCommentCharsOpen,
-               std::string blockCommentCharsClose) {
-    FileInput = std::move(fileInput);
+bool isEOF() {
+    return CurrentChar == EOF;
+}
+
+void skipWhitespaces() {
+    while (isspace(CurrentChar)) {
+        if (CurrentChar == '\n') {
+            ColNum = -1;
+            LineNum++;
+        }
+        advance();
+    }
+}
+
+Token consumeArbitrary() {
+    std::string arbitraryStr;
+    while(!isLookaheadBlockCommentCharOpen() && !isLookaheadLineCommentChars() && !isEOF()) {
+        arbitraryStr.push_back((char) CurrentChar);
+        advance();
+    }
+    currentContext = SECTION;
+    return Token(TOK_ARBITRARY, arbitraryStr, LineNum, ColNum);
+}
+
+Token consumePayload() {
+    std::string payloadStr;
+    while(!isLookaheadLineCommentChars() && CurrentChar != '\n' && !isEOF()) {
+        payloadStr.push_back((char) CurrentChar);
+        advance();
+    }
+    currentContext = SECTION;
+    return Token(TOK_ARBITRARY, payloadStr, LineNum, ColNum);
+}
+
+Token consumeNumber() {
+    std::string numStr;
+    do {
+        numStr.push_back((char) CurrentChar);
+        advance();
+    } while (isdigit(CurrentChar));
+    return Token(TOK_NUMBER, numStr, LineNum, ColNum);
+}
+
+Token consumeIdentifierOrKeyword() {
+    std::string identifierStr;
+    identifierStr.push_back((char) CurrentChar);
+    while (isalnum(advance())) // [a-zA-Z0-9]*
+        identifierStr.push_back((char) CurrentChar);
+
+    // Is keyword?
+    if (identifierStr == "if") return Token(TOK_IF, LineNum, ColNum);
+    if (identifierStr == "has") return Token(TOK_HAS, LineNum, ColNum);
+    if (identifierStr == "not") return Token(TOK_NOT, LineNum, ColNum);
+    if (identifierStr == "true") return Token(TOK_TRUE, LineNum, ColNum);
+    if (identifierStr == "false") return Token(TOK_FALSE, LineNum, ColNum);
+    return Token(TOK_IDENTIFIER, identifierStr, LineNum, ColNum);
+}
+
+Token consumeStringLiteral() {
+    expect('"');
+    std::string stringStr;
+    while(CurrentChar != '"' && CurrentChar != EOF) {
+        if (CurrentChar == '\\') {
+            stringStr.push_back((char) advance());
+            advance();
+        } else {
+            stringStr.push_back((char) CurrentChar);
+            advance();
+        }
+    }
+    expect('"');
+    return Token(TOK_STRING, stringStr, LineNum, ColNum);
+}
+
+bool isLookaheadPayloadCommentChars() {
+    return getLookahead().substr(0, PayloadCommentChars.length()) == PayloadCommentChars;
+}
+
+bool isLookaheadLineCommentChars() {
+    return getLookahead().substr(0, LineCommentChars.length()) == LineCommentChars;
+}
+
+bool isLookaheadBlockCommentCharOpen() {
+    return getLookahead().substr(0, BlockCommentCharsOpen.length()) == BlockCommentCharsOpen;
+}
+
+bool isLookaheadBlockCommentCharClose() {
+    return getLookahead().substr(0, BlockCommentCharsClose.length()) == BlockCommentCharsClose;
+}
+
+void initLexer(const std::string& fileInput, const std::string& lineCommentChars,
+               const std::string& blockCommentCharsOpen, const std::string& blockCommentCharsClose) {
+    FileInput = fileInput;
 
     // Build conditional comment chars, based on comment chars input
     LineCommentChars = lineCommentChars + "?";
     BlockCommentCharsOpen = blockCommentCharsOpen + "?";
-    BlockCommentCharsClose = std::move(blockCommentCharsClose);
-    PayloadCommentChars = LineCommentChars + "?";
+    BlockCommentCharsClose = blockCommentCharsClose;
+    PayloadCommentChars = lineCommentChars;
     MaxLookahead = std::max({BlockCommentCharsOpen.length(), BlockCommentCharsClose.length(), PayloadCommentChars.length()});
 
     // Load first char into the buffer

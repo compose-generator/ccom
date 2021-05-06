@@ -1,3 +1,5 @@
+// Copyright (c) Marc Auberer 2021. All rights reserved.
+
 //
 // Created by Marc on 02.05.2021.
 //
@@ -9,6 +11,6 @@
 
 Token getNextToken();
 
-void initParser(std::string, std::string, const std::string&, const std::string&, std::string);
+void initParser(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
 
 #endif //COMPILER_PARSER_H
