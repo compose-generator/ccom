@@ -5,6 +5,7 @@
 //
 
 #include <iostream>
+#include <sstream>
 #include "lexer.h"
 
 // CommentChars, built from user input
@@ -145,21 +146,21 @@ void skipWhitespaces() {
 }
 
 Token consumeArbitrary() {
-    std::string arbitraryStr;
+    std::stringstream arbitraryStr;
     while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharOpen() && !isEOF()) {
         if (CurrentChar == '\n') {
             ColNum = -1;
             LineNum++;
         }
-        arbitraryStr.push_back((char) CurrentChar);
+        arbitraryStr << (char) CurrentChar;
         advance();
     }
     currentContext = SECTION;
-    return Token(TOK_ARBITRARY, arbitraryStr, LineNum, ColNum);
+    return Token(TOK_ARBITRARY, arbitraryStr.str(), LineNum, ColNum);
 }
 
 Token consumePayload() {
-    std::string payloadStr;
+    std::stringstream payloadStr;
     while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharClose() && !isEOF()) {
         if (CurrentChar == '\n') {
             ColNum = -1;
@@ -168,51 +169,52 @@ Token consumePayload() {
             // Consume PayloadCommentChars
             for (int i = 0; i < PayloadCommentChars.length(); i++) advance();
         }
-        payloadStr.push_back((char) CurrentChar);
+        payloadStr << (char) CurrentChar;
         advance();
     }
     currentContext = SECTION;
-    return Token(TOK_ARBITRARY, payloadStr, LineNum, ColNum);
+    return Token(TOK_ARBITRARY, payloadStr.str(), LineNum, ColNum);
 }
 
 Token consumeNumber() {
-    std::string numStr;
+    std::stringstream numStr;
     do {
-        numStr.push_back((char) CurrentChar);
+        numStr << (char) CurrentChar;
         advance();
     } while (isdigit(CurrentChar));
-    return Token(TOK_NUMBER, numStr, LineNum, ColNum);
+    return Token(TOK_NUMBER, numStr.str(), LineNum, ColNum);
 }
 
 Token consumeIdentifierOrKeyword() {
-    std::string identifierStr;
-    identifierStr.push_back((char) CurrentChar);
+    std::stringstream identifierStr;
+    identifierStr << (char) CurrentChar;
     while (isalnum(advance())) // [a-zA-Z0-9]*
-        identifierStr.push_back((char) CurrentChar);
+        identifierStr << (char) CurrentChar;
 
     // Is keyword?
-    if (identifierStr == "if") return Token(TOK_IF, LineNum, ColNum);
-    if (identifierStr == "has") return Token(TOK_HAS, LineNum, ColNum);
-    if (identifierStr == "not") return Token(TOK_NOT, LineNum, ColNum);
-    if (identifierStr == "true") return Token(TOK_TRUE, LineNum, ColNum);
-    if (identifierStr == "false") return Token(TOK_FALSE, LineNum, ColNum);
-    return Token(TOK_IDENTIFIER, identifierStr, LineNum, ColNum);
+    std::string identifierName = identifierStr.str();
+    if (identifierName == "if") return Token(TOK_IF, LineNum, ColNum);
+    if (identifierName == "has") return Token(TOK_HAS, LineNum, ColNum);
+    if (identifierName == "not") return Token(TOK_NOT, LineNum, ColNum);
+    if (identifierName == "true") return Token(TOK_TRUE, LineNum, ColNum);
+    if (identifierName == "false") return Token(TOK_FALSE, LineNum, ColNum);
+    return Token(TOK_IDENTIFIER, identifierName, LineNum, ColNum);
 }
 
 Token consumeStringLiteral() {
     expect('"');
-    std::string stringStr;
+    std::stringstream stringStr;
     while(CurrentChar != '"' && CurrentChar != EOF) {
         if (CurrentChar == '\\') {
-            stringStr.push_back((char) advance());
+            stringStr << (char) advance();
             advance();
         } else {
-            stringStr.push_back((char) CurrentChar);
+            stringStr << (char) CurrentChar;
             advance();
         }
     }
     expect('"');
-    return Token(TOK_STRING, stringStr, LineNum, ColNum);
+    return Token(TOK_STRING, stringStr.str(), LineNum, ColNum);
 }
 
 bool isLookaheadPayloadCommentChars() {
@@ -244,11 +246,6 @@ void initLexer(const std::string& fileInput, const std::string& lineCommentChars
     PayloadCommentChars = lineCommentChars;
     MaxLookahead = std::max({LineCommentChars.length(), BlockCommentCharsOpen.length(),
                              BlockCommentCharsClose.length(), PayloadCommentChars.length()});
-
-    //std::cout << "LineCommentChars: " << LineCommentChars << std::endl;
-    //std::cout << "BlockCommentCharsOpen: " << BlockCommentCharsOpen << std::endl;
-    //std::cout << "BlockCommentCharsClose: " << BlockCommentCharsClose << std::endl;
-    //std::cout << "PayloadCommentChars: " << PayloadCommentChars << std::endl;
 
     // Load first char into the buffer
     advance();
