@@ -15,6 +15,7 @@
 
 Token getNextToken();
 
-void initParser(const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
+void initParser(bool, const std::string&, const std::string&, const std::string&,
+                const std::string&, const std::string&);
 
 #endif //COMPILER_PARSER_H

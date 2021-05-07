@@ -54,6 +54,12 @@ func main() {
 				DefaultText: "yaml",
 				Usage:       "File format / programming language (e.g.: yaml, java, html, ...)",
 			},
+			&cli.StringFlag{
+				Name:        "mode",
+				Aliases:     []string{"m"},
+				DefaultText: "file",
+				Usage:       "Whole file with string output or single statement list with boolean output (file / single)",
+			},
 			&cli.BoolFlag{
 				Name:    "preserve-comments-on-false",
 				Aliases: []string{"p"},
@@ -65,6 +71,7 @@ func main() {
 				c.Args().Get(0),
 				c.String("data"),
 				c.String("lang"),
+				c.String("mode"),
 				c.String("line-comment-chars"),
 				c.String("block-comment-chars-open"),
 				c.String("block-comment-chars-close"),

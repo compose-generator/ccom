@@ -10,8 +10,9 @@
 Token CurTok;
 Token getNextToken() { return CurTok = getTok(); }
 
-void initParser(const std::string& fileInput, const std::string& dataInput, const std::string& lineCommentChars,
-                const std::string& blockCommentCharsOpen, const std::string& blockCommentCharsClose) {
+void initParser(const bool isSingleStatement, const std::string& fileInput, const std::string& dataInput,
+                const std::string& lineCommentChars, const std::string& blockCommentCharsOpen,
+                const std::string& blockCommentCharsClose) {
     initLexer(fileInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose);
 
     // Test lexer

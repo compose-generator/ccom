@@ -13,30 +13,31 @@ int main(int argc, char** argv) {
     for (size_t iArg = 0; iArg < argc; ++iArg)
         args.emplace_back(argv[iArg]);
 
-    std::string fileInput = args[1];
-    std::string dataInput = args[2];
+    bool singleStatementMode = args[1] == "1";
+    std::string fileInput = args[2];
+    std::string dataInput = args[3];
 
     // Replace file input with test string
     //fileInput = "property1:= value\n//? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\n// test payload}\n// - another test payload\n//? }\nattribute2: value2";
     //fileInput = "property1:= value\n/*? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\ntest payload\n- }another test payload\n}*/\nattribute2: value2";
-    fileInput = "build: ${{SPRING_MAVEN_SOURCE_DIRECTORY}}\n"
-                "container_name: ${{PROJECT_NAME_CONTAINER}}-backend-spring-maven\n"
-                "restart: always\n"
-                "networks:\n"
-                "#? if has frontend {\n"
-                "#  - frontend-backend\n"
-                "#? }\n"
-                "#? if has database {\n"
-                "#  - backend-database\n"
-                "#? }\n"
-                "ports:\n"
-                "  - ${{SPRING_MAVEN_PORT}}:8080\n"
-                "env_file:\n"
-                "#? if var.ENV == \"File\" {\n"
-                "#   - environment.env\n"
-                "#? }";
+    fileInput = "<html>\n"
+                "    <head>\n"
+                "        <!--? if var.test == \"Title 1\" {\n"
+                "        <title>Title 1</title>\n"
+                "        }-->\n"
+                "        <!--? if var.test == \"Title 2\" {\n"
+                "        <title>Title 2</title>\n"
+                "        }-->\n"
+                "    </head>\n"
+                "    <body>\n"
+                "        <!--? if has var.body {\n"
+                "        <h2>Body is available</h2><br>\n"
+                "        <h3>Subheading</h3>\n"
+                "        }-->\n"
+                "    </body>\n"
+                "</html>";
 
-    initParser(fileInput, dataInput, args[3], args[4], args[5]);
+    initParser(singleStatementMode, fileInput, dataInput, args[4], args[5], args[6]);
 
     return 0;
 }

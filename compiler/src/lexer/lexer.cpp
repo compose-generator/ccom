@@ -218,20 +218,22 @@ Token consumeStringLiteral() {
 }
 
 bool isLookaheadPayloadCommentChars() {
-    return getLookahead().substr(0, PayloadCommentChars.length()) == PayloadCommentChars;
+    return !PayloadCommentChars.empty()
+        && getLookahead().substr(0, PayloadCommentChars.length()) == PayloadCommentChars;
 }
 
 bool isLookaheadLineCommentChars() {
-    return !LineCommentChars.empty() && getLookahead().substr(0, LineCommentChars.length()) == LineCommentChars;
+    return !LineCommentChars.empty()
+        && getLookahead().substr(0, LineCommentChars.length()) == LineCommentChars;
 }
 
 bool isLookaheadBlockCommentCharOpen() {
-    return !BlockCommentCharsOpen.empty() && !BlockCommentCharsClose.empty()
+    return !BlockCommentCharsOpen.empty()
         && getLookahead().substr(0, BlockCommentCharsOpen.length()) == BlockCommentCharsOpen;
 }
 
 bool isLookaheadBlockCommentCharClose() {
-    return !BlockCommentCharsOpen.empty() && !BlockCommentCharsClose.empty()
+    return !BlockCommentCharsClose.empty()
         && getLookahead().substr(0, BlockCommentCharsClose.length()) == BlockCommentCharsClose;
 }
 

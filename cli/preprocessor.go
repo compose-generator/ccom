@@ -12,6 +12,7 @@ func processInput(
 	fileInput string,
 	dataInput string,
 	lang string,
+	mode string,
 	lineCommentChars string,
 	blockCommentCharsOpen string,
 	blockCommentCharsClose string,
@@ -19,19 +20,27 @@ func processInput(
 ) {
 	// Analyze correctness of inputs
 	fmt.Print("Analyzing inputs ... ")
-	analyze(&fileInput, &dataInput, lang, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose)
+	analyze(&fileInput, &dataInput, lang, &mode, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose)
 	fmt.Println("done")
 
 	// Feed the compiler with the individual sections
 	fmt.Print("Compiling ... ")
-	result := util.ExecuteAndWaitWithOutput("./ccomc", fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
 	fmt.Println("done")
 
 	// Temporarily print preprocessed output
 	fmt.Println(result)
 }
 
-func analyze(fileInput *string, dataInput *string, lang string, lineCommentChars *string, blockCommentCharsOpen *string, blockCommentCharsClose *string) {
+func analyze(
+	fileInput *string,
+	dataInput *string,
+	lang string,
+	mode *string,
+	lineCommentChars *string,
+	blockCommentCharsOpen *string,
+	blockCommentCharsClose *string,
+) {
 	// Ensure value of input data
 	if *dataInput == "" {
 		*dataInput = "{}"
@@ -46,8 +55,13 @@ func analyze(fileInput *string, dataInput *string, lang string, lineCommentChars
 		*blockCommentCharsClose = ""
 	}
 	// Get raw data strings
-	ensureInputString(fileInput)
-	ensureDataString(dataInput)
+	if *mode == "file" {
+		ensureFileInputString(fileInput)
+		*mode = "0"
+	} else {
+		*mode = "1"
+	}
+	ensureDataInputString(dataInput)
 
 	// Replace any Windows line breaks with Linux line breaks
 	*fileInput = strings.ReplaceAll(*fileInput, "\r\n", "\n")
@@ -72,14 +86,14 @@ func getCommentCharsFromLang(lang string) (lineCommentChars string, blockComment
 	return
 }
 
-func ensureInputString(text *string) {
+func ensureFileInputString(text *string) {
 	// Is it a path to a file
 	if util.FileExists(*text) && !util.IsDir(*text) {
 		*text = util.GetFileContents(*text)
 	}
 }
 
-func ensureDataString(text *string) {
+func ensureDataInputString(text *string) {
 	// Is it a path to a file
 	if util.FileExists(*text) && !util.IsDir(*text) {
 		*text = util.GetFileContents(*text)
