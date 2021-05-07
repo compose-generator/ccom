@@ -59,7 +59,9 @@ Token getTok() {
 
     // Are we in arbitrary context?
     if (currentContext == ARBITRARY) {
-        return consumeArbitrary();
+        Token token = consumeArbitrary();
+        if (!token.getValue().empty())
+            return token;
     }
 
     // Are we in payload context?
@@ -76,7 +78,8 @@ Token getTok() {
             return Token(TOK_BRACE_OPEN, LineNum, ColNum);
         case '}':
             expect('}');
-            currentContext = ARBITRARY;
+            if (!isLookaheadBlockCommentCharClose())
+                currentContext = ARBITRARY;
             return Token(TOK_BRACE_CLOSE, LineNum, ColNum);
         case '|':
             expect('|');
@@ -161,7 +164,7 @@ Token consumeArbitrary() {
 
 Token consumePayload() {
     std::stringstream payloadStr;
-    while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharClose() && !isEOF()) {
+    while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharCloseWithBrace() && !isEOF()) {
         if (CurrentChar == '\n') {
             ColNum = -1;
             LineNum++;
@@ -237,6 +240,11 @@ bool isLookaheadBlockCommentCharClose() {
         && getLookahead().substr(0, BlockCommentCharsClose.length()) == BlockCommentCharsClose;
 }
 
+bool isLookaheadBlockCommentCharCloseWithBrace() {
+    return !BlockCommentCharsClose.empty()
+           && getLookahead().substr(0, BlockCommentCharsClose.length() +1) == "}" + BlockCommentCharsClose;
+}
+
 void initLexer(const std::string& fileInput, const std::string& lineCommentChars,
                const std::string& blockCommentCharsOpen, const std::string& blockCommentCharsClose) {
     FileInput = fileInput;
@@ -247,7 +255,7 @@ void initLexer(const std::string& fileInput, const std::string& lineCommentChars
     BlockCommentCharsClose = blockCommentCharsClose;
     PayloadCommentChars = lineCommentChars;
     MaxLookahead = std::max({LineCommentChars.length(), BlockCommentCharsOpen.length(),
-                             BlockCommentCharsClose.length(), PayloadCommentChars.length()});
+                             BlockCommentCharsClose.length(), PayloadCommentChars.length()}) +1;
 
     // Load first char into the buffer
     advance();

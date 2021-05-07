@@ -20,24 +20,7 @@ int main(int argc, char** argv) {
     // Replace file input with test string
     //fileInput = "property1:= value\n//? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\n// test payload}\n// - another test payload\n//? }\nattribute2: value2";
     //fileInput = "property1:= value\n/*? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\ntest payload\n- }another test payload\n}*/\nattribute2: value2";
-    fileInput = "<html>\n"
-                "    <head>\n"
-                "        <!--? if var.test == \"Title 1\" {\n"
-                "        <title>Title 1</title>\n"
-                "        }-->\n"
-                "        <!--? if var.test == \"Title 2\" {\n"
-                "        <title>Title 2</title>\n"
-                "        }-->\n"
-                "    </head>\n"
-                "    <body>\n"
-                "        <!--? if has var.body {\n"
-                "        <h2>Body is available</h2><br>\n"
-                "        <h3>Subheading</h3>\n"
-                "        }-->\n"
-                "    </body>\n"
-                "</html>";
 
     initParser(singleStatementMode, fileInput, dataInput, args[4], args[5], args[6]);
-
     return 0;
 }

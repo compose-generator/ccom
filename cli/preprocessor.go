@@ -54,6 +54,10 @@ func analyze(
 		*blockCommentCharsOpen = ""
 		*blockCommentCharsClose = ""
 	}
+	// Ensure value of mode
+	if *mode == "" {
+		*mode = "file"
+	}
 	// Get raw data strings
 	if *mode == "file" {
 		ensureFileInputString(fileInput)

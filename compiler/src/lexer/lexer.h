@@ -84,6 +84,8 @@ bool isLookaheadBlockCommentCharOpen();
 
 bool isLookaheadBlockCommentCharClose();
 
+bool isLookaheadBlockCommentCharCloseWithBrace();
+
 void initLexer(const std::string&, const std::string&, const std::string&, const std::string&);
 
 #endif //COMPILER_LEXER_H
