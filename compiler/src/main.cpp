@@ -17,8 +17,24 @@ int main(int argc, char** argv) {
     std::string dataInput = args[2];
 
     // Replace file input with test string
-    //fileInput = "property1:= value\n//? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\n// test payload\n// - another test payload\n//? }\nattribute2: value2";
-    //fileInput = "property1:= value\n/*? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\ntest payload\n- another test payload\n}*/\nattribute2: value2";
+    //fileInput = "property1:= value\n//? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\n// test payload}\n// - another test payload\n//? }\nattribute2: value2";
+    //fileInput = "property1:= value\n/*? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\ntest payload\n- }another test payload\n}*/\nattribute2: value2";
+    fileInput = "build: ${{SPRING_MAVEN_SOURCE_DIRECTORY}}\n"
+                "container_name: ${{PROJECT_NAME_CONTAINER}}-backend-spring-maven\n"
+                "restart: always\n"
+                "networks:\n"
+                "#? if has frontend {\n"
+                "#  - frontend-backend\n"
+                "#? }\n"
+                "#? if has database {\n"
+                "#  - backend-database\n"
+                "#? }\n"
+                "ports:\n"
+                "  - ${{SPRING_MAVEN_PORT}}:8080\n"
+                "env_file:\n"
+                "#? if var.ENV == \"File\" {\n"
+                "#   - environment.env\n"
+                "#? }";
 
     initParser(fileInput, dataInput, args[3], args[4], args[5]);
 

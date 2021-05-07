@@ -57,7 +57,9 @@ Token getTok() {
     if (isEOF()) return Token(TOK_EOF, LineNum, ColNum);
 
     // Are we in arbitrary context?
-    if (currentContext == ARBITRARY) return consumeArbitrary();
+    if (currentContext == ARBITRARY) {
+        return consumeArbitrary();
+    }
 
     // Are we in payload context?
     if (currentContext == PAYLOAD) return consumePayload();
@@ -145,6 +147,10 @@ void skipWhitespaces() {
 Token consumeArbitrary() {
     std::string arbitraryStr;
     while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharOpen() && !isEOF()) {
+        if (CurrentChar == '\n') {
+            ColNum = -1;
+            LineNum++;
+        }
         arbitraryStr.push_back((char) CurrentChar);
         advance();
     }
@@ -232,16 +238,17 @@ void initLexer(const std::string& fileInput, const std::string& lineCommentChars
     FileInput = fileInput;
 
     // Build conditional comment chars, based on comment chars input
-    LineCommentChars = lineCommentChars + "?";
-    BlockCommentCharsOpen = blockCommentCharsOpen + "?";
+    LineCommentChars = lineCommentChars.empty() ? "" : lineCommentChars + "?";
+    BlockCommentCharsOpen = blockCommentCharsOpen.empty() ? "" : blockCommentCharsOpen + "?";
     BlockCommentCharsClose = blockCommentCharsClose;
     PayloadCommentChars = lineCommentChars;
-    MaxLookahead = std::max({BlockCommentCharsOpen.length(), BlockCommentCharsClose.length(), PayloadCommentChars.length()});
+    MaxLookahead = std::max({LineCommentChars.length(), BlockCommentCharsOpen.length(),
+                             BlockCommentCharsClose.length(), PayloadCommentChars.length()});
 
-    std::cout << "LineCommentChars: " << LineCommentChars << std::endl;
-    std::cout << "BlockCommentCharsOpen: " << BlockCommentCharsOpen << std::endl;
-    std::cout << "BlockCommentCharsClose: " << BlockCommentCharsClose << std::endl;
-    std::cout << "PayloadCommentChars: " << PayloadCommentChars << std::endl;
+    //std::cout << "LineCommentChars: " << LineCommentChars << std::endl;
+    //std::cout << "BlockCommentCharsOpen: " << BlockCommentCharsOpen << std::endl;
+    //std::cout << "BlockCommentCharsClose: " << BlockCommentCharsClose << std::endl;
+    //std::cout << "PayloadCommentChars: " << PayloadCommentChars << std::endl;
 
     // Load first char into the buffer
     advance();
