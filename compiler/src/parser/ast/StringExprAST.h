@@ -9,8 +9,9 @@
 
 #include <string>
 #include <utility>
+#include "ExprAST.h"
 
-class StringExprAST {
+class StringExprAST : public ExprAST {
 private:
     std::string Val;
 public:

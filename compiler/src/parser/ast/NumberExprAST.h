@@ -7,7 +7,9 @@
 #ifndef COMPILER_NUMBEREXPRAST_H
 #define COMPILER_NUMBEREXPRAST_H
 
-class NumberExprAST {
+#include "ExprAST.h"
+
+class NumberExprAST : public ExprAST {
 private:
     int Val;
 public:

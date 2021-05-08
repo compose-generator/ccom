@@ -9,9 +9,13 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
+#include "ast/ExprAST.h"
+#include "ast/NumberExprAST.h"
+#include "ast/StringExprAST.h"
+#include "ast/IdentifierExprAST.h"
 #include "../lexer/Token.h"
 #include "../lexer/lexer.h"
-
 
 Token getNextToken();
 

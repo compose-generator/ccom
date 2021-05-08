@@ -9,10 +9,10 @@
 
 #include <memory>
 #include <utility>
-#include "../../lexer/Token.h"
 #include "ExprAST.h"
+#include "../../lexer/Token.h"
 
-class BinaryExprAST {
+class BinaryExprAST : public ExprAST {
 private:
     Token Op;
     std::unique_ptr<ExprAST> LHS, RHS;
