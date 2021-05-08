@@ -8,11 +8,15 @@ on:
     branches: [ main, dev, feature/* ]
 
 jobs:
-  ubuntu-build:
+  build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./compiler
+        
     steps:
     - name: Checkout
-      uses: actions/checkout@v2.0.0
+      uses: actions/checkout@v2
     - name: Build project
       uses: nicledomaS/cmake_build_action@v1.4
       with:
