@@ -27,12 +27,9 @@ std::unique_ptr<StringExprAST> parseString() {
     return std::make_unique<StringExprAST>(value);
 }
 
-std::unique_ptr<ExprAST> parseValue() {
-    if (CurTok.getType() == TOK_NUMBER) {
-
-    } else {
-
-    }
+std::unique_ptr<ValueExprAST> parseValue() {
+    if (CurTok.getType() == TOK_NUMBER) return parseNumber();
+    return parseString();
 }
 
 std::unique_ptr<IdentifierExprAST> parseIdentifier() {
@@ -43,14 +40,30 @@ std::unique_ptr<IdentifierExprAST> parseIdentifier() {
 
 std::unique_ptr<KeyExprAST> parseKey() {
     std::vector<std::unique_ptr<IdentifierExprAST>> identifiers;
-    do {
-
-    } while (CurTok.getType() == TOK_DOT);
+    identifiers.push_back(parseIdentifier()); // consume first identifier
+    while (CurTok.getType() == TOK_DOT) {
+        expectToken(TOK_DOT);
+        identifiers.push_back(parseIdentifier()); // consume identifier
+    }
     return std::make_unique<KeyExprAST>(identifiers);
 }
 
-std::unique_ptr<ExprAST> parseCompStmt() {
-
+std::unique_ptr<CompStmtExprAST> parseCompStmt() {
+    std::unique_ptr<KeyExprAST> key = parseKey();
+    Operator op;
+    switch (CurTok.getType()) {
+        case TOK_EQUALS:
+            op = OP_EQUALS;
+            break;
+        case TOK_NOT_EQUALS:
+            op = OP_NOT_EQUALS;
+            break;
+        default:
+            throw std::runtime_error("Unknown comparison operator at " + CurTok.getCodePos());
+    }
+    getNextToken(); // Consume operator
+    std::unique_ptr<ValueExprAST> value = parseValue();
+    return std::make_unique<CompStmtExprAST>(std::move(key), op, std::move(value));
 }
 
 std::unique_ptr<HasStmtExprAST> parseHasStmt() {
@@ -65,58 +78,54 @@ std::unique_ptr<HasStmtExprAST> parseHasStmt() {
 }
 
 std::unique_ptr<StmtExprAST> parseStmt() {
-    if (CurTok.getType() == TOK_HAS) {
-
-    } else {
-
-    }
+    if (CurTok.getType() == TOK_HAS) return parseHasStmt();
+    return parseCompStmt();
 }
 
 std::unique_ptr<StmtLstExprAST> parseStmtList() {
     std::vector<std::unique_ptr<StmtExprAST>> stmts;
-    do {
-        stmts.push_back(parseStmt());
-    } while (CurTok.getType() == TOK_HAS || CurTok.getType() == TOK_IDENTIFIER);
+    stmts.push_back(parseStmt()); // Consume first statement
+    while (CurTok.getType() == TOK_OR) {
+        expectToken(TOK_OR);
+        stmts.push_back(parseStmt()); // Consume statement
+    }
     return std::make_unique<StmtLstExprAST>(stmts);
 }
 
 std::unique_ptr<PayloadExprAST> parsePayload() {
     std::string value = CurTok.getValue();
-    getNextToken(); // Consume payload
+    expectToken(TOK_ARBITRARY); // Consume payload
     return std::make_unique<PayloadExprAST>(value);
 }
 
-std::unique_ptr<ExprAST> parseComBlockIdenClose() {
-    expectToken(TOK_COM_BLOCK_IDEN_CLOSE);
-}
-
-std::unique_ptr<ExprAST> parseComBlockIdenOpen() {
-    expectToken(TOK_COM_BLOCK_IDEN_OPEN);
-}
-
-std::unique_ptr<ExprAST> parseComIdenPayload() {
-    expectToken(TOK_COM_IDEN_PAYLOAD);
-}
-
-std::unique_ptr<ExprAST> parseComLineIden() {
-    expectToken(TOK_COM_LINE_IDEN);
-}
-
 std::unique_ptr<IfExprAST> parseIfBlock() {
-    expectToken(TOK_IF);
-    std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList();
-    expectToken(TOK_BRACE_OPEN);
-    std::unique_ptr<PayloadExprAST> payload = parsePayload();
-    expectToken(TOK_BRACE_CLOSE);
+    expectToken(TOK_IF); // Consume 'if'
+    std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList(); // Consume StmtList
+    expectToken(TOK_BRACE_OPEN); // Consume '{'
+    std::unique_ptr<PayloadExprAST> payload = parsePayload(); // Consume payload
+    expectToken(TOK_BRACE_CLOSE); // Consume '}'
     return std::make_unique<IfExprAST>(std::move(stmtList), std::move(payload));
 }
 
-std::unique_ptr<ExprAST> parseComBlockBlock() {
-
+std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock() {
+    expectToken(TOK_COM_BLOCK_IDEN_OPEN); // Consume ComBlockIdenOpen
+    std::vector<std::unique_ptr<IfExprAST>> ifBlocks;
+    while (CurTok.getType() == TOK_IF) {
+        ifBlocks.push_back(parseIfBlock()); // Consume IfBlock
+    }
+    expectToken(TOK_COM_BLOCK_IDEN_CLOSE); // Consume ComBlockIdenClose
+    return std::make_unique<ComBlockBlockExprAST>(std::move(ifBlocks));
 }
 
-std::unique_ptr<ExprAST> parseComLineBlock() {
-
+std::unique_ptr<ComLineBlockExprAST> parseComLineBlock() {
+    expectToken(TOK_COM_LINE_IDEN); // Consume ComLineIden
+    std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList();  // Consume StmtList
+    if (CurTok.getType() == TOK_COM_LINE_IDEN) expectToken(TOK_COM_LINE_IDEN); // Consume ComLineIden optional
+    expectToken(TOK_BRACE_OPEN); // Consume '{'
+    std::unique_ptr<PayloadExprAST> payload = parsePayload(); // Consume payload
+    expectToken(TOK_COM_LINE_IDEN); // Consume ComLineIden
+    expectToken(TOK_BRACE_CLOSE); // Consume '}'
+    return std::make_unique<ComLineBlockExprAST>(std::move(stmtList), std::move(payload));
 }
 
 std::unique_ptr<ExprAST> parseSection() {

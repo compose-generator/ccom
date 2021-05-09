@@ -9,8 +9,9 @@
 
 #include <memory>
 #include "KeyExprAST.h"
+#include "StmtExprAST.h"
 
-class HasStmtExprAST {
+class HasStmtExprAST : public StmtExprAST {
 private:
     std::unique_ptr<KeyExprAST> Key;
     bool Inverted;
