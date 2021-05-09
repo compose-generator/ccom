@@ -11,8 +11,9 @@
 #include "ExprAST.h"
 #include "StmtLstExprAST.h"
 #include "PayloadExprAST.h"
+#include "ComBlockExprAST.h"
 
-class ComLineBlockExprAST : public ExprAST {
+class ComLineBlockExprAST : public ComBlockExprAST {
 private:
     std::unique_ptr<StmtLstExprAST> StmtList;
     std::unique_ptr<PayloadExprAST> Payload;

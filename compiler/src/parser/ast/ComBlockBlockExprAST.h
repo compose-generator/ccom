@@ -7,16 +7,15 @@
 #ifndef COMPILER_COMBLOCKBLOCKEXPRAST_H
 #define COMPILER_COMBLOCKBLOCKEXPRAST_H
 
-#include <vector>
 #include <memory>
-#include "ExprAST.h"
 #include "IfExprAST.h"
+#include "ComBlockExprAST.h"
 
-class ComBlockBlockExprAST: public ExprAST {
+class ComBlockBlockExprAST: public ComBlockExprAST {
 private:
-    std::vector<std::unique_ptr<IfExprAST>> IfBlocks;
+    std::unique_ptr<IfExprAST> IfBlock;
 public:
-    explicit ComBlockBlockExprAST(std::vector<std::unique_ptr<IfExprAST>> ifBlocks): IfBlocks(std::move(ifBlocks)) {}
+    explicit ComBlockBlockExprAST(std::unique_ptr<IfExprAST> ifBlock): IfBlock(std::move(ifBlock)) {}
 };
 
 #endif //COMPILER_COMBLOCKBLOCKEXPRAST_H

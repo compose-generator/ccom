@@ -15,6 +15,12 @@ void expectToken(int tokenType) {
     getNextToken();
 }
 
+std::unique_ptr<ArbitraryExprAST> parseArbitrary() {
+    std::string value = CurTok.getValue();
+    getNextToken(); // Consume arbitrary string
+    return std::make_unique<ArbitraryExprAST>(value);
+}
+
 std::unique_ptr<NumberExprAST> parseNumber() {
     int value = stoi(CurTok.getValue());
     getNextToken(); // Consume number literal
@@ -109,12 +115,9 @@ std::unique_ptr<IfExprAST> parseIfBlock() {
 
 std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock() {
     expectToken(TOK_COM_BLOCK_IDEN_OPEN); // Consume ComBlockIdenOpen
-    std::vector<std::unique_ptr<IfExprAST>> ifBlocks;
-    while (CurTok.getType() == TOK_IF) {
-        ifBlocks.push_back(parseIfBlock()); // Consume IfBlock
-    }
+    std::unique_ptr<IfExprAST> ifBlock = parseIfBlock(); // Consume if block
     expectToken(TOK_COM_BLOCK_IDEN_CLOSE); // Consume ComBlockIdenClose
-    return std::make_unique<ComBlockBlockExprAST>(std::move(ifBlocks));
+    return std::make_unique<ComBlockBlockExprAST>(std::move(ifBlock));
 }
 
 std::unique_ptr<ComLineBlockExprAST> parseComLineBlock() {
@@ -128,12 +131,29 @@ std::unique_ptr<ComLineBlockExprAST> parseComLineBlock() {
     return std::make_unique<ComLineBlockExprAST>(std::move(stmtList), std::move(payload));
 }
 
-std::unique_ptr<ExprAST> parseSection() {
-
+std::unique_ptr<SectionExprAST> parseSection() {
+    std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks;
+    bool isLineBlock;
+    while ((isLineBlock = CurTok.getType() == TOK_COM_LINE_IDEN) || CurTok.getType() == TOK_COM_BLOCK_IDEN_OPEN) {
+        if (isLineBlock) {
+            comBlocks.push_back(parseComLineBlock());
+            continue;
+        }
+        comBlocks.push_back(parseComBlockBlock());
+    }
+    return std::make_unique<SectionExprAST>(comBlocks);
 }
 
-std::unique_ptr<ExprAST> parseContent() {
-
+std::unique_ptr<ContentExprAST> parseContent() {
+    std::vector<std::unique_ptr<ExprAST>> sections;
+    while (CurTok.getType() != TOK_EOF) {
+        if (CurTok.getType() == TOK_ARBITRARY) {
+            sections.push_back(parseArbitrary());
+            continue;
+        }
+        sections.push_back(parseSection());
+    }
+    return std::make_unique<ContentExprAST>(std::move(sections));
 }
 
 void initParser(const bool isSingleStatement, const std::string& fileInput, const std::string& dataInput,
@@ -141,10 +161,18 @@ void initParser(const bool isSingleStatement, const std::string& fileInput, cons
                 const std::string& blockCommentCharsClose) {
     initLexer(fileInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose);
 
+    // Fill buffer with first token
+    getNextToken();
+
+    // Build AST
     if (isSingleStatement) {
-        parseStmtList();
+        std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList();
+
+
     } else {
-        parseContent();
+        std::unique_ptr<ContentExprAST> content = parseContent();
+
+
     }
 
     // Test lexer
