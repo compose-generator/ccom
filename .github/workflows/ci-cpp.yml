@@ -5,18 +5,23 @@ on:
     paths:
       - 'compiler/**'
   pull_request:
-    branches: [ main, dev, feature/* ]
+    branches: [ main, dev, feature/** ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./compiler
         
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+    - name: Prepare environment
+      run: |
+        sudo apt-get install tree
+        shopt -s extglob
+        rm -rf !("compiler")
+        cp -fR ./compiler/* .
+        rm -rf ./compiler
+        tree .
     - name: Build project
       uses: nicledomaS/cmake_build_action@v1.4
       with:

@@ -38,7 +38,7 @@ std::unique_ptr<KeyExprAST> parseKey() {
     do {
 
     } while (CurTok.getType() == TOK_DOT);
-    return std::make_unique<KeyExprAST>(identifiers)
+    return std::make_unique<KeyExprAST>(identifiers);
 }
 
 std::unique_ptr<ExprAST> parseCompStmt() {
