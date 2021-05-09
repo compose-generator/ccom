@@ -10,14 +10,21 @@
 Token CurTok;
 Token getNextToken() { return CurTok = getTok(); }
 
+void expectToken(int tokenType) {
+    if (CurTok.getType() != tokenType) throw std::runtime_error("Syntax error  at " + CurTok.getCodePos());
+    getNextToken();
+}
+
 std::unique_ptr<NumberExprAST> parseNumber() {
+    int value = stoi(CurTok.getValue());
     getNextToken(); // Consume number literal
-    return std::make_unique<NumberExprAST>(stoi(CurTok.getValue()));
+    return std::make_unique<NumberExprAST>(value);
 }
 
 std::unique_ptr<StringExprAST> parseString() {
+    std::string value = CurTok.getValue();
     getNextToken();
-    return std::make_unique<StringExprAST>(CurTok.getValue());
+    return std::make_unique<StringExprAST>(value);
 }
 
 std::unique_ptr<ExprAST> parseValue() {
@@ -29,8 +36,9 @@ std::unique_ptr<ExprAST> parseValue() {
 }
 
 std::unique_ptr<IdentifierExprAST> parseIdentifier() {
+    std::string name = CurTok.getValue();
     getNextToken(); // Consume identifier
-    return std::make_unique<IdentifierExprAST>(CurTok.getValue());
+    return std::make_unique<IdentifierExprAST>(name);
 }
 
 std::unique_ptr<KeyExprAST> parseKey() {
@@ -45,12 +53,23 @@ std::unique_ptr<ExprAST> parseCompStmt() {
 
 }
 
-std::unique_ptr<ExprAST> parseHasStmt() {
-
+std::unique_ptr<HasStmtExprAST> parseHasStmt() {
+    bool inverted = false;
+    if (CurTok.getType() == TOK_NOT) {
+        inverted = true;
+        getNextToken(); // Consume 'not'
+    }
+    expectToken(TOK_HAS); // consume 'has'
+    std::unique_ptr<KeyExprAST> key = parseKey(); // consume key
+    return std::make_unique<HasStmtExprAST>(std::move(key), inverted);
 }
 
 std::unique_ptr<StmtExprAST> parseStmt() {
+    if (CurTok.getType() == TOK_HAS) {
 
+    } else {
+
+    }
 }
 
 std::unique_ptr<StmtLstExprAST> parseStmtList() {
@@ -61,28 +80,35 @@ std::unique_ptr<StmtLstExprAST> parseStmtList() {
     return std::make_unique<StmtLstExprAST>(stmts);
 }
 
-std::unique_ptr<ExprAST> parsePayload() {
-
+std::unique_ptr<PayloadExprAST> parsePayload() {
+    std::string value = CurTok.getValue();
+    getNextToken(); // Consume payload
+    return std::make_unique<PayloadExprAST>(value);
 }
 
 std::unique_ptr<ExprAST> parseComBlockIdenClose() {
-
+    expectToken(TOK_COM_BLOCK_IDEN_CLOSE);
 }
 
 std::unique_ptr<ExprAST> parseComBlockIdenOpen() {
-
+    expectToken(TOK_COM_BLOCK_IDEN_OPEN);
 }
 
 std::unique_ptr<ExprAST> parseComIdenPayload() {
-
+    expectToken(TOK_COM_IDEN_PAYLOAD);
 }
 
 std::unique_ptr<ExprAST> parseComLineIden() {
-
+    expectToken(TOK_COM_LINE_IDEN);
 }
 
-std::unique_ptr<ExprAST> parseIfBlock() {
-
+std::unique_ptr<IfExprAST> parseIfBlock() {
+    expectToken(TOK_IF);
+    std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList();
+    expectToken(TOK_BRACE_OPEN);
+    std::unique_ptr<PayloadExprAST> payload = parsePayload();
+    expectToken(TOK_BRACE_CLOSE);
+    return std::make_unique<IfExprAST>(std::move(stmtList), std::move(payload));
 }
 
 std::unique_ptr<ExprAST> parseComBlockBlock() {

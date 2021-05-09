@@ -17,6 +17,10 @@
 #include "ast/IdentifierExprAST.h"
 #include "ast/StmtLstExprAST.h"
 #include "ast/KeyExprAST.h"
+#include "ast/PayloadExprAST.h"
+#include "ast/IfExprAST.h"
+#include "ast/HasStmtExprAST.h"
+
 #include "../lexer/Token.h"
 #include "../lexer/lexer.h"
 
@@ -31,15 +35,15 @@ std::unique_ptr<ExprAST> parseValue();
 std::unique_ptr<IdentifierExprAST> parseIdentifier();
 std::unique_ptr<KeyExprAST> parseKey();
 std::unique_ptr<ExprAST> parseCompStmt();
-std::unique_ptr<ExprAST> parseHasStmt();
+std::unique_ptr<HasStmtExprAST> parseHasStmt();
 std::unique_ptr<StmtExprAST> parseStmt();
 std::unique_ptr<StmtLstExprAST> parseStmtList();
-std::unique_ptr<ExprAST> parsePayload();
+std::unique_ptr<PayloadExprAST> parsePayload();
 std::unique_ptr<ExprAST> parseComBlockIdenClose();
 std::unique_ptr<ExprAST> parseComBlockIdenOpen();
 std::unique_ptr<ExprAST> parseComIdenPayload();
 std::unique_ptr<ExprAST> parseComLineIden();
-std::unique_ptr<ExprAST> parseIfBlock();
+std::unique_ptr<IfExprAST> parseIfBlock();
 std::unique_ptr<ExprAST> parseComBlockBlock();
 std::unique_ptr<ExprAST> parseComLineBlock();
 std::unique_ptr<ExprAST> parseSection();
