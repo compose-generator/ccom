@@ -28,11 +28,6 @@ func main() {
 		Usage:     "Evaluate conditional comment sections of data files.",
 		Flags: []cli.Flag{
 			&cli.StringFlag{
-				Name:    "line-comment-chars",
-				Aliases: []string{"lcc"},
-				Usage:   "Specifies the line comment character(s) of your data format",
-			},
-			&cli.StringFlag{
 				Name:    "block-comment-chars-open",
 				Aliases: []string{"bcco"},
 				Usage:   "Specifies the opening block comment character(s) of your data format",
@@ -48,6 +43,11 @@ func main() {
 				DefaultText: "{}",
 				Usage:       "JSON string or path to JSON file, which holds the evaluation work data",
 			},
+			&cli.BoolFlag{
+				Name:    "force",
+				Aliases: []string{"f"},
+				Usage:   "Ignore safety checks. Warning: This could cause demage",
+			},
 			&cli.StringFlag{
 				Name:        "lang",
 				Aliases:     []string{"l"},
@@ -55,10 +55,20 @@ func main() {
 				Usage:       "File format / programming language (e.g.: yaml, java, html, ...)",
 			},
 			&cli.StringFlag{
+				Name:    "line-comment-chars",
+				Aliases: []string{"lcc"},
+				Usage:   "Specifies the line comment character(s) of your data format",
+			},
+			&cli.StringFlag{
 				Name:        "mode",
 				Aliases:     []string{"m"},
 				DefaultText: "file",
 				Usage:       "Whole file with string output or single statement list with boolean output (file / single)",
+			},
+			&cli.StringFlag{
+				Name:    "out-file",
+				Aliases: []string{"o"},
+				Usage:   "Path to output file. If you omit this flag, the output will be printed to the console",
 			},
 			&cli.BoolFlag{
 				Name:    "preserve-comments-on-false",
@@ -69,12 +79,14 @@ func main() {
 		Action: func(c *cli.Context) error {
 			processInput(
 				c.Args().Get(0),
-				c.String("data"),
-				c.String("lang"),
-				c.String("mode"),
-				c.String("line-comment-chars"),
 				c.String("block-comment-chars-open"),
 				c.String("block-comment-chars-close"),
+				c.String("data"),
+				c.Bool("force"),
+				c.String("lang"),
+				c.String("line-comment-chars"),
+				c.String("mode"),
+				c.String("out-file"),
 				c.Bool("preserve-comments-on-false"),
 			)
 			return nil

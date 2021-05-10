@@ -4,18 +4,21 @@ import (
 	"ccom/util"
 	"errors"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"strings"
 )
 
 func processInput(
 	fileInput string,
-	dataInput string,
-	lang string,
-	mode string,
-	lineCommentChars string,
 	blockCommentCharsOpen string,
 	blockCommentCharsClose string,
+	dataInput string,
+	force bool,
+	lang string,
+	lineCommentChars string,
+	mode string,
+	outFile string,
 	preserveFlag bool,
 ) {
 	// Analyze correctness of inputs
@@ -23,13 +26,26 @@ func processInput(
 	analyze(&fileInput, &dataInput, lang, &mode, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose)
 	fmt.Println("done")
 
-	// Feed the compiler with the individual sections
+	// Feed the compiler with the input
 	fmt.Print("Compiling ... ")
 	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
 	fmt.Println("done")
 
-	// Temporarily print preprocessed output
-	fmt.Println(result)
+	// Write output
+	if outFile != "" { // To file
+		// Check if output file exists
+		if util.FileExists(outFile) && !force {
+			// Ask user if he wants to overwrite the output file
+			if !util.YesNoQuestion("The output file already exists. Do you want to overwrite it?", false) {
+				return
+			}
+		}
+		// Write output to file
+		ioutil.WriteFile(outFile, []byte(result), 0)
+	} else { // Print to console
+		fmt.Println()
+		fmt.Println(result)
+	}
 }
 
 func analyze(

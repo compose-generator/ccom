@@ -110,10 +110,13 @@ public class Example {
 ```
 
 #### CLI flags
--	`--mode="single" / --mode="file"`
 -   `--line-comment-char="//"`
 -   `--block-comment-char-open="/*"`
 -   `--block-comment-char-close="*/"`
+-	`--data="{}"`
+-   `--force`
+-	`--mode="single" / --mode="file"`
+-   `--out-file="./output.java"`
 -   `--preserve-comments-on-false`
 
 ### Single condition + data input => boolean output
