@@ -70,6 +70,7 @@ std::unique_ptr<CompStmtExprAST> parseCompStmt() {
             op = OP_NOT_EQUALS;
             break;
         default:
+            std::cout << "Operator: " << CurTok.getType() << std::endl;
             throw std::runtime_error("Unknown comparison operator at " + CurTok.getCodePos());
     }
     getNextToken(); // Consume operator
@@ -127,6 +128,7 @@ std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock() {
 
 std::unique_ptr<ComLineBlockExprAST> parseComLineBlock() {
     expectToken(TOK_COM_LINE_IDEN); // Consume ComLineIden
+    expectToken(TOK_IF); // Consume 'if'
     std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList();  // Consume StmtList
     if (CurTok.getType() == TOK_COM_LINE_IDEN) expectToken(TOK_COM_LINE_IDEN); // Consume ComLineIden optional
     expectToken(TOK_BRACE_OPEN); // Consume '{'
@@ -171,9 +173,10 @@ void initParser(const bool isSingleStatement, const std::string& fileInput, cons
 
     // Build AST
     if (isSingleStatement) {
-        std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList();
+        StmtLstExprAST* stmtList = parseStmtList().release();
     } else {
-        std::unique_ptr<ContentExprAST> content = parseContent();
+        ContentExprAST* content = parseContent().release();
+        std::cout << "Number of sections: " << content->GetSections().size() << std::endl;
     }
 
     // Test lexer
