@@ -9,7 +9,7 @@
 
 class ExprAST {
 public:
-    virtual ~ExprAST() = default;;
+    virtual ~ExprAST() = default;
 };
 
 #endif //COMPILER_EXPRAST_H

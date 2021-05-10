@@ -17,6 +17,7 @@ private:
     std::vector<std::unique_ptr<StmtExprAST>> Stmts;
 public:
     explicit StmtLstExprAST(std::vector<std::unique_ptr<StmtExprAST>> stmts): Stmts(std::move(stmts)) {}
+    const std::vector<std::unique_ptr<StmtExprAST>> &GetStatements();
 };
 
 #endif //COMPILER_STMTLSTEXPRAST_H

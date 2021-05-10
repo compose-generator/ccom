@@ -16,6 +16,7 @@ private:
     std::vector<std::unique_ptr<IdentifierExprAST>> Identifiers;
 public:
     explicit KeyExprAST(std::vector<std::unique_ptr<IdentifierExprAST>> stmts): Identifiers(std::move(stmts)) {}
+    const std::vector<std::unique_ptr<IdentifierExprAST>> &GetIdentifiers();
 };
 
 #endif //COMPILER_KEYEXPRAST_H

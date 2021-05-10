@@ -5,3 +5,7 @@
 //
 
 #include "ComBlockBlockExprAST.h"
+
+std::unique_ptr<IfBlockExprAST> const &ComBlockBlockExprAST::GetIfBlock() {
+    return IfBlock;
+}

@@ -9,6 +9,9 @@
 
 #include "ExprAST.h"
 
-class ComBlockExprAST : public ExprAST {};
+class ComBlockExprAST : public ExprAST {
+public:
+    virtual ~ComBlockExprAST() = default;
+};
 
 #endif //COMPILER_COMBLOCKEXPRAST_H

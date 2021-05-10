@@ -5,3 +5,7 @@
 //
 
 #include "StringExprAST.h"
+
+std::string StringExprAST::GetValue() const {
+    return Value;
+}

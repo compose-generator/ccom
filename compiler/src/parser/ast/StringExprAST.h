@@ -13,9 +13,10 @@
 
 class StringExprAST : public ValueExprAST {
 private:
-    std::string Val;
+    std::string Value;
 public:
-    explicit StringExprAST(std::string val): Val(std::move(val)) {}
+    explicit StringExprAST(std::string val): Value(std::move(val)) {}
+    std::string GetValue() const;
 };
 
 #endif //COMPILER_STRINGEXPRAST_H

@@ -8,7 +8,8 @@
 #define COMPILER_VALUEEXPRAST_H
 
 class ValueExprAST {
-
+public:
+    virtual ~ValueExprAST() = default;
 };
 
 #endif //COMPILER_VALUEEXPRAST_H

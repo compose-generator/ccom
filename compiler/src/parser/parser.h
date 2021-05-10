@@ -11,15 +11,15 @@
 #include <iostream>
 #include <memory>
 #include <vector>
-#include "ast/ExprAST.h"
 #include "ast/ArbitraryExprAST.h"
 #include "ast/NumberExprAST.h"
 #include "ast/StringExprAST.h"
 #include "ast/IdentifierExprAST.h"
+#include "ast/StmtExprAST.h"
 #include "ast/StmtLstExprAST.h"
 #include "ast/KeyExprAST.h"
 #include "ast/PayloadExprAST.h"
-#include "ast/IfExprAST.h"
+#include "ast/IfBlockExprAST.h"
 #include "ast/CompStmtExprAST.h"
 #include "ast/HasStmtExprAST.h"
 #include "ast/ComBlockBlockExprAST.h"
@@ -45,7 +45,7 @@ std::unique_ptr<HasStmtExprAST> parseHasStmt();
 std::unique_ptr<StmtExprAST> parseStmt();
 std::unique_ptr<StmtLstExprAST> parseStmtList();
 std::unique_ptr<PayloadExprAST> parsePayload();
-std::unique_ptr<IfExprAST> parseIfBlock();
+std::unique_ptr<IfBlockExprAST> parseIfBlock();
 std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock();
 std::unique_ptr<ComLineBlockExprAST> parseComLineBlock();
 std::unique_ptr<SectionExprAST> parseSection();

@@ -5,3 +5,7 @@
 //
 
 #include "ContentExprAST.h"
+
+std::vector<std::unique_ptr<ExprAST>> const &ContentExprAST::GetSections() {
+    return Sections;
+}

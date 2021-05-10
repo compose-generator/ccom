@@ -4,20 +4,22 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_IFEXPRAST_H
-#define COMPILER_IFEXPRAST_H
+#ifndef COMPILER_IFBLOCKEXPRAST_H
+#define COMPILER_IFBLOCKEXPRAST_H
 
 #include <memory>
 #include "StmtLstExprAST.h"
 #include "PayloadExprAST.h"
 
-class IfExprAST {
+class IfBlockExprAST {
 private:
     std::unique_ptr<StmtLstExprAST> StmtList;
     std::unique_ptr<PayloadExprAST> Payload;
 public:
-    explicit IfExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
+    explicit IfBlockExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
         StmtList(std::move(stmtList)), Payload(std::move(payload)) {}
+    const std::unique_ptr<StmtLstExprAST> &GetStmtList();
+    const std::unique_ptr<PayloadExprAST> &GetPayload();
 };
 
-#endif //COMPILER_IFEXPRAST_H
+#endif //COMPILER_IFBLOCKEXPRAST_H

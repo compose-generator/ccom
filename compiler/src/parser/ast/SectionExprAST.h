@@ -18,6 +18,7 @@ private:
 public:
     explicit SectionExprAST(std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks):
             ComBlocks(std::move(comBlocks)) {}
+    const std::vector<std::unique_ptr<ComBlockExprAST>> &GetComBlocks();
 };
 
 #endif //COMPILER_SECTIONEXPRAST_H

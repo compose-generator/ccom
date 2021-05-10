@@ -5,3 +5,15 @@
 //
 
 #include "CompStmtExprAST.h"
+
+Operator CompStmtExprAST::GetOperator() const {
+    return Op;
+}
+
+std::unique_ptr<KeyExprAST> const &CompStmtExprAST::GetKey() {
+    return Key;
+}
+
+std::unique_ptr<ValueExprAST> const &CompStmtExprAST::GetValue() {
+    return Value;
+}

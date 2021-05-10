@@ -22,7 +22,7 @@ int CurrentChar = 0;
 unsigned int LineNum = 1;
 unsigned int ColNum = 0;
 
-Context currentContext = ARBITRARY;
+Context currentContext = ARBITRARY; // Default ARBITRARY
 
 
 int advance() {

@@ -5,3 +5,11 @@
 //
 
 #include "HasStmtExprAST.h"
+
+std::unique_ptr<KeyExprAST> const &HasStmtExprAST::GetKey() {
+    return Key;
+}
+
+bool HasStmtExprAST::GetInverted() const {
+    return Inverted;
+};

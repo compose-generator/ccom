@@ -11,9 +11,10 @@
 
 class NumberExprAST : public ValueExprAST {
 private:
-    int Val;
+    int Value;
 public:
-    explicit NumberExprAST(int val): Val(val) {}
+    explicit NumberExprAST(int val): Value(val) {}
+    int GetValue() const;
 };
 
 #endif //COMPILER_NUMBEREXPRAST_H

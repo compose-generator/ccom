@@ -8,14 +8,15 @@
 #define COMPILER_COMBLOCKBLOCKEXPRAST_H
 
 #include <memory>
-#include "IfExprAST.h"
+#include "IfBlockExprAST.h"
 #include "ComBlockExprAST.h"
 
 class ComBlockBlockExprAST: public ComBlockExprAST {
 private:
-    std::unique_ptr<IfExprAST> IfBlock;
+    std::unique_ptr<IfBlockExprAST> IfBlock;
 public:
-    explicit ComBlockBlockExprAST(std::unique_ptr<IfExprAST> ifBlock): IfBlock(std::move(ifBlock)) {}
+    explicit ComBlockBlockExprAST(std::unique_ptr<IfBlockExprAST> ifBlock): IfBlock(std::move(ifBlock)) {}
+    const std::unique_ptr<IfBlockExprAST> &GetIfBlock();
 };
 
 #endif //COMPILER_COMBLOCKBLOCKEXPRAST_H

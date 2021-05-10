@@ -15,7 +15,8 @@ class IdentifierExprAST: public ExprAST {
 private:
     std::string Name;
 public:
-    IdentifierExprAST(std::string Name) : Name(std::move(Name)) {}
+    explicit IdentifierExprAST(std::string Name): Name(std::move(Name)) {}
+    std::string GetName() const;
 };
 
 #endif //COMPILER_IDENTIFIEREXPRAST_H

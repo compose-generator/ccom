@@ -5,3 +5,7 @@
 //
 
 #include "StmtLstExprAST.h"
+
+std::vector<std::unique_ptr<StmtExprAST>> const &StmtLstExprAST::GetStatements() {
+    return Stmts;
+}

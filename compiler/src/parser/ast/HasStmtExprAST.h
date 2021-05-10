@@ -18,6 +18,8 @@ private:
 public:
     explicit HasStmtExprAST(std::unique_ptr<KeyExprAST> key, bool inverted):
             Key(std::move(key)), Inverted(inverted) {}
+    const std::unique_ptr<KeyExprAST> &GetKey();
+    bool GetInverted() const;
 };
 
 #endif //COMPILER_HASSTMTEXPRAST_H

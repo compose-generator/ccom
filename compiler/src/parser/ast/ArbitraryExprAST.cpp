@@ -5,3 +5,7 @@
 //
 
 #include "ArbitraryExprAST.h"
+
+std::string ArbitraryExprAST::GetValue() const {
+    return Value;
+}

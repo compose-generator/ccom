@@ -11,10 +11,8 @@
 #include "ExprAST.h"
 
 class StmtExprAST: public ExprAST {
-private:
-
 public:
-
+    virtual ~StmtExprAST() = default;
 };
 
 #endif //COMPILER_STMTEXPRAST_H

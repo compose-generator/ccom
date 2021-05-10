@@ -11,9 +11,10 @@
 
 class PayloadExprAST {
 private:
-    std::string Val;
+    std::string Value;
 public:
-    explicit PayloadExprAST(std::string val): Val(std::move(val)) {}
+    explicit PayloadExprAST(std::string val): Value(std::move(val)) {}
+    std::string GetValue() const;
 };
 
 #endif //COMPILER_PAYLOADEXPRAST_H

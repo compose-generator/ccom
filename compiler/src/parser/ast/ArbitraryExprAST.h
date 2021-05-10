@@ -16,6 +16,7 @@ private:
     std::string Value;
 public:
     explicit ArbitraryExprAST(std::string value): Value(std::move(value)) {}
+    std::string GetValue() const;
 };
 
 #endif //COMPILER_ARBITRARYEXPRAST_H

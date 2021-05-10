@@ -25,7 +25,9 @@ private:
 public:
     explicit CompStmtExprAST(std::unique_ptr<KeyExprAST> key, Operator op, std::unique_ptr<ValueExprAST> value):
         Key(std::move(key)), Op(op), Value(std::move(value)) {}
-
+    Operator GetOperator() const;
+    const std::unique_ptr<KeyExprAST> &GetKey();
+    const std::unique_ptr<ValueExprAST> &GetValue();
 };
 
 #endif //COMPILER_COMPSTMTEXPRAST_H

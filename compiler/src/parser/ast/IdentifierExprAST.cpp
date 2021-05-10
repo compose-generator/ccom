@@ -5,3 +5,7 @@
 //
 
 #include "IdentifierExprAST.h"
+
+std::string IdentifierExprAST::GetName() const {
+    return Name;
+}
