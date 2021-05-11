@@ -163,19 +163,22 @@ std::unique_ptr<ContentExprAST> parseContent() {
     return std::make_unique<ContentExprAST>(std::move(sections));
 }
 
-void initParser(const bool isSingleStatement, const std::string& fileInput, const std::string& dataInput,
-                const std::string& lineCommentChars, const std::string& blockCommentCharsOpen,
-                const std::string& blockCommentCharsClose) {
+ExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string& fileInput, const std::string& dataInput,
+                               const std::string& lineCommentChars, const std::string& blockCommentCharsOpen,
+                               const std::string& blockCommentCharsClose) {
     initLexer(fileInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose);
 
     // Fill buffer with first token
     getNextToken();
 
     // Build AST
+    ExprAST* ast;
     if (isSingleStatement) {
         StmtLstExprAST* stmtList = parseStmtList().release();
+        ast = stmtList;
     } else {
         ContentExprAST* content = parseContent().release();
+        ast = content;
         std::cout << "Number of sections: " << content->GetSections().size() << std::endl;
     }
 
@@ -187,4 +190,5 @@ void initParser(const bool isSingleStatement, const std::string& fileInput, cons
         std::cout << "Loc: " << next.getCodePos() << std::endl;
         std::cout << std::endl;
     }*/
+    return ast;
 }
