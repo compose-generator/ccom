@@ -7,8 +7,11 @@
 #ifndef COMPILER_ANALYZER_H
 #define COMPILER_ANALYZER_H
 
+#include <nlohmann/json.hpp>
 #include "../parser/ast/ExprAST.h"
 #include "../parser/parser.h"
+
+using json = nlohmann::json;
 
 ExprAST* executeSemanticAnalysis(bool isSingleStatement, const std::string &fileInput, const std::string &dataInput,
                                const std::string &lineCommentChars, const std::string &blockCommentCharsOpen,
