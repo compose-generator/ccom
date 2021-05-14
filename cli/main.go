@@ -75,6 +75,11 @@ func main() {
 				Aliases: []string{"p"},
 				Usage:   "Do not delete conditional section after evaluating. Default is to delete them",
 			},
+			&cli.BoolFlag{
+				Name:    "silent",
+				Aliases: []string{"s"},
+				Usage:   "Only print raw compiler output and no debug output",
+			},
 		},
 		Action: func(c *cli.Context) error {
 			processInput(
@@ -88,6 +93,7 @@ func main() {
 				c.String("mode"),
 				c.String("out-file"),
 				c.Bool("preserve-comments-on-false"),
+				c.Bool("silent"),
 			)
 			return nil
 		},

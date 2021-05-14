@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -20,16 +21,25 @@ func processInput(
 	mode string,
 	outFile string,
 	preserveFlag bool,
+	silentFlag bool,
 ) {
 	// Analyze correctness of inputs
-	fmt.Print("Analyzing inputs ... ")
+	if !silentFlag {
+		fmt.Print("Analyzing inputs ... ")
+	}
 	analyze(&fileInput, &dataInput, lang, &mode, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose)
-	fmt.Println("done")
+	if !silentFlag {
+		fmt.Println("done")
+	}
 
 	// Feed the compiler with the input
-	fmt.Print("Compiling ... ")
-	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
-	fmt.Println("done")
+	if !silentFlag {
+		fmt.Print("Compiling ... ")
+	}
+	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose, strconv.FormatBool(preserveFlag))
+	if !silentFlag {
+		fmt.Println("done")
+	}
 
 	// Write output
 	if outFile != "" { // To file
@@ -41,9 +51,11 @@ func processInput(
 			}
 		}
 		// Write output to file
-		ioutil.WriteFile(outFile, []byte(result), 0)
+		ioutil.WriteFile(outFile, []byte(result), 0777)
 	} else { // Print to console
-		fmt.Println()
+		if !silentFlag {
+			fmt.Println()
+		}
 		fmt.Println(result)
 	}
 }
@@ -77,9 +89,9 @@ func analyze(
 	// Get raw data strings
 	if *mode == "file" {
 		ensureFileInputString(fileInput)
-		*mode = "0"
+		*mode = "false"
 	} else {
-		*mode = "1"
+		*mode = "true"
 	}
 	ensureDataInputString(dataInput)
 
