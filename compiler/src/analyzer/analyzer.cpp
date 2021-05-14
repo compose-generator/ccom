@@ -6,11 +6,6 @@
 
 #include "analyzer.h"
 
-template<typename Base, typename T>
-inline bool instanceof(const T*) {
-    return std::is_base_of<Base, T>::value;
-}
-
 json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
     for (const std::unique_ptr<IdentifierExprAST>& identifier : key->GetIdentifiers()) {
         std::string keyName = identifier->GetName();
@@ -32,12 +27,16 @@ void checkDataTypeCompatibility(bool isSingleStatement, ExprAST* ast, const json
 
 void checkDataTypeCompatibilityContent(ExprAST* ast, const json& data) {
     auto* content = dynamic_cast<ContentExprAST*>(ast);
-    for (const std::unique_ptr<SectionExprAST>& section : content->GetRelevantSections()) {
-        for (const std::unique_ptr<ComBlockExprAST>& comBlock : section->GetComBlocks()) {
-            if (auto* lineBlockExpr = dynamic_cast<ComLineBlockExprAST*>(comBlock.get())) {
-                checkDataTypeCompatibilityStmtList(lineBlockExpr->GetStmtList().get(), data);
-            } else if(auto* blockBlockExpr = dynamic_cast<ComBlockBlockExprAST*>(comBlock.get())) {
-                checkDataTypeCompatibilityStmtList(blockBlockExpr->GetIfBlock()->GetStmtList().get(), data);
+    // Loop through sections
+    for (const std::unique_ptr<ExprAST>& section : content->GetSections()) {
+        if (auto* relevantSection = dynamic_cast<SectionExprAST*>(section.get())) {
+            // Loop through ComBlocks
+            for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->GetComBlocks()) {
+                if (auto* lineBlockExpr = dynamic_cast<ComLineBlockExprAST*>(comBlock.get())) {
+                    checkDataTypeCompatibilityStmtList(lineBlockExpr->GetStmtList().get(), data);
+                } else if(auto* blockBlockExpr = dynamic_cast<ComBlockBlockExprAST*>(comBlock.get())) {
+                    checkDataTypeCompatibilityStmtList(blockBlockExpr->GetIfBlock()->GetStmtList().get(), data);
+                }
             }
         }
     }
@@ -57,7 +56,7 @@ void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& d
     // Check if 'Value' has the same type as the JSON key value
     auto jsonKeyValue = getJsonValueFromKey(compStmt->GetKey(), data);
 
-    if (auto* stringExpr = dynamic_cast<StringExprAST*>(compStmt->GetValue().get())) {
+    if (dynamic_cast<StringExprAST*>(compStmt->GetValue().get())) {
         if (!jsonKeyValue.is_string())
             throw std::runtime_error(jsonKeyValue.dump() + " is not a string");
     } else {

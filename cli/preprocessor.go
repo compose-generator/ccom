@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -28,7 +29,7 @@ func processInput(
 
 	// Feed the compiler with the input
 	fmt.Print("Compiling ... ")
-	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose, strconv.FormatBool(preserveFlag))
 	fmt.Println("done")
 
 	// Write output
@@ -77,9 +78,9 @@ func analyze(
 	// Get raw data strings
 	if *mode == "file" {
 		ensureFileInputString(fileInput)
-		*mode = "0"
+		*mode = "false"
 	} else {
-		*mode = "1"
+		*mode = "true"
 	}
 	ensureDataInputString(dataInput)
 

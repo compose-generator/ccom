@@ -19,7 +19,6 @@ private:
 public:
     explicit ContentExprAST(std::vector<std::unique_ptr<ExprAST>> sections): Sections(std::move(sections)) {}
     const std::vector<std::unique_ptr<ExprAST>> &GetSections();
-    std::vector<std::unique_ptr<SectionExprAST>> GetRelevantSections();
 };
 
 #endif //COMPILER_CONTENTEXPRAST_H
