@@ -245,7 +245,7 @@ bool isLookaheadBlockCommentCharCloseWithBrace() {
            && getLookahead().substr(0, BlockCommentCharsClose.length() +1) == "}" + BlockCommentCharsClose;
 }
 
-void initLexer(const std::string& fileInput, const std::string& lineCommentChars,
+void initLexer(bool isSingleStatement, const std::string& fileInput, const std::string& lineCommentChars,
                const std::string& blockCommentCharsOpen, const std::string& blockCommentCharsClose) {
     FileInput = fileInput;
 
@@ -256,6 +256,7 @@ void initLexer(const std::string& fileInput, const std::string& lineCommentChars
     PayloadCommentChars = lineCommentChars;
     MaxLookahead = std::max({LineCommentChars.length(), BlockCommentCharsOpen.length(),
                              BlockCommentCharsClose.length(), PayloadCommentChars.length()}) +1;
+    currentContext = isSingleStatement ? SECTION : ARBITRARY;
 
     // Load first char into the buffer
     advance();
