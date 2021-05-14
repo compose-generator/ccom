@@ -12,7 +12,7 @@
 #include <memory>
 #include "StmtExprAST.h"
 
-class StmtLstExprAST {
+class StmtLstExprAST : public ExprAST {
 private:
     std::vector<std::unique_ptr<StmtExprAST>> Stmts;
 public:

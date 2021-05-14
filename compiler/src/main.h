@@ -9,7 +9,7 @@
 
 #include <iostream>
 #include <vector>
-#include "parser/parser.h"
+#include "analyzer/analyzer.h"
 
 int main(int, char**);
 

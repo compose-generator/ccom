@@ -22,6 +22,9 @@ CCom is a language for pre-processing source files. It's primary purpose is to e
 | HTML       | -                  | <!--                     | -->                       |
 | XML        | -                  | <!--                     | -->                       |
 | Rust       | //                 | /*                       | */                        |
+| Assembler  | ;                  | -                        | -                         |
+
+*Note: Formats like JSON, where no comments are supported can also work with CCom, however then the file input is not valid before pre-processing it with CCom.*
 
 ### Input
 CCom requests two input parameters. A source file/string of any language, containing conditional sections and a JSON file/string, which holds data for the evaluation.
@@ -135,7 +138,7 @@ Start symbol: `CONTENT`.
 
 ```
 CONTENT               --> (CHARS SECTION)* CHARS
-SECTION               --> (COM_LINE_BLOCK* COM_BLOCK_BLOCK*)*
+SECTION               --> COM_LINE_BLOCK | COM_BLOCK_BLOCK
 COM_LINE_BLOCK        --> COM_LINE_IDEN if STMT_LST COM_LINE_IDEN? { PAYLOAD COM_LINE_IDEN }
 COM_BLOCK_BLOCK       --> COM_BLOCK_IDEN_OPEN IF_BLOCK COM_BLOCK_IDEN_CLOSE
 IF_BLOCK              --> if STMT_LST { PAYLOAD }
