@@ -13,7 +13,8 @@ int main(int argc, char** argv) {
     for (size_t iArg = 0; iArg < argc; ++iArg)
         args.emplace_back(argv[iArg]);
 
-    bool singleStatementMode = args[1] == "1";
+    bool singleStatementMode = args[1] == "true";
+    bool preserveCommentsOnFalse = args[7] == "true";
     std::string fileInput = args[2];
     std::string dataInput = args[3];
 
@@ -22,6 +23,6 @@ int main(int argc, char** argv) {
     //fileInput = "property1:= value\n/*? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\ntest payload\n- }another test payload\n}*/\nattribute2: value2";
     //fileInput = "//? if not has test.marc | test.marc.dominic.24 != \"Test\" { Test payload //? }";
 
-    executeSemanticAnalysis(singleStatementMode, fileInput, dataInput, args[4], args[5], args[6]);
+    interpretInput(singleStatementMode, preserveCommentsOnFalse, fileInput, dataInput, args[4], args[5], args[6]);
     return 0;
 }

@@ -2,15 +2,15 @@ build: ${{SPRING_MAVEN_SOURCE_DIRECTORY}}
 container_name: ${{PROJECT_NAME_CONTAINER}}-backend-spring-maven
 restart: always
 networks:
-#? if has frontend {
+#? if has service.frontend {
 #  - frontend-backend
 #? }
-#? if has database {
+#? if has service.database {
 #  - backend-database
 #? }
 ports:
   - ${{SPRING_MAVEN_PORT}}:8080
 env_file:
-#? if var.ENV == "File" {
+#? if version == "0.7.0" {
 #   - environment.env
 #? }

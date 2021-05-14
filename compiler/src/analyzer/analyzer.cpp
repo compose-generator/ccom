@@ -13,7 +13,9 @@ inline bool instanceof(const T*) {
 
 json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
     for (const std::unique_ptr<IdentifierExprAST>& identifier : key->GetIdentifiers()) {
-        data = data[identifier->GetName()];
+        std::string keyName = identifier->GetName();
+        if (!data.contains(keyName)) throw std::runtime_error("Key " + keyName + " does not exist in data input");
+        data = data[keyName];
     }
     return data;
 }
@@ -64,15 +66,12 @@ void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& d
     }
 }
 
-ExprAST* executeSemanticAnalysis(bool isSingleStatement, const std::string& fileInput, const std::string& dataInput,
+ExprAST* executeSemanticAnalysis(bool isSingleStatement, const std::string& fileInput, const json& data,
                                  const std::string& lineCommentChars, const std::string& blockCommentCharsOpen,
                                  const std::string& blockCommentCharsClose) {
     // Parse Abstract Syntax Tree
-    ExprAST* ast = executeSyntaxAnalysis(isSingleStatement, fileInput, dataInput, lineCommentChars,
+    ExprAST* ast = executeSyntaxAnalysis(isSingleStatement, fileInput, lineCommentChars,
                                          blockCommentCharsOpen, blockCommentCharsClose);
-
-    // Parse input string from JSON to object
-    json data = json::parse(dataInput);
 
     // Execute semantic checks
     checkDataTypeCompatibility(isSingleStatement, ast, data);

@@ -31,9 +31,8 @@
 
 Token getNextToken();
 
-ExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string &fileInput, const std::string &dataInput,
-                               const std::string &lineCommentChars, const std::string &blockCommentCharsOpen,
-                               const std::string &blockCommentCharsClose);
+ExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string &fileInput, const std::string &lineCommentChars,
+                               const std::string &blockCommentCharsOpen, const std::string &blockCommentCharsClose);
 
 std::unique_ptr<ArbitraryExprAST> parseArbitrary();
 std::unique_ptr<NumberExprAST> parseNumber();
