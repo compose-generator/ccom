@@ -31,7 +31,6 @@ std::string getOutputOfContent(ExprAST* ast, const json& data, bool preserveComm
         if (auto* arbitrarySection = dynamic_cast<ArbitraryExprAST*>(section.get())) { // Is section an arbitrary section?
             result += getOutputOfArbitrarySection(arbitrarySection);
         } else if (auto* sectionExpr = dynamic_cast<SectionExprAST*>(section.get())) { // Is section a relevant section?
-            std::cout << "Size: " << sectionExpr->GetComBlocks().size() << std::endl;
             result += getOutputOfRelevantSection(sectionExpr, data);
         }
     }
@@ -48,13 +47,11 @@ std::string getOutputOfRelevantSection(SectionExprAST* relevantSection, const js
     // Loop through com blocks
     for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->GetComBlocks()) {
         if (auto* lineBlockExpr = dynamic_cast<ComLineBlockExprAST*>(comBlock.get())) { // Is it a ComLineBlock?
-            std::cout << "ComLineBlock" << std::endl;
             // Evaluate condition and append payload to output string if condition was truthy
             if (evaluateStmtList(lineBlockExpr->GetStmtList().get(), data)) {
                 result += lineBlockExpr->GetPayload()->GetValue();
             }
         } else if(auto* blockBlockExpr = dynamic_cast<ComBlockBlockExprAST*>(comBlock.get())) { // Is it a ComBlockBlock?
-            std::cout << "ComBlockBlock" << std::endl;
             const std::unique_ptr<IfBlockExprAST>& ifBlock = blockBlockExpr->GetIfBlock();
             // Evaluate condition and append payload to output string if condition was truthy
             if (evaluateStmtList(ifBlock->GetStmtList().get(), data)) {
@@ -114,7 +111,5 @@ std::string interpretInput(bool isSingleStatement, bool preserveCommentsOnFalse,
     ExprAST* ast = executeSemanticAnalysis(isSingleStatement, fileInput, data, lineCommentChars,
                                            blockCommentCharsOpen, blockCommentCharsClose);
 
-    std::string output = getOutput(isSingleStatement, ast, data, preserveCommentsOnFalse);
-
-    std::cout << "Output: " << output << std::endl;
+    return getOutput(isSingleStatement, ast, data, preserveCommentsOnFalse);
 }
