@@ -13,11 +13,11 @@
 
 using json = nlohmann::json;
 
-std::string interpretInput(bool, bool, const std::string&, const std::string&, const std::string&,
+std::string interpretInput(bool, const std::string&, const std::string&, const std::string&,
                          const std::string&, const std::string&);
 
-std::string getOutput(bool, ExprAST*, const json&, bool);
-std::string getOutputOfContent(ExprAST*, const json&, bool);
+std::string getOutput(bool, ExprAST*, const json&);
+std::string getOutputOfContent(ExprAST*, const json&);
 std::string getOutputOfArbitrarySection(ArbitraryExprAST*);
 std::string getOutputOfRelevantSection(SectionExprAST*, const json&);
 bool evaluateStmtList(ExprAST *ast, const json &data);

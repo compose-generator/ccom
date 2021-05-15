@@ -120,7 +120,6 @@ public class Example {
 -   `--force`
 -	`--mode="single" / --mode="file"`
 -   `--out-file="./output.java"`
--   `--preserve-comments-on-false`
 
 ### Single condition + data input => boolean output
 You also have the option to feed CCom with a single condition and get a boolean output, whether this condition is true or false.

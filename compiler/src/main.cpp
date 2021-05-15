@@ -14,7 +14,6 @@ int main(int argc, char** argv) {
         args.emplace_back(argv[iArg]);
 
     bool singleStatementMode = args[1] == "true";
-    bool preserveCommentsOnFalse = args[7] == "true";
     std::string fileInput = args[2];
     std::string dataInput = args[3];
 
@@ -24,7 +23,7 @@ int main(int argc, char** argv) {
     //fileInput = "//? if not has test.marc | test.marc.dominic.24 != \"Test\" { Test payload //? }";
 
     // Start compiler pipeline
-    std::string output = interpretInput(singleStatementMode, preserveCommentsOnFalse, fileInput, dataInput, args[4], args[5], args[6]);
+    std::string output = interpretInput(singleStatementMode, fileInput, dataInput, args[4], args[5], args[6]);
 
     // Print output
     std::cout << output;

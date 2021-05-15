@@ -15,15 +15,15 @@ bool getExistenceOfJsonKey(const std::unique_ptr<KeyExprAST> &key, json data) {
     return true;
 }
 
-std::string getOutput(bool isSingleStatement, ExprAST* ast, const json& data, bool preserveCommentsOnFalse) {
+std::string getOutput(bool isSingleStatement, ExprAST* ast, const json& data) {
     if (isSingleStatement) {
         return evaluateStmtList(ast, data) ? "true" : "false";
     } else {
-        return getOutputOfContent(ast, data, preserveCommentsOnFalse);
+        return getOutputOfContent(ast, data);
     }
 }
 
-std::string getOutputOfContent(ExprAST* ast, const json& data, bool preserveCommentsOnFalse) {
+std::string getOutputOfContent(ExprAST* ast, const json& data) {
     std::string result;
 
     auto* content = dynamic_cast<ContentExprAST*>(ast);
@@ -101,7 +101,7 @@ bool evaluateCompStatement(CompStmtExprAST* ast, const json& data) {
     throw std::runtime_error("Unknown datatype of '" + keyValue.dump() + "'");
 }
 
-std::string interpretInput(bool isSingleStatement, bool preserveCommentsOnFalse, const std::string& fileInput,
+std::string interpretInput(bool isSingleStatement, const std::string& fileInput,
                            const std::string& dataInput, const std::string& lineCommentChars,
                            const std::string& blockCommentCharsOpen, const std::string& blockCommentCharsClose) {
     // Parse input string from JSON to object
@@ -111,5 +111,5 @@ std::string interpretInput(bool isSingleStatement, bool preserveCommentsOnFalse,
     ExprAST* ast = executeSemanticAnalysis(isSingleStatement, fileInput, data, lineCommentChars,
                                            blockCommentCharsOpen, blockCommentCharsClose);
 
-    return getOutput(isSingleStatement, ast, data, preserveCommentsOnFalse);
+    return getOutput(isSingleStatement, ast, data);
 }

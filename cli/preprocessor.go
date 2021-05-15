@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"strconv"
 	"strings"
 )
 
@@ -20,7 +19,6 @@ func processInput(
 	lineCommentChars string,
 	mode string,
 	outFile string,
-	preserveFlag bool,
 	silentFlag bool,
 ) {
 	// Analyze correctness of inputs
@@ -36,7 +34,7 @@ func processInput(
 	if !silentFlag {
 		fmt.Print("Compiling ... ")
 	}
-	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose, strconv.FormatBool(preserveFlag))
+	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
 	if !silentFlag {
 		fmt.Println("done")
 	}

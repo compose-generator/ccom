@@ -71,11 +71,6 @@ func main() {
 				Usage:   "Path to output file. If you omit this flag, the output will be printed to the console",
 			},
 			&cli.BoolFlag{
-				Name:    "preserve-comments-on-false",
-				Aliases: []string{"p"},
-				Usage:   "Do not delete conditional section after evaluating. Default is to delete them",
-			},
-			&cli.BoolFlag{
 				Name:    "silent",
 				Aliases: []string{"s"},
 				Usage:   "Only print raw compiler output and no debug output",
@@ -92,7 +87,6 @@ func main() {
 				c.String("line-comment-chars"),
 				c.String("mode"),
 				c.String("out-file"),
-				c.Bool("preserve-comments-on-false"),
 				c.Bool("silent"),
 			)
 			return nil
