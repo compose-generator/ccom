@@ -67,9 +67,9 @@ bool evaluateStmtList(ExprAST* ast, const json& data) {
     // Loop through statements
     for (const std::unique_ptr<StmtExprAST>& stmt : stmtList->GetStatements()) {
         if (auto* hasStmt = dynamic_cast<HasStmtExprAST*>(stmt.get())) {
-            return evaluateHasStatement(hasStmt, data);
+            if (evaluateHasStatement(hasStmt, data)) return true;
         } else if (auto* compStmt = dynamic_cast<CompStmtExprAST*>(stmt.get())) {
-            return evaluateCompStatement(compStmt, data);
+            if (evaluateCompStatement(compStmt, data)) return true;
         }
     }
     return false;

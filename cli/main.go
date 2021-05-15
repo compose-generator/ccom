@@ -59,11 +59,10 @@ func main() {
 				Aliases: []string{"lcc"},
 				Usage:   "Specifies the line comment character(s) of your data format",
 			},
-			&cli.StringFlag{
-				Name:        "mode",
-				Aliases:     []string{"m"},
-				DefaultText: "file",
-				Usage:       "Whole file with string output or single statement list with boolean output (file / single)",
+			&cli.BoolFlag{
+				Name:    "mode-single",
+				Aliases: []string{"m"},
+				Usage:   "Set input mode to single statement list",
 			},
 			&cli.StringFlag{
 				Name:    "out-file",
@@ -85,7 +84,7 @@ func main() {
 				c.Bool("force"),
 				c.String("lang"),
 				c.String("line-comment-chars"),
-				c.String("mode"),
+				c.Bool("mode-single"),
 				c.String("out-file"),
 				c.Bool("silent"),
 			)

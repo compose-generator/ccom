@@ -118,7 +118,7 @@ public class Example {
 -   `--block-comment-char-close="*/"`
 -	`--data="{}"`
 -   `--force`
--	`--mode="single" / --mode="file"`
+-	`--mode-single`
 -   `--out-file="./output.java"`
 
 ### Single condition + data input => boolean output

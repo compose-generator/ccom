@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"strconv"
 	"strings"
 )
 
@@ -17,7 +18,7 @@ func processInput(
 	force bool,
 	lang string,
 	lineCommentChars string,
-	mode string,
+	modeSingle bool,
 	outFile string,
 	silentFlag bool,
 ) {
@@ -25,7 +26,7 @@ func processInput(
 	if !silentFlag {
 		fmt.Print("Analyzing inputs ... ")
 	}
-	analyze(&fileInput, &dataInput, lang, &mode, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose)
+	analyze(&fileInput, &dataInput, lang, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose, modeSingle)
 	if !silentFlag {
 		fmt.Println("done")
 	}
@@ -34,7 +35,7 @@ func processInput(
 	if !silentFlag {
 		fmt.Print("Compiling ... ")
 	}
-	result := util.ExecuteAndWaitWithOutput("./ccomc", mode, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+	result := util.ExecuteAndWaitWithOutput("./ccomc", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
 	if !silentFlag {
 		fmt.Println("done")
 	}
@@ -62,10 +63,10 @@ func analyze(
 	fileInput *string,
 	dataInput *string,
 	lang string,
-	mode *string,
 	lineCommentChars *string,
 	blockCommentCharsOpen *string,
 	blockCommentCharsClose *string,
+	modeSingle bool,
 ) {
 	// Ensure value of input data
 	if *dataInput == "" {
@@ -80,16 +81,9 @@ func analyze(
 		*blockCommentCharsOpen = ""
 		*blockCommentCharsClose = ""
 	}
-	// Ensure value of mode
-	if *mode == "" {
-		*mode = "file"
-	}
 	// Get raw data strings
-	if *mode == "file" {
+	if !modeSingle {
 		ensureFileInputString(fileInput)
-		*mode = "false"
-	} else {
-		*mode = "true"
 	}
 	ensureDataInputString(dataInput)
 

@@ -18,6 +18,9 @@ func GetFileContents(path string) string {
 // FileExists checks if a file exists
 func FileExists(path string) bool {
 	_, err := os.Stat(path)
+	if err != nil {
+		return false
+	}
 	return !os.IsNotExist(err)
 }
 
