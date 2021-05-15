@@ -1,14 +1,14 @@
-|:warning: | This language is under construction and doesn't work in the current state. Do NOT use it in production. |
-|----------|:-------------------------------|
-
 # CCom (Conditional Comments) language
+
+|:warning: | This language is under construction and doesn't work in its current state. Do NOT use it in production. |
+|----------|:-------------------------------|
 
 *Note: This language is part of the [Compose Generator](https://github.com/compose-generator/compose-generator) project, but also can be used independently.*
 
 ## Introduction
 CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or XML, but can also be used for a variety of programming languages with support for comments.
 
-### Supported data formats
+## Supported data formats
 |            | Line comment chars | Block comment chars open | Block comment chars close |
 |------------|--------------------|--------------------------|---------------------------|
 | YAML       | #                  | -                        | -                         |
@@ -26,10 +26,29 @@ CCom is a language for pre-processing source files. It's primary purpose is to e
 
 *Note: Formats like JSON, where no comments are supported can also work with CCom, however then the file input is not valid before pre-processing it with CCom.*
 
-### Input
-CCom requests two input parameters. A source file/string of any language, containing conditional sections and a JSON file/string, which holds data for the evaluation.
+## Usage
+In general, you call the cli like so: <br>
+`ccom [options] <input>`
 
-#### Source file
+### CLI options
+| Option                      	| Shortcut 	| Description                                                                           	| Default 	|
+|-----------------------------	|----------	|---------------------------------------------------------------------------------------	|---------	|
+| --data                      	| -d       	| JSON string or path to JSON file, which holds the evaluation work data                	| {}      	|
+| --lang                      	| -l       	| File format / programming language (e.g. yaml, java, html, ...)                       	| yaml    	|
+| --mode-single               	| -m       	| Set input mode to single statement list                                               	| -       	|
+| --out-file                  	| -o       	| Path to output file. If you omit this flag, the output will be printed to the console 	| -       	|
+| --silent                    	| -s       	| Only print raw compiler output and no debug output                                    	| -       	|
+| --force                     	| -f       	| Ignore safety checks. Warning: This could cause demage                                	| -       	|
+| --line-comment-char         	| -lcc     	| Specifies the line comment char(s) of your data format                                	| #       	|
+| --block-comment-chars-open  	| -bcco    	| Specifies the opening block comment char(s) of your data format                       	| -       	|
+| --block-comment-chars-close 	| -bccc    	| Specifies the closing block comment char(s) of your data format                       	| -       	|
+
+## Work process
+The first thing CCom does, is to analyze the input and determine, whether it is a single condition or a source file. This depends on how you call the CCom CLI. To switch to a single statement, you can call it with the flag `--mode-single`
+
+### Source file mode
+CCom takes the whole file and feeds it into the interpreter, starting with the `CONTENT` grammar node.
+
 Here is an example YAML file, which can be evaluated by CCom:
 ```yaml
 ...
@@ -41,7 +60,7 @@ property1: "value1"
 ...
 ```
 
-Another example for Java (whatever you want to achive with that)
+Another example for Java with line comments (whatever you want to achive with that)
 ```java
 public class Example {
 	public static void main(String[] args) {
@@ -58,7 +77,7 @@ public class Example {
 }
 ```
 
-Java example:
+Another Java example with block comments:
 ```java
 public class Example {
 	public static void main(String[] args) {
@@ -76,59 +95,13 @@ public class Example {
 }
 ```
 
-#### Data input
-```json
-{
-    "version": "0.7.0",
-    "service": {
-        "frontend": [
-            {
-                "label": "Spring Maven",
-                "name": "spring-maven",
-                "dir": "./spring-maven",
-                "type": "frontend",
-                "preselected": false
-            },
-            {
-                "label": "Spring Gradle",
-                "name": "spring-gradle",
-                "dir": "./spring-gradle",
-                "type": "frontend",
-                "preselected": false
-            }
-        ],
-        "backend": []
-    },
-    "var": [
-        {
-            "name": "SPRING_MAVEN_SOURCE_DIRECTORY",
-            "value": "./backend"
-        },
-        {
-            "name": "SPRING_MAVEN_PACKAGE_NAME",
-            "value": "com.chillibits.test-app"
-        }
-    ]
-}
-```
+### Single condition mode (`--mode-single`)
+CCom feeds the condition into the interpreter, starting by the `STMT_LST` grammar node. The result is either `true` or `false`.
 
-#### CLI flags
--   `--line-comment-char="//"`
--   `--block-comment-char-open="/*"`
--   `--block-comment-char-close="*/"`
--	`--data="{}"`
--   `--force`
--	`--mode-single`
--   `--out-file="./output.java"`
-
-### Single condition + data input => boolean output
-You also have the option to feed CCom with a single condition and get a boolean output, whether this condition is true or false.
+Here is an example input: <br>
 ```ccom
 has service.angular | has service.mysql | has backend
 ```
-
-In combination with the data input from above, this condition would be `false`, because the data collection does not fulfill any of the three sub-conditions.
-
 
 ## Grammar
 *Note a grammar is dependent on the line comment chars and the block comment chars. In this particular case the line comment char is `//`, the block comment char open is `/*` and the block comment char close is `*/`*
@@ -174,18 +147,6 @@ UNICODE               --> Any unicode character
 -   `.`
 -   `"`
 -   `{` / `}`
-
-## Work process
-The first thing CCom does, is to analyze the input and determine, whether it is a single condition or a source file. Depending on that, the CLI interface will call the main compiler with `--mode="single"` or `--mode="file"`.
-
-### Source file
-CCom takes the whole file and feeds it into the interpreter, starting with the `CONTENT` grammar node.
-
-### Single condition
-CCom feeds the condition into the interpreter, starting by the `STMT_LST` grammar node.
-
-## Usage
-*To be extended...*
 
 ## Contribute otherwise to the project
 If you want to contribute to this project, please ensure you comply with the contribution guidelines.
