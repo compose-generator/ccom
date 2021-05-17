@@ -5,7 +5,7 @@ name: CMake Build Matrix
 on:
   push:
     paths:
-      - 'compiler/**'
+      - 'compiler/c++/**'
       - 'cli/**'
   pull_request:
     branches: [ main, dev, feature/* ]
@@ -31,7 +31,7 @@ jobs:
 #            environment_script: "C:/Program Files (x86)/Microsoft Visual Studio/2019/Enterprise/VC/Auxiliary/Build/vcvars64.bat"
 #          }
         - {
-            name: "Windows Latest MinGW", artifact: "win-mingw",
+            name: "Windows Latest MinGW", artifact: "win",
             os: windows-latest,
             cc: "gcc", cxx: "g++"
           }
@@ -41,7 +41,7 @@ jobs:
             cc: "gcc", cxx: "g++"
           }
         - {
-            name: "macOS Latest Clang", artifact: "macOS",
+            name: "macOS Latest Clang", artifact: "macos",
             os: macos-latest,
             cc: "clang", cxx: "clang++"
           }
@@ -119,7 +119,7 @@ jobs:
           ${{ matrix.config.name }}-ccache-
 
     - name: Configure
-      working-directory: compiler
+      working-directory: compiler/c++
       shell: cmake -P {0}
       run: |
         set(ENV{CC} ${{ matrix.config.cc }})
@@ -160,7 +160,7 @@ jobs:
         endif()
 
     - name: Build
-      working-directory: compiler
+      working-directory: compiler/c++
       shell: cmake -P {0}
       run: |
         set(ENV{NINJA_STATUS} "[%f/%t %o/sec] ")
@@ -204,7 +204,7 @@ jobs:
         execute_process(COMMAND ccache -s)
 
     - name: Run tests
-      working-directory: compiler
+      working-directory: compiler/c++
       shell: cmake -P {0}
       run: |
         include(ProcessorCount)
@@ -228,14 +228,14 @@ jobs:
         endif()
 
     - name: Install Strip
-      working-directory: compiler
+      working-directory: compiler/c++
       run: cmake --install build --prefix instdir --strip
 
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.config.artifact }}
-        path: ./compiler/instdir/
+        path: ./compiler/c++/instdir/
 
   release:
     if: contains(github.ref, 'tags/v')
@@ -267,6 +267,7 @@ jobs:
     if: contains(github.ref, 'tags/v')
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
+    needs: release
     strategy:
       fail-fast: false
       matrix:
@@ -287,7 +288,6 @@ jobs:
             name: "macOS Latest Clang", artifact: "macOS.7z",
             os: ubuntu-latest
           }
-    needs: release
 
     steps:
     - name: Download artifact

@@ -3,7 +3,7 @@ name: C++ CI
 on:
   push:
     paths:
-      - 'compiler/**'
+      - 'compiler/c++/**'
   pull_request:
     branches: [ main, dev, feature/** ]
 
@@ -17,9 +17,9 @@ jobs:
     - name: Prepare environment
       run: |
         shopt -s extglob
-        rm -rf !("compiler")
-        cp -fR ./compiler/* .
-        rm -rf ./compiler
+        rm -rf !("compiler/c++")
+        cp -fR ./compiler/c++/* .
+        rm -rf ./compiler/c++
     - name: Build project
       uses: nicledomaS/cmake_build_action@v1.4
       with:
