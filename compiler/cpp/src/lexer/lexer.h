@@ -10,6 +10,8 @@
 #include <string>
 #include <stdexcept>
 #include <algorithm>
+#include <iostream>
+#include <sstream>
 #include "Token.h"
 
 enum TokenType {

@@ -28,5 +28,6 @@ int main(int argc, char** argv) {
     // Print output
     std::cout << output;
 
+    // Return with positive result code
     return 0;
 }

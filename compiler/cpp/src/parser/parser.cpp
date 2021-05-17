@@ -65,7 +65,6 @@ std::unique_ptr<CompStmtExprAST> parseCompStmt() {
             op = OP_NOT_EQUALS;
             break;
         default:
-            std::cout << "Operator: " << CurTok.getType() << std::endl;
             throw std::runtime_error("Unknown comparison operator at " + CurTok.getCodePos());
     }
     getNextToken(); // Consume operator
@@ -172,14 +171,5 @@ ExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string& fileIn
     } else {
         ast = parseContent().release();
     }
-
-    // Test lexer
-    /*Token next;
-    while ((next = getNextToken()).getType() != TOK_EOF) {
-        std::cout << "Got token: " << std::to_string(next.getType()) << std::endl;
-        std::cout << "Value: " << next.getValue() << std::endl;
-        std::cout << "Loc: " << next.getCodePos() << std::endl;
-        std::cout << std::endl;
-    }*/
     return ast;
 }
