@@ -6,7 +6,7 @@
 
 #include "main.h"
 
-// CLI call: ./ccom <file-input> <data-input> <line-com-chars> <block-com-open-chars> <block-com-close-chars>
+// CLI call: ./ccom <single-stmt> <file-input> <data-input> <line-com-chars> <block-com-open-chars> <block-com-close-chars>
 int main(int argc, char** argv) {
     // Parse cli args
     std::vector<std::string> args;
