@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f5a14087-9254-43d0-9d92-6c0978f370bb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../compiler/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/analyzer/analyzer.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/analyzer/analyzer.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/interpreter/interpreter.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/interpreter/interpreter.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/lexer/Token.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/lexer/Token.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/lexer/lexer.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/lexer/lexer.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/main.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/main.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ArbitraryExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ArbitraryExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ComBlockBlockExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ComBlockBlockExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ComBlockExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ComBlockExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ComLineBlockExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ComLineBlockExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/CompStmtExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/CompStmtExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ContentExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ContentExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/HasStmtExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/HasStmtExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/IdentifierExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/IdentifierExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/IfBlockExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/IfBlockExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/KeyExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/KeyExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/NumberExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/NumberExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/PayloadExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/PayloadExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/SectionExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/SectionExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/StmtExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/StmtExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/StmtLstExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/StmtLstExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/StringExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/StringExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ValueExprAST.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/ast/ValueExprAST.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/parser.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../compiler/src/parser/parser.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/.vscode/launch.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/CComManualInput.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/CComTestInput.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/CComManualMain.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/CComTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/CComTestMain.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/compiler/CCom.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/compiler/CComIntf.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/compiler/FileReader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/compiler/FileReaderIntf.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/compiler/NumberReader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/compiler/NumberReaderIntf.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/test/TestCaseIntf.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/test/TestSuite.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../java-compiler/src/test/TestSuiteIntf.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1sdjgj0OAn2ElX2n2ErmCdEVJBB" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../compiler/java/pom.xml" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.30689654" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f5a14087-9254-43d0-9d92-6c0978f370bb" name="Default Changelist" comment="" />
+      <created>1621209478676</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1621209478676</updated>
+    </task>
+    <servers />
+  </component>
+</project>
