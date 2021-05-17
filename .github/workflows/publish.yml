@@ -5,7 +5,7 @@ name: CMake Build Matrix
 on:
   push:
     paths:
-      - 'compiler/c++/**'
+      - 'compiler/cpp/**'
       - 'cli/**'
   pull_request:
     branches: [ main, dev, feature/* ]
@@ -119,7 +119,7 @@ jobs:
           ${{ matrix.config.name }}-ccache-
 
     - name: Configure
-      working-directory: compiler/c++
+      working-directory: compiler/cpp
       shell: cmake -P {0}
       run: |
         set(ENV{CC} ${{ matrix.config.cc }})
@@ -160,7 +160,7 @@ jobs:
         endif()
 
     - name: Build
-      working-directory: compiler/c++
+      working-directory: compiler/cpp
       shell: cmake -P {0}
       run: |
         set(ENV{NINJA_STATUS} "[%f/%t %o/sec] ")
@@ -204,7 +204,7 @@ jobs:
         execute_process(COMMAND ccache -s)
 
     - name: Run tests
-      working-directory: compiler/c++
+      working-directory: compiler/cpp
       shell: cmake -P {0}
       run: |
         include(ProcessorCount)
@@ -228,14 +228,14 @@ jobs:
         endif()
 
     - name: Install Strip
-      working-directory: compiler/c++
+      working-directory: compiler/cpp
       run: cmake --install build --prefix instdir --strip
 
     - name: Upload
       uses: actions/upload-artifact@v2
       with:
         name: ${{ matrix.config.artifact }}
-        path: ./compiler/c++/instdir/
+        path: ./compiler/cpp/instdir/
 
   release:
     if: contains(github.ref, 'tags/v')
