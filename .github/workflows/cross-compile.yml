@@ -1,0 +1,44 @@
+# Publish Compiler binaries
+
+name: Cross compile
+
+on:
+  push:
+    paths:
+      #- 'compiler/cpp/**'
+  pull_request:
+    branches: [ main, dev, feature/* ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch_name: [linux-arm64, linux-armv5, linux-armv6, linux-armv7, linux-x86, linux-x64, windows-static-x86, windows-static-x64]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: Prepare builder
+        run: |
+          docker run --rm dockcross/${{ matrix.arch_name }} > ./dockcross
+          chmod +x dockcross
+          mkdir bin
+      
+      - name: Configure
+        run: ./dockcross cmake -Bbin -H./compiler/cpp -GNinja
+
+      - name: Compile
+        run: ./dockcross ninja -Cbin
+
+      - name: Process build output
+        working-directory: bin
+        run: |
+          sudo apt-get install tree
+          tree .
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ matrix.arch_name }}
+          path: ./bin
