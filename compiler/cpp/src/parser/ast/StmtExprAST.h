@@ -12,7 +12,7 @@
 
 class StmtExprAST: public ExprAST {
 public:
-    virtual ~StmtExprAST() = default;
+    ~StmtExprAST() override = default;
 };
 
 #endif //COMPILER_STMTEXPRAST_H

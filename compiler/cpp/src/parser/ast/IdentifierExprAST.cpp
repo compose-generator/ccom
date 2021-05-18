@@ -9,3 +9,7 @@
 std::string IdentifierExprAST::GetName() const {
     return Name;
 }
+
+int IdentifierExprAST::GetIndex() const {
+    return Index;
+}
