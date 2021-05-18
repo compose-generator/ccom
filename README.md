@@ -123,7 +123,8 @@ STMT_LST              --> STMT (`|` STMT)*
 STMT                  --> HAS_STMT | COMP_STMT
 HAS_STMT              --> has KEY | not has KEY
 COMP_STMT             --> KEY == VALUE | KEY != VALUE
-KEY                   --> IDENTIFIER(.IDENTIFIER)*
+KEY                   --> IDENTIFIER INDEX? (.IDENTIFIER INDEX?)*
+INDEX                 --> [NUMBER]
 IDENTIFIER            --> LETTER+
 VALUE                 --> STRING | NUMBER
 STRING                --> "CHARS_LIMITED"

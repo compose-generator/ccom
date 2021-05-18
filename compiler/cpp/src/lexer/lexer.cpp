@@ -34,13 +34,12 @@ int advance() {
     return CurrentChar;
 }
 
-int expect(int input) {
+void expect(int input) {
     if (CurrentChar != input)
         throw std::runtime_error("Expected '" + std::string(1, (char) input) + "', but got '"
                                  + std::string(1, (char) CurrentChar) +"' at L"
                                  + std::to_string(LineNum) + "C" + std::to_string(ColNum));
     advance();
-    return input;
 }
 
 std::string getLookahead() {
@@ -67,37 +66,50 @@ Token getTok() {
 
     // Is it a primitive char, that can be returned immediately?
     switch (CurrentChar) {
-        case '.':
+        case '.': {
             expect('.');
             return Token(TOK_DOT, LineNum, ColNum);
-        case '{':
+        }
+        case '{': {
             expect('{');
             currentContext = PAYLOAD;
             return Token(TOK_BRACE_OPEN, LineNum, ColNum);
-        case '}':
+        }
+        case '}': {
             expect('}');
             if (!isLookaheadBlockCommentCharClose())
                 currentContext = ARBITRARY;
             return Token(TOK_BRACE_CLOSE, LineNum, ColNum);
-        case '|':
+        }
+        case '[': {
+            expect('[');
+            std::string idx = consumeNumber();
+            expect(']');
+            return Token(TOK_INDEX, idx, LineNum, ColNum);
+        }
+        case '|': {
             expect('|');
             return Token(TOK_OR, LineNum, ColNum);
-        case '!': // !=
+        }
+        case '!': { // !=
             expect('!');
             expect('=');
             return Token(TOK_NOT_EQUALS, LineNum, ColNum);
-        case '=': // ==
+        }
+        case '=': { // ==
             expect('=');
             expect('=');
             return Token(TOK_EQUALS, LineNum, ColNum);
-        case '"': // String literal
+        }
+        case '"': { // String literal
             return consumeStringLiteral();
-        default:
+        }
+        default: {
             // Is it a char array?
             if (isalpha(CurrentChar)) return consumeIdentifierOrKeyword();
 
             // Is it an integer?
-            if (isdigit(CurrentChar)) return consumeNumber();
+            if (isdigit(CurrentChar)) return Token(TOK_NUMBER, consumeNumber(), LineNum, ColNum);
 
             // Is it a conditional comment identifier?
             std::string laResult;
@@ -124,6 +136,7 @@ Token getTok() {
                 currentContext = ARBITRARY;
                 return Token(TOK_COM_BLOCK_IDEN_CLOSE, LineNum, ColNum);
             }
+        }
     }
 
     // Otherwise, just return the character as its ascii value.
@@ -177,13 +190,13 @@ Token consumePayload() {
     return Token(TOK_ARBITRARY, payloadStr.str(), LineNum, ColNum);
 }
 
-Token consumeNumber() {
+std::string consumeNumber() {
     std::stringstream numStr;
     do {
         numStr << (char) CurrentChar;
         advance();
     } while (isdigit(CurrentChar));
-    return Token(TOK_NUMBER, numStr.str(), LineNum, ColNum);
+    return numStr.str();
 }
 
 Token consumeIdentifierOrKeyword() {
