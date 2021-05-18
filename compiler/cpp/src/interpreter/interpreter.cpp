@@ -8,9 +8,16 @@
 
 bool getExistenceOfJsonKey(const std::unique_ptr<KeyExprAST> &key, json data) {
     for (const std::unique_ptr<IdentifierExprAST>& identifier : key->GetIdentifiers()) {
-        std::string keyName = identifier->GetName();
-        if (!data.contains(keyName)) return false;
-        data = data[keyName];
+        std::string identifierName = identifier->GetName();
+        int identifierIndex = identifier->GetIndex();
+
+        if (!data.contains(identifierName)) return false;
+        data = data[identifierName];
+
+        if (identifierIndex >= 0) { // Identifier has an index attached to it
+            if (data.size() <= identifierIndex) return false;
+            data = data[identifierIndex];
+        }
     }
     return true;
 }
