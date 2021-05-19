@@ -1,0 +1,46 @@
+project_name: ccom
+builds:
+  - env:
+      - CGO_ENABLED=0
+    dir: cli
+    main: ./ccom.go
+    goos:
+      - linux
+      - windows
+      #- darwin
+      #- freebsd
+    goarch:
+      - amd64
+      - arm
+      - arm64
+      - 386
+    goarm:
+      - 5
+      #- 6
+      - 7
+archives:
+  - files:
+      - LICENSE
+    format_overrides:
+      - goos: windows
+        format: zip
+nfpms:
+  - id: publish
+    maintainer: Marc Auberer <marc.auberer@chillibits.com>
+    description: Compiler for the CCom (Conditional Comments) language.
+    homepage: https://github.com/compose-generator/ccom
+    license: MIT
+    bindir: /usr/bin
+    formats:
+      - apk
+      - deb
+      - rpm
+    contents:
+      - src: bin/ccomc-{{ .Os }}-{{ .Arch }}/*
+        dst: /usr/bin/ccom/
+release:
+  name_template: v{{ .Tag }}
+  github:
+    owner: compose-generator
+    name: ccom
+  prerelease: auto
