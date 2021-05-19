@@ -76,7 +76,7 @@ func main() {
 			},
 		},
 		Action: func(c *cli.Context) error {
-			processInput(
+			ProcessInput(
 				c.Args().Get(0),
 				c.String("block-comment-chars-open"),
 				c.String("block-comment-chars-close"),

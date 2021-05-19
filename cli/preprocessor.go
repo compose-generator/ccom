@@ -10,7 +10,9 @@ import (
 	"strings"
 )
 
-func processInput(
+// -------------------------------------------------- Public functions --------------------------------------------------
+
+func ProcessInput(
 	fileInput string,
 	blockCommentCharsOpen string,
 	blockCommentCharsClose string,
@@ -58,6 +60,8 @@ func processInput(
 		fmt.Println(result)
 	}
 }
+
+// ------------------------------------------------- Private functions --------------------------------------------------
 
 func analyze(
 	fileInput *string,

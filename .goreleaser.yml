@@ -3,7 +3,6 @@ builds:
   - env:
       - CGO_ENABLED=0
     dir: cli
-    main: ./ccom.go
     goos:
       - linux
       - windows
@@ -21,6 +20,7 @@ builds:
 archives:
   - files:
       - LICENSE
+      - ccom-{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}**
     format_overrides:
       - goos: windows
         format: zip

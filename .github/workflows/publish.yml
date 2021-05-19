@@ -64,6 +64,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -75,7 +77,7 @@ jobs:
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: ${{ runner.os }}-go
+          restore-keys: ${{ runner.os }}-go-
 
       - name: Download all artifacts of compiler build
         uses: actions/download-artifact@v2
@@ -85,10 +87,13 @@ jobs:
       - name: Prepare compiler binaries
         working-directory: bin
         run: |
-          mv ccomc-windows-static-x86 ccomc-windows-386
-          mv ccomc-windows-static-x64 ccomc-windows-amd64
-          mv ccomc-linux-x86 ccomc-linux-386
-          mv ccomc-linux-x64 ccomc-linux-amd64
+          mv ccomc-linux-arm64 ccomc-${{ steps.get_version.outputs.version }}-linux-arm64
+          mv ccomc-linux-armv5 ccomc-${{ steps.get_version.outputs.version }}-linux-armv5
+          mv ccomc-linux-armv7 ccomc-${{ steps.get_version.outputs.version }}-linux-armv7
+          mv ccomc-linux-x86 ccomc-${{ steps.get_version.outputs.version }}-linux-386
+          mv ccomc-linux-x64 ccomc-${{ steps.get_version.outputs.version }}-linux-amd64
+          mv ccomc-windows-static-x86 ccomc-${{ steps.get_version.outputs.version }}-windows-386
+          mv ccomc-windows-static-x64 ccomc-${{ steps.get_version.outputs.version }}-windows-amd64
           ls -R
 
       - name: Run GoReleaser
@@ -102,6 +107,10 @@ jobs:
           NFPM_PUBLISH_DEB_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
           NFPM_PUBLISH_RPM_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
           NFPM_PUBLISH_APK_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
+
+      - name: Test
+        working-directory: dist
+        run: ls -R
 
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v1
@@ -124,7 +133,6 @@ jobs:
           jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/amd64
           jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_arm64.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/arm64
           jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_armv5.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/armv5
-          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_armv6.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/armv6
           jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_armv7.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/armv7
           jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_386.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/i386
       
