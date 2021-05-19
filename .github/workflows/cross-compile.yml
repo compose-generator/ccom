@@ -31,14 +31,20 @@ jobs:
       - name: Compile
         run: ./dockcross ninja -Cbin
 
-      - name: Process build output
+      - name: Process build output - Linux
+        if: ${{ startsWith(matrix.arch_name, 'linux') }}
         working-directory: bin
         run: |
-          sudo apt-get install tree
-          tree .
+          mv compiler ccomc
+          chmod +x ccomc
+          
+      - name: Process build output - Windows
+        if: ${{ startsWith(matrix.arch_name, 'windows') }}
+        working-directory: bin
+        run: mv compiler ccomc.exe
 
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ matrix.arch_name }}
-          path: ./bin
+          name: ccom-${{ matrix.arch_name }}
+          path: ./bin/ccom**
