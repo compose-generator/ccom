@@ -20,7 +20,7 @@ builds:
 archives:
   - files:
       - LICENSE
-      - ccom-{{ .Os }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}**
+      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
     format_overrides:
       - goos: windows
         format: zip
@@ -36,7 +36,7 @@ nfpms:
       - deb
       - rpm
     contents:
-      - src: bin/ccomc-{{ .Os }}-{{ .Arch }}/*
+      - src: bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
         dst: /usr/bin/ccom/
 release:
   name_template: v{{ .Tag }}

@@ -79,6 +79,13 @@ jobs:
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: ${{ runner.os }}-go-
 
+      - name: Import GPG key
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v3
+        with:
+          gpg-private-key: ${{ secrets.GPG_PACKAGE_SIGNING }}
+          passphrase: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
+
       - name: Download all artifacts of compiler build
         uses: actions/download-artifact@v2
         with:
@@ -87,14 +94,10 @@ jobs:
       - name: Prepare compiler binaries
         working-directory: bin
         run: |
-          mv ccomc-linux-arm64 ccomc-${{ steps.get_version.outputs.version }}-linux-arm64
-          mv ccomc-linux-armv5 ccomc-${{ steps.get_version.outputs.version }}-linux-armv5
-          mv ccomc-linux-armv7 ccomc-${{ steps.get_version.outputs.version }}-linux-armv7
-          mv ccomc-linux-x86 ccomc-${{ steps.get_version.outputs.version }}-linux-386
-          mv ccomc-linux-x64 ccomc-${{ steps.get_version.outputs.version }}-linux-amd64
-          mv ccomc-windows-static-x86 ccomc-${{ steps.get_version.outputs.version }}-windows-386
-          mv ccomc-windows-static-x64 ccomc-${{ steps.get_version.outputs.version }}-windows-amd64
-          ls -R
+          mv ccomc-linux-x86 ccomc-linux-386
+          mv ccomc-linux-x64 ccomc-linux-amd64
+          mv ccomc-windows-static-x86 ccomc-windows-386
+          mv ccomc-windows-static-x64 ccomc-windows-amd64
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
@@ -107,10 +110,6 @@ jobs:
           NFPM_PUBLISH_DEB_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
           NFPM_PUBLISH_RPM_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
           NFPM_PUBLISH_APK_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
-
-      - name: Test
-        working-directory: dist
-        run: ls -R
 
       - name: Setup JFrog CLI
         uses: jfrog/setup-jfrog-cli@v1
