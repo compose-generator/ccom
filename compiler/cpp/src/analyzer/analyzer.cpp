@@ -8,9 +8,18 @@
 
 json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
     for (const std::unique_ptr<IdentifierExprAST>& identifier : key->GetIdentifiers()) {
-        std::string keyName = identifier->GetName();
-        if (!data.contains(keyName)) throw std::runtime_error("Key " + keyName + " does not exist in data input");
-        data = data[keyName];
+        std::string identifierName = identifier->GetName();
+        int identifierIndex = identifier->GetIndex();
+        if (!data.contains(identifierName))
+            throw std::runtime_error("Identifier " + identifierName + " does not exist in data input");
+
+        data = data[identifierName];
+
+        if (identifierIndex >= 0) { // Identifier has an index attached to it
+            if (data.empty())
+                throw std::runtime_error("Index " + std::to_string(identifierIndex) + " does not exist in identifier " + identifierName);
+            data = data[identifierIndex];
+        }
     }
     return data;
 }

@@ -42,6 +42,7 @@ enum TokenType {
     TOK_DOT, // .
     TOK_BRACE_OPEN, // {
     TOK_BRACE_CLOSE, // }
+    TOK_INDEX, // [123]
     TOK_COM_IDEN_PAYLOAD, // //
     TOK_COM_LINE_IDEN, // //?
     TOK_COM_BLOCK_IDEN_OPEN, // /*?
@@ -58,7 +59,7 @@ enum Context {
 
 int advance();
 
-int expect(int);
+void expect(int);
 
 std::string getLookahead();
 
@@ -72,7 +73,7 @@ bool isEOF();
 
 void skipWhitespaces();
 
-Token consumeNumber();
+std::string consumeNumber();
 
 Token consumeArbitrary();
 

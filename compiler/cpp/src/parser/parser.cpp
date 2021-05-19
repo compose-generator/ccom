@@ -41,7 +41,10 @@ std::unique_ptr<ValueExprAST> parseValue() {
 std::unique_ptr<IdentifierExprAST> parseIdentifier() {
     std::string name = CurTok.getValue();
     getNextToken(); // Consume identifier
-    return std::make_unique<IdentifierExprAST>(name);
+    if (CurTok.getType() != TOK_INDEX) return std::make_unique<IdentifierExprAST>(name);
+    int idx = std::stoi(CurTok.getValue());
+    getNextToken(); // Consume index
+    return std::make_unique<IdentifierExprAST>(name, idx);
 }
 
 std::unique_ptr<KeyExprAST> parseKey() {

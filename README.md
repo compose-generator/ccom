@@ -100,8 +100,42 @@ CCom feeds the condition into the interpreter, starting by the `STMT_LST` gramma
 
 Here is an example input: <br>
 ```ccom
-has service.angular | has service.mysql | has backend
+has service.angular | has service.frontend[1] | has backend
 ```
+
+### Data file
+CCom needs a JSON data tree to work with. To pass a file or a JSON string to CCOM, please use the `--data` flag. <br>
+An example file looks like this:
+```json
+{
+    "version": "0.7.0",
+    "service": {
+        "frontend": [
+            {
+                "label": "Spring Maven",
+                "name": "spring-maven",
+                "dir": "./spring-maven"
+            },
+            {
+                "label": "Spring Gradle",
+                "preselected": false
+            }
+        ],
+        "backend": []
+    },
+    "var": [
+        {
+            "name": "SPRING_MAVEN_SOURCE_DIRECTORY"
+        },
+        {
+            "name": "SPRING_MAVEN_PACKAGE_NAME",
+            "value": "com.chillibits.test-app"
+        }
+    ]
+}
+```
+To access `0.7.0`, you can use the key `version`. To access `./spring-maven`, you can use the key `service.frontend[0].dir`.
+
 
 ## Grammar
 *Note a grammar is dependent on the line comment chars and the block comment chars. In this particular case the line comment char is `//`, the block comment char open is `/*` and the block comment char close is `*/`*
@@ -123,7 +157,8 @@ STMT_LST              --> STMT (`|` STMT)*
 STMT                  --> HAS_STMT | COMP_STMT
 HAS_STMT              --> has KEY | not has KEY
 COMP_STMT             --> KEY == VALUE | KEY != VALUE
-KEY                   --> IDENTIFIER(.IDENTIFIER)*
+KEY                   --> IDENTIFIER INDEX? (.IDENTIFIER INDEX?)*
+INDEX                 --> [NUMBER]
 IDENTIFIER            --> LETTER+
 VALUE                 --> STRING | NUMBER
 STRING                --> "CHARS_LIMITED"

@@ -11,7 +11,7 @@
 
 class ComBlockExprAST : public ExprAST {
 public:
-    virtual ~ComBlockExprAST() = default;
+    ~ComBlockExprAST() override = default;
 };
 
 #endif //COMPILER_COMBLOCKEXPRAST_H
