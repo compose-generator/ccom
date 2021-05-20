@@ -28,7 +28,7 @@ std::unique_ptr<NumberExprAST> parseNumber() {
 }
 
 std::unique_ptr<BooleanExprAST> parseBoolean() {
-    bool value = stoi(CurTok.getValue());
+    bool value = CurTok.getValue() == "true";
     getNextToken(); // Consume boolean literal
     return std::make_unique<BooleanExprAST>(value);
 }
