@@ -38,6 +38,12 @@ func main() {
 				Usage:   "Specifies the closing block comment character(s) of your data format",
 			},
 			&cli.StringFlag{
+				Name:        "compiler",
+				Aliases:     []string{"c"},
+				DefaultText: "cpp",
+				Usage:       "CCom supports several compiler implementations, which you can choose from. Possible options are: 'cpp' (default), 'java', more to come ...",
+			},
+			&cli.StringFlag{
 				Name:        "data",
 				Aliases:     []string{"d"},
 				DefaultText: "{}",
@@ -78,6 +84,7 @@ func main() {
 		Action: func(c *cli.Context) error {
 			processInput(
 				c.Args().Get(0),
+				c.String("compiler"),
 				c.String("block-comment-chars-open"),
 				c.String("block-comment-chars-close"),
 				c.String("data"),
