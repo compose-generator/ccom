@@ -68,6 +68,9 @@ void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& d
     if (dynamic_cast<StringExprAST*>(compStmt->GetValue().get())) {
         if (!jsonKeyValue.is_string())
             throw std::runtime_error(jsonKeyValue.dump() + " is not a string");
+    } else if (dynamic_cast<BooleanExprAST*>(compStmt->GetValue().get())) {
+        if (!jsonKeyValue.is_boolean())
+            throw std::runtime_error(jsonKeyValue.dump() + " is not a boolean");
     } else {
         if (!jsonKeyValue.is_number_integer())
             throw std::runtime_error(jsonKeyValue.dump() + " is not an integer");
