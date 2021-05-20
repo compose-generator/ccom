@@ -4,8 +4,7 @@
 // Created by Marc on 04.05.2021.
 //
 
-#ifndef COMPILER_IDENTIFIEREXPRAST_H
-#define COMPILER_IDENTIFIEREXPRAST_H
+#pragma once
 
 #include <string>
 #include <utility>
@@ -21,5 +20,3 @@ public:
     std::string GetName() const;
     int GetIndex() const;
 };
-
-#endif //COMPILER_IDENTIFIEREXPRAST_H

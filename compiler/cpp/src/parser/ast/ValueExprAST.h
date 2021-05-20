@@ -4,12 +4,9 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_VALUEEXPRAST_H
-#define COMPILER_VALUEEXPRAST_H
+#pragma once
 
 class ValueExprAST {
 public:
     virtual ~ValueExprAST() = default;
 };
-
-#endif //COMPILER_VALUEEXPRAST_H

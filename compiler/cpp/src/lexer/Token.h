@@ -4,8 +4,7 @@
 // Created by Marc on 02.05.2021.
 //
 
-#ifndef COMPILER_TOKEN_H
-#define COMPILER_TOKEN_H
+#pragma once
 
 #include <string>
 
@@ -23,5 +22,3 @@ public:
     std::string getValue();
     std::string getCodePos();
 };
-
-#endif //COMPILER_TOKEN_H

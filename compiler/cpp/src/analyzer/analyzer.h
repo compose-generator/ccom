@@ -4,8 +4,7 @@
 // Created by Marc on 11.05.2021.
 //
 
-#ifndef COMPILER_ANALYZER_H
-#define COMPILER_ANALYZER_H
+#pragma once
 
 #include <nlohmann/json.hpp>
 #include "../parser/ast/ExprAST.h"
@@ -22,5 +21,3 @@ void checkDataTypeCompatibility(bool, ExprAST*, const json&);
 void checkDataTypeCompatibilityContent(ExprAST*, const json&);
 void checkDataTypeCompatibilityStmtList(ExprAST*, const json&);
 void checkDataTypeCompatibilityCompStmt(CompStmtExprAST*, const json&);
-
-#endif //COMPILER_ANALYZER_H

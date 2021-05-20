@@ -2,8 +2,7 @@
 // Created by Marc on 20.05.2021.
 //
 
-#ifndef COMPILER_BOOLEANEXPRAST_H
-#define COMPILER_BOOLEANEXPRAST_H
+#pragma once
 
 #include "ValueExprAST.h"
 
@@ -14,5 +13,3 @@ public:
     explicit BooleanExprAST(bool val): Value(val) {}
     bool GetValue() const;
 };
-
-#endif //COMPILER_BOOLEANEXPRAST_H

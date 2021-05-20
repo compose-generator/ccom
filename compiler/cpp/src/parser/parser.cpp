@@ -40,10 +40,17 @@ std::unique_ptr<StringExprAST> parseString() {
 }
 
 std::unique_ptr<ValueExprAST> parseValue() {
-    int type = CurTok.getType();
-    if (type == TOK_NUMBER) return parseNumber(); // Consume number
-    if (type == TOK_TRUE || type == TOK_FALSE) return parseBoolean(); // Consume boolean
-    return parseString(); // Consume string
+    switch (CurTok.getType()) {
+        case TOK_NUMBER:
+            return parseNumber(); // Consume number
+        case TOK_TRUE:
+        case TOK_FALSE:
+            return parseBoolean(); // Consume boolean
+        case TOK_STRING:
+            return parseString(); // Consume string
+        default:
+            throw std::runtime_error("Invalid token. Expected number, boolean or string at " + CurTok.getCodePos() + " got" + std::to_string(CurTok.getType()));
+    }
 }
 
 std::unique_ptr<IdentifierExprAST> parseIdentifier() {

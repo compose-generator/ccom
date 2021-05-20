@@ -4,8 +4,7 @@
 // Created by Marc on 02.05.2021.
 //
 
-#ifndef COMPILER_PARSER_H
-#define COMPILER_PARSER_H
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -52,5 +51,3 @@ std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock();
 std::unique_ptr<ComLineBlockExprAST> parseComLineBlock();
 std::unique_ptr<SectionExprAST> parseSection();
 std::unique_ptr<ContentExprAST> parseContent();
-
-#endif //COMPILER_PARSER_H

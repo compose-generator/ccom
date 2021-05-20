@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_COMBLOCKEXPRAST_H
-#define COMPILER_COMBLOCKEXPRAST_H
+#pragma once
 
 #include "ExprAST.h"
 
@@ -13,5 +12,3 @@ class ComBlockExprAST : public ExprAST {
 public:
     ~ComBlockExprAST() override = default;
 };
-
-#endif //COMPILER_COMBLOCKEXPRAST_H

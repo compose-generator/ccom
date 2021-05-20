@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_HASSTMTEXPRAST_H
-#define COMPILER_HASSTMTEXPRAST_H
+#pragma once
 
 #include <memory>
 #include "KeyExprAST.h"
@@ -21,5 +20,3 @@ public:
     const std::unique_ptr<KeyExprAST> &GetKey();
     bool GetInverted() const;
 };
-
-#endif //COMPILER_HASSTMTEXPRAST_H

@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_ARBITRARYEXPRAST_H
-#define COMPILER_ARBITRARYEXPRAST_H
+#pragma once
 
 #include <string>
 #include <utility>
@@ -18,5 +17,3 @@ public:
     explicit ArbitraryExprAST(std::string value): Value(std::move(value)) {}
     std::string GetValue() const;
 };
-
-#endif //COMPILER_ARBITRARYEXPRAST_H

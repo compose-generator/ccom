@@ -160,9 +160,10 @@ COMP_STMT             --> KEY == VALUE | KEY != VALUE
 KEY                   --> IDENTIFIER INDEX? (.IDENTIFIER INDEX?)*
 INDEX                 --> [NUMBER]
 IDENTIFIER            --> LETTER+
-VALUE                 --> STRING | NUMBER
+VALUE                 --> STRING | NUMBER | BOOLEAN
 STRING                --> "CHARS_LIMITED"
 NUMBER                --> DIGIT+
+BOOLEAN               --> true | false
 CHARS                 --> ({UNICODE}\{COM_LINE_IDEN, COM_BLOCK_IDEN_OPEN})*
 CHARS_LIMITED         --> (LETTER* DIGIT* SCHAR*)*
 LETTER                --> a|b|...|y|z|A|B|...|Y|Z

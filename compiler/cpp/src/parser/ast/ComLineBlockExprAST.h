@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_COMLINEBLOCKEXPRAST_H
-#define COMPILER_COMLINEBLOCKEXPRAST_H
+#pragma once
 
 #include <memory>
 #include "ExprAST.h"
@@ -23,5 +22,3 @@ public:
     const std::unique_ptr<StmtLstExprAST> &GetStmtList();
     const std::unique_ptr<PayloadExprAST> &GetPayload();
 };
-
-#endif //COMPILER_COMLINEBLOCKEXPRAST_H

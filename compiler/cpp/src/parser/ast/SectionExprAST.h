@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_SECTIONEXPRAST_H
-#define COMPILER_SECTIONEXPRAST_H
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -20,5 +19,3 @@ public:
             ComBlocks(std::move(comBlocks)) {}
     const std::vector<std::unique_ptr<ComBlockExprAST>> &GetComBlocks();
 };
-
-#endif //COMPILER_SECTIONEXPRAST_H

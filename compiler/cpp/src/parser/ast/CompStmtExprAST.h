@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_COMPSTMTEXPRAST_H
-#define COMPILER_COMPSTMTEXPRAST_H
+#pragma once
 
 #include <memory>
 #include "KeyExprAST.h"
@@ -29,5 +28,3 @@ public:
     const std::unique_ptr<KeyExprAST> &GetKey();
     const std::unique_ptr<ValueExprAST> &GetValue();
 };
-
-#endif //COMPILER_COMPSTMTEXPRAST_H
