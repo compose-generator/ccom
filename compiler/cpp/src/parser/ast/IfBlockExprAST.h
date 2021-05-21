@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_IFBLOCKEXPRAST_H
-#define COMPILER_IFBLOCKEXPRAST_H
+#pragma once
 
 #include <memory>
 #include "StmtLstExprAST.h"
@@ -21,5 +20,3 @@ public:
     const std::unique_ptr<StmtLstExprAST> &GetStmtList();
     const std::unique_ptr<PayloadExprAST> &GetPayload();
 };
-
-#endif //COMPILER_IFBLOCKEXPRAST_H

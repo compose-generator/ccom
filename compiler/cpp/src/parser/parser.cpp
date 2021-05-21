@@ -27,6 +27,12 @@ std::unique_ptr<NumberExprAST> parseNumber() {
     return std::make_unique<NumberExprAST>(value);
 }
 
+std::unique_ptr<BooleanExprAST> parseBoolean() {
+    bool value = CurTok.getValue() == "true";
+    getNextToken(); // Consume boolean literal
+    return std::make_unique<BooleanExprAST>(value);
+}
+
 std::unique_ptr<StringExprAST> parseString() {
     std::string value = CurTok.getValue();
     getNextToken(); // Consume string literal
@@ -34,8 +40,17 @@ std::unique_ptr<StringExprAST> parseString() {
 }
 
 std::unique_ptr<ValueExprAST> parseValue() {
-    if (CurTok.getType() == TOK_NUMBER) return parseNumber(); // Consume number
-    return parseString(); // Consume string
+    switch (CurTok.getType()) {
+        case TOK_NUMBER:
+            return parseNumber(); // Consume number
+        case TOK_TRUE:
+        case TOK_FALSE:
+            return parseBoolean(); // Consume boolean
+        case TOK_STRING:
+            return parseString(); // Consume string
+        default:
+            throw std::runtime_error("Invalid token. Expected number, boolean or string at " + CurTok.getCodePos() + " got" + std::to_string(CurTok.getType()));
+    }
 }
 
 std::unique_ptr<IdentifierExprAST> parseIdentifier() {

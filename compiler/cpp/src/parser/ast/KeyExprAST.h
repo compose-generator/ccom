@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_KEYEXPRAST_H
-#define COMPILER_KEYEXPRAST_H
+#pragma once
 
 #include <vector>
 #include <memory>
@@ -18,5 +17,3 @@ public:
     explicit KeyExprAST(std::vector<std::unique_ptr<IdentifierExprAST>> stmts): Identifiers(std::move(stmts)) {}
     const std::vector<std::unique_ptr<IdentifierExprAST>> &GetIdentifiers();
 };
-
-#endif //COMPILER_KEYEXPRAST_H

@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_STMTLSTEXPRAST_H
-#define COMPILER_STMTLSTEXPRAST_H
+#pragma once
 
 #include <utility>
 #include <vector>
@@ -19,5 +18,3 @@ public:
     explicit StmtLstExprAST(std::vector<std::unique_ptr<StmtExprAST>> stmts): Stmts(std::move(stmts)) {}
     const std::vector<std::unique_ptr<StmtExprAST>> &GetStatements();
 };
-
-#endif //COMPILER_STMTLSTEXPRAST_H

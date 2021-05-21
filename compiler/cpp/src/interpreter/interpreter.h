@@ -4,8 +4,7 @@
 // Created by Marc on 14.05.2021.
 //
 
-#ifndef COMPILER_INTERPRETER_H
-#define COMPILER_INTERPRETER_H
+#pragma once
 
 #include <string>
 #include "../parser/ast/ExprAST.h"
@@ -23,5 +22,3 @@ std::string getOutputOfRelevantSection(SectionExprAST*, const json&);
 bool evaluateStmtList(ExprAST *ast, const json &data);
 bool evaluateHasStatement(HasStmtExprAST*, const json&);
 bool evaluateCompStatement(CompStmtExprAST*, const json&);
-
-#endif //COMPILER_INTERPRETER_H

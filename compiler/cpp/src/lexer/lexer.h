@@ -4,8 +4,7 @@
 // Created by Marc on 02.05.2021.
 //
 
-#ifndef COMPILER_LEXER_H
-#define COMPILER_LEXER_H
+#pragma once
 
 #include <string>
 #include <stdexcept>
@@ -90,5 +89,3 @@ bool isLookaheadBlockCommentCharClose();
 bool isLookaheadBlockCommentCharCloseWithBrace();
 
 void initLexer(bool, const std::string&, const std::string&, const std::string&, const std::string&);
-
-#endif //COMPILER_LEXER_H

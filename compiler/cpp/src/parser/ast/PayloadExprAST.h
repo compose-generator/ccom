@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_PAYLOADEXPRAST_H
-#define COMPILER_PAYLOADEXPRAST_H
+#pragma once
 
 #include <string>
 
@@ -16,5 +15,3 @@ public:
     explicit PayloadExprAST(std::string val): Value(std::move(val)) {}
     std::string GetValue() const;
 };
-
-#endif //COMPILER_PAYLOADEXPRAST_H

@@ -92,11 +92,18 @@ bool evaluateCompStatement(CompStmtExprAST* ast, const json& data) {
     json keyValue = getJsonValueFromKey(ast->GetKey(), data);
     if (keyValue.is_string()) {
         auto value = keyValue.get<std::string>();
-        if (auto* expectedValue = dynamic_cast<StringExprAST*>(ast->GetValue().get())) {
+        if (auto *expectedValue = dynamic_cast<StringExprAST*>(ast->GetValue().get())) {
             return value == expectedValue->GetValue();
         }
         // This should never get triggered, because invalid type combinations are already filtered out
         throw std::runtime_error("Internal compiler error - JSON value was string and hardcoded was not");
+    } else if (keyValue.is_boolean()) {
+        auto value = keyValue.get<bool>();
+        if (auto *expectedValue = dynamic_cast<BooleanExprAST*>(ast->GetValue().get())) {
+            return value == expectedValue->GetValue();
+        }
+        // This should never get triggered, because invalid type combinations are already filtered out
+        throw std::runtime_error("Internal compiler error - JSON value was boolean and hardcoded was not");
     } else if (keyValue.is_number_integer()) {
         auto value = keyValue.get<int>();
         if (auto* expectedValue = dynamic_cast<NumberExprAST*>(ast->GetValue().get())) {

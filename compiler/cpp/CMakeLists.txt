@@ -48,6 +48,8 @@ add_executable(compiler
         src/parser/ast/ContentExprAST.h
         src/parser/ast/ArbitraryExprAST.cpp
         src/parser/ast/ArbitraryExprAST.h
+        src/parser/ast/BooleanExprAST.cpp
+        src/parser/ast/BooleanExprAST.h
         src/analyzer/analyzer.cpp
         src/analyzer/analyzer.h
         src/interpreter/interpreter.cpp
