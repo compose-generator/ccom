@@ -1,13 +1,9 @@
 project_name: ccom
 builds:
-  - env:
-      - CGO_ENABLED=0
-    dir: cli
+  - dir: cli
     goos:
       - linux
       - windows
-      #- darwin
-      #- freebsd
     goarch:
       - amd64
       - arm
@@ -15,7 +11,7 @@ builds:
       - 386
     goarm:
       - 5
-      #- 6
+      #- 6 # Waiting for third party fix
       - 7
 archives:
   - files:
@@ -37,10 +33,7 @@ nfpms:
       - rpm
     contents:
       - src: bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
-        dst: /usr/bin/
+        dst: /usr/bin/ # ToDo: Move compiler binaries to /usr/lib/ccom instead of the /usr/bin directory, which should only be used for main binaries.
 release:
   name_template: v{{ .Tag }}
-  github:
-    owner: compose-generator
-    name: ccom
   prerelease: auto
