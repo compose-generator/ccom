@@ -37,7 +37,7 @@ nfpms:
       - rpm
     contents:
       - src: bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
-        dst: /usr/bin/ccom/
+        dst: /usr/bin/
 release:
   name_template: v{{ .Tag }}
   github:
