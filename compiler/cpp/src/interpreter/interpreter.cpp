@@ -53,17 +53,26 @@ std::string getOutputOfRelevantSection(SectionExprAST* relevantSection, const js
 
     // Loop through com blocks
     for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->GetComBlocks()) {
-        if (auto* lineBlockExpr = dynamic_cast<ComLineBlockExprAST*>(comBlock.get())) { // Is it a ComLineBlock?
-            // Evaluate condition and append payload to output string if condition was truthy
-            if (evaluateStmtList(lineBlockExpr->GetStmtList().get(), data)) {
-                result += lineBlockExpr->GetPayload()->GetValue();
+        switch (comBlock->GetType()) {
+            case ComBlockExprAST::COM_LINE_BLOCK_EXPR: {
+                auto* lineBlockExpr = static_cast<ComLineBlockExprAST*>(comBlock.get());
+                // Evaluate condition and append payload to output string if condition was truthy
+                if (evaluateStmtList(lineBlockExpr->GetStmtList().get(), data)) {
+                    result += lineBlockExpr->GetPayload()->GetValue();
+                }
+                break;
             }
-        } else if(auto* blockBlockExpr = dynamic_cast<ComBlockBlockExprAST*>(comBlock.get())) { // Is it a ComBlockBlock?
-            const std::unique_ptr<IfBlockExprAST>& ifBlock = blockBlockExpr->GetIfBlock();
-            // Evaluate condition and append payload to output string if condition was truthy
-            if (evaluateStmtList(ifBlock->GetStmtList().get(), data)) {
-                result += ifBlock->GetPayload()->GetValue();
+            case ComBlockExprAST::COM_BLOCK_BLOCK_EXPR: {
+                auto* blockBlockExpr = static_cast<ComBlockBlockExprAST*>(comBlock.get());
+                const std::unique_ptr<IfBlockExprAST>& ifBlock = blockBlockExpr->GetIfBlock();
+                // Evaluate condition and append payload to output string if condition was truthy
+                if (evaluateStmtList(ifBlock->GetStmtList().get(), data)) {
+                    result += ifBlock->GetPayload()->GetValue();
+                }
+                break;
             }
+            default:
+                throw std::runtime_error("Got unknown ComBlock object");
         }
     }
     return result;

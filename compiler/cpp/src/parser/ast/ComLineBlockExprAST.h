@@ -18,6 +18,7 @@ private:
     std::unique_ptr<PayloadExprAST> payload;
 public:
     explicit ComLineBlockExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
+            ComBlockExprAST(ComLineBlockExprAST::Type::COM_LINE_BLOCK_EXPR),
             stmtList(std::move(stmtList)), payload(std::move(payload)) {}
     const std::unique_ptr<StmtLstExprAST> &GetStmtList();
     const std::unique_ptr<PayloadExprAST> &GetPayload();

@@ -41,10 +41,19 @@ void checkDataTypeCompatibilityContent(ExprAST* ast, const json& data) {
         if (auto* relevantSection = dynamic_cast<SectionExprAST*>(section.get())) {
             // Loop through comBlocks
             for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->GetComBlocks()) {
-                if (auto* lineBlockExpr = dynamic_cast<ComLineBlockExprAST*>(comBlock.get())) {
-                    checkDataTypeCompatibilityStmtList(lineBlockExpr->GetStmtList().get(), data);
-                } else if(auto* blockBlockExpr = dynamic_cast<ComBlockBlockExprAST*>(comBlock.get())) {
-                    checkDataTypeCompatibilityStmtList(blockBlockExpr->GetIfBlock()->GetStmtList().get(), data);
+                switch (comBlock->GetType()) {
+                    case ComBlockExprAST::COM_LINE_BLOCK_EXPR: {
+                        auto* lineBlockExpr = static_cast<ComLineBlockExprAST*>(comBlock.get());
+                        checkDataTypeCompatibilityStmtList(lineBlockExpr->GetStmtList().get(), data);
+                        continue;
+                    }
+                    case ComBlockExprAST::COM_BLOCK_BLOCK_EXPR: {
+                        auto* blockBlockExpr = static_cast<ComBlockBlockExprAST*>(comBlock.get());
+                        checkDataTypeCompatibilityStmtList(blockBlockExpr->GetIfBlock()->GetStmtList().get(), data);
+                        continue;
+                    }
+                    default:
+                        throw std::runtime_error("Got unknown ComBlock object");
                 }
             }
         }

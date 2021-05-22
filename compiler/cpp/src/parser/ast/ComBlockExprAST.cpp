@@ -5,3 +5,7 @@
 //
 
 #include "ComBlockExprAST.h"
+
+ComBlockExprAST::Type ComBlockExprAST::GetType() {
+    return type;
+}
