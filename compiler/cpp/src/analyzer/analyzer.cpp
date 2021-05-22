@@ -90,6 +90,7 @@ void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& d
         case ValueExprAST::NUMBER_EXPR:
             if (!jsonKeyValue.is_number_integer())
                 throw std::runtime_error(jsonKeyValue.dump() + " is not an integer");
+            return;
         case ValueExprAST::VALUE_EXPR:
             throw std::runtime_error(jsonKeyValue.dump() + " is an unknown data type");
     }

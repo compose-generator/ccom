@@ -20,35 +20,19 @@ enum Context {
 };
 
 int advance();
-
 void expect(int);
-
 std::string getLookahead();
-
 Token getTok();
-
 Token consumeStringLiteral();
-
 Token consumeIdentifierOrKeyword();
-
 bool isEOF();
-
 void skipWhitespaces();
-
 std::string consumeNumber();
-
 Token consumeArbitrary();
-
 Token consumePayload();
-
 bool isLookaheadPayloadCommentChars();
-
 bool isLookaheadLineCommentChars();
-
 bool isLookaheadBlockCommentCharOpen();
-
 bool isLookaheadBlockCommentCharClose();
-
 bool isLookaheadBlockCommentCharCloseWithBrace();
-
 void initLexer(bool, const std::string&, const std::string&, const std::string&, const std::string&);
