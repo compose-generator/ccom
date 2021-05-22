@@ -1,26 +1,29 @@
 package com.c.lexer;
 
 public class Token {
-    private TokenType tokenType;
+    private TokenType type;
     private String value;
-    private int lineNum = 0;
-    private int colNum = 0;
+    private int lineNum;
+    private int colNum;
 
-    public Token(TokenType tokenType, String value, int lineNum, int colNum) {
-        this.tokenType = tokenType;
+    public Token(TokenType type, String value, int lineNum, int colNum) {
+        this.type = type;
         this.value = value;
         this.lineNum = lineNum;
         this.colNum = colNum;
     }
 
-    public TokenType getTokenType() {
-        return tokenType;
+    public TokenType getType() {
+        return type;
     }
 
     public String getValue() {
         return value;
     }
 
+    /**
+     * @return the code position where this Token occurs (line and column number)
+     */
     public String getCodePos() {
         return "Line " + lineNum + ",Col " + colNum;
     }

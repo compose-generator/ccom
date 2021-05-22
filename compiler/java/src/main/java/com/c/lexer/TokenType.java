@@ -33,5 +33,5 @@ public enum TokenType {
     COMMENT_BLOCK_IDENTIFIER_OPEN, // /*?
     COMMENT_BLOCK_IDENTIFIER_CLOSE, // */
 
-    PROGRAM_CODE // actual program code that is not relevant for us since we are enriching the language
+    PROGRAM_CODE // actual program code that is not relevant for us since we are enriching existent languages
 }
