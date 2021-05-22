@@ -35,25 +35,23 @@ public class FileReader {
     /**
      * The current line we are looking at in the file.
      */
-    private int posLine = -1;
+    private int posLine = 1; // first line is line 1
 
     /**
      * The current column we are looking at in the file.
      */
-    private int posCol = -1;
-
-    /**
-     * The current line we are looking at in the file with the head of our buffer.
-     */
-    private int posHeadLine = -1;
+    private int posCol = 1; // line starts at column 1
 
     /**
      * The current column we are looking at in the file with the head of our buffer.
      */
-    private int posHeadCol = -1;
+    private int posHeadCol = 0; // line starts at column 1
 
     // EOF flag
-    private boolean isEof = false;
+    /**
+     * Flag for whether the HEAD has reached EOF (end of file) or not.
+     */
+    private boolean hasHeadReachedEof = false;
 
 
     // --------------------------------------- Constructor -------------------------------------------------------------
@@ -75,7 +73,7 @@ public class FileReader {
         // Advance to load first characters into buffer
         readNextLine();
         for (int i = 0; i < maxLookAhead; i++) {
-            advance();
+            advanceHead();
         }
     }
 
@@ -109,28 +107,47 @@ public class FileReader {
      * Consumes current char and advances to next character.
      */
     public void advance() {
+        advanceHead();
+        advanceNormal();
+    }
+
+    /**
+     * Advances one char with the HEAD position.
+     */
+    private void advanceHead() {
         // Check for EOF
-        if (isEof) {
+        if (hasHeadReachedEof) {
             nextChars.add((char) -1);
             return; // nothing to do anymore after having reached EOF
         }
 
         // HEAD: Need to read next line into buffer?
-        if (posHeadCol == nextLines.getLast().length() - 1) {
+        if (posHeadCol == nextLines.getLast().length()) {
             readNextLine();
         }
 
+        // Advance
+        posHeadCol++;
+        nextChars.add(nextLines.getLast().charAt(posHeadCol - 1));
+    }
+
+    /**
+     * Advances one char with the "normal" position.
+     */
+    private void advanceNormal() {
+        // Empty file?
+        // We must not use if(isEof) file here since isEof only refers to the HEAD position (!)
+        if (nextLines.isEmpty()) return;
+
         // Need to jump to next line with current position?
-        if (posCol == nextLines.getFirst().length() - 1) {
-            posCol = -1;
+        if (posCol == nextLines.getFirst().length()) {
+            posCol = 0;
             posLine++;
             nextLines.removeFirst(); // advance to the next line
         }
 
-        // Add to next chars buffer
-        posHeadCol++;
+        // Advance with "normal" position and HEAD
         posCol++;
-        nextChars.add(nextLines.getFirst().charAt(posCol));
     }
 
     /**
@@ -142,9 +159,10 @@ public class FileReader {
 
         lineReader:
         while (true) {
+
             // Check for EOF
             if (!file.hasNext()) {
-                isEof = true;
+                hasHeadReachedEof = true;
                 // construct a dummy currentLine for advance() to read from once at the end
                 newLine.append((char) -1);
                 break;
@@ -161,11 +179,11 @@ public class FileReader {
                 default: // every other char
                     newLine.append(next);
             }
+
         }
 
         nextLines.add(newLine.toString());
-        posHeadLine++;
-        posHeadCol = -1;
+        posHeadCol = 0;
     }
 
 
@@ -179,12 +197,19 @@ public class FileReader {
      */
     public void expect(char c) throws UnexpectedCharError {
         if (nextChars.getFirst() != c)
-            throw new UnexpectedCharError(c, nextChars.get(0), locationToLineAndCol());
+            throw new UnexpectedCharError(c, nextChars.getFirst(), locationToLineAndCol());
         advance();
     }
 
 
-    // ------------------------------------ Formatting -----------------------------------------------------------------
+    // ------------------------------------ Current position -----------------------------------------------------------
+
+    /**
+     * @return formatted line number and column
+     */
+    private String locationToLineAndCol() {
+        return "@" + posLine + ":" + posCol;
+    }
 
     /**
      * Output example:<br>
@@ -195,13 +220,6 @@ public class FileReader {
      */
     public String getCaretPositionMsg() {
         return nextLines.getFirst() + " ".repeat(posCol) + "^\n";
-    }
-
-    /**
-     * @return formatted line number and column
-     */
-    private String locationToLineAndCol() {
-        return "@" + posLine + ":" + posCol;
     }
 
 }
