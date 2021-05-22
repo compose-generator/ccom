@@ -124,7 +124,7 @@ Token getTok() {
             expect('=');
             return Token(TOK_EQUALS, LineNum, ColNum);
         }
-        case '<': {
+        case '<': { // < or <=
             expect('<');
             if (CurrentChar == '=') {
                 expect('=');
@@ -132,7 +132,7 @@ Token getTok() {
             }
             return Token(TOK_LESS_THEN, LineNum, ColNum);
         }
-        case '>': {
+        case '>': { // > or >=
             expect('>');
             if (CurrentChar == '=') {
                 expect('=');

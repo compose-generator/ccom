@@ -13,7 +13,11 @@
 
 enum Operator {
     OP_EQUALS,
-    OP_NOT_EQUALS
+    OP_NOT_EQUALS,
+    OP_GREATER_THEN,
+    OP_LESS_THEN,
+    OP_GREATER_EQUALS,
+    OP_LESS_EQUALS,
 };
 
 class CompStmtExprAST : public StmtExprAST {
