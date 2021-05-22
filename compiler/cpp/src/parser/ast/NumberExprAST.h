@@ -10,8 +10,8 @@
 
 class NumberExprAST : public ValueExprAST {
 private:
-    int Value;
+    int value;
 public:
-    explicit NumberExprAST(int val): Value(val) {}
+    explicit NumberExprAST(int val): value(val) {}
     int GetValue() const;
 };

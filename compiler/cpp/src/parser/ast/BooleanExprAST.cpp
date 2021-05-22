@@ -5,5 +5,5 @@
 #include "BooleanExprAST.h"
 
 bool BooleanExprAST::GetValue() const {
-    return Value;
+    return value;
 }

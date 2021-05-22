@@ -7,9 +7,9 @@
 #include "IfBlockExprAST.h"
 
 std::unique_ptr<StmtLstExprAST> const &IfBlockExprAST::GetStmtList() {
-    return StmtList;
+    return stmtList;
 }
 
 std::unique_ptr<PayloadExprAST> const &IfBlockExprAST::GetPayload() {
-    return Payload;
+    return payload;
 }

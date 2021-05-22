@@ -7,5 +7,5 @@
 #include "NumberExprAST.h"
 
 int NumberExprAST::GetValue() const {
-    return Value;
+    return value;
 }

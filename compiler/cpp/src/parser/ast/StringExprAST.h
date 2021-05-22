@@ -12,8 +12,8 @@
 
 class StringExprAST : public ValueExprAST {
 private:
-    std::string Value;
+    std::string value;
 public:
-    explicit StringExprAST(std::string val): Value(std::move(val)) {}
+    explicit StringExprAST(std::string val): value(std::move(val)) {}
     std::string GetValue() const;
 };

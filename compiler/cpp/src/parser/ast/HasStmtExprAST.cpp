@@ -7,9 +7,9 @@
 #include "HasStmtExprAST.h"
 
 std::unique_ptr<KeyExprAST> const &HasStmtExprAST::GetKey() {
-    return Key;
+    return key;
 }
 
 bool HasStmtExprAST::GetInverted() const {
-    return Inverted;
+    return isInverted;
 };

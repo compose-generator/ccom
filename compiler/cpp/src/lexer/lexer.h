@@ -16,7 +16,7 @@
 enum Context {
     ARBITRARY, // Before / after conditional section
     SECTION, // Conditional section itself
-    PAYLOAD // Payload content
+    PAYLOAD // payload content
 };
 
 int advance();

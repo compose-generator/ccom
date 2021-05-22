@@ -7,9 +7,9 @@
 #include "IdentifierExprAST.h"
 
 std::string IdentifierExprAST::GetName() const {
-    return Name;
+    return name;
 }
 
 int IdentifierExprAST::GetIndex() const {
-    return Index;
+    return index;
 }

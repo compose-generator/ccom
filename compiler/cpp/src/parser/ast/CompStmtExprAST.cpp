@@ -7,13 +7,13 @@
 #include "CompStmtExprAST.h"
 
 Operator CompStmtExprAST::GetOperator() const {
-    return Op;
+    return op;
 }
 
 std::unique_ptr<KeyExprAST> const &CompStmtExprAST::GetKey() {
-    return Key;
+    return key;
 }
 
 std::unique_ptr<ValueExprAST> const &CompStmtExprAST::GetValue() {
-    return Value;
+    return value;
 }

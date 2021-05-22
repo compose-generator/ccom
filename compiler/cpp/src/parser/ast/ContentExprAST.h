@@ -14,8 +14,8 @@
 
 class ContentExprAST : public ExprAST {
 private:
-    std::vector<std::unique_ptr<ExprAST>> Sections;
+    std::vector<std::unique_ptr<ExprAST>> sections;
 public:
-    explicit ContentExprAST(std::vector<std::unique_ptr<ExprAST>> sections): Sections(std::move(sections)) {}
+    explicit ContentExprAST(std::vector<std::unique_ptr<ExprAST>> sections): sections(std::move(sections)) {}
     const std::vector<std::unique_ptr<ExprAST>> &GetSections();
 };

@@ -7,9 +7,9 @@
 #include "ComLineBlockExprAST.h"
 
 std::unique_ptr<StmtLstExprAST> const &ComLineBlockExprAST::GetStmtList() {
-    return StmtList;
+    return stmtList;
 }
 
 std::unique_ptr<PayloadExprAST> const &ComLineBlockExprAST::GetPayload() {
-    return Payload;
+    return payload;
 }

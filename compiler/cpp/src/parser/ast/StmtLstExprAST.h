@@ -13,8 +13,8 @@
 
 class StmtLstExprAST : public ExprAST {
 private:
-    std::vector<std::unique_ptr<StmtExprAST>> Stmts;
+    std::vector<std::unique_ptr<StmtExprAST>> stmts;
 public:
-    explicit StmtLstExprAST(std::vector<std::unique_ptr<StmtExprAST>> stmts): Stmts(std::move(stmts)) {}
+    explicit StmtLstExprAST(std::vector<std::unique_ptr<StmtExprAST>> stmts): stmts(std::move(stmts)) {}
     const std::vector<std::unique_ptr<StmtExprAST>> &GetStatements();
 };

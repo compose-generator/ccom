@@ -18,12 +18,12 @@ enum Operator {
 
 class CompStmtExprAST : public StmtExprAST {
 private:
-    Operator Op;
-    std::unique_ptr<KeyExprAST> Key;
-    std::unique_ptr<ValueExprAST> Value;
+    Operator op;
+    std::unique_ptr<KeyExprAST> key;
+    std::unique_ptr<ValueExprAST> value;
 public:
     explicit CompStmtExprAST(std::unique_ptr<KeyExprAST> key, Operator op, std::unique_ptr<ValueExprAST> value):
-        Key(std::move(key)), Op(op), Value(std::move(value)) {}
+            key(std::move(key)), op(op), value(std::move(value)) {}
     Operator GetOperator() const;
     const std::unique_ptr<KeyExprAST> &GetKey();
     const std::unique_ptr<ValueExprAST> &GetValue();

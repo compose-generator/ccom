@@ -17,7 +17,7 @@ json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
 
         if (identifierIndex >= 0) { // Identifier has an index attached to it
             if (data.empty())
-                throw std::runtime_error("Index " + std::to_string(identifierIndex) + " does not exist in identifier " + identifierName);
+                throw std::runtime_error("index " + std::to_string(identifierIndex) + " does not exist in identifier " + identifierName);
             data = data[identifierIndex];
         }
     }
@@ -39,7 +39,7 @@ void checkDataTypeCompatibilityContent(ExprAST* ast, const json& data) {
     // Loop through sections
     for (const std::unique_ptr<ExprAST>& section : content->GetSections()) {
         if (auto* relevantSection = dynamic_cast<SectionExprAST*>(section.get())) {
-            // Loop through ComBlocks
+            // Loop through comBlocks
             for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->GetComBlocks()) {
                 if (auto* lineBlockExpr = dynamic_cast<ComLineBlockExprAST*>(comBlock.get())) {
                     checkDataTypeCompatibilityStmtList(lineBlockExpr->GetStmtList().get(), data);
@@ -62,7 +62,7 @@ void checkDataTypeCompatibilityStmtList(ExprAST* ast, const json& data) {
 }
 
 void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& data) {
-    // Check if 'Value' has the same type as the JSON key value
+    // Check if 'value' has the same type as the JSON key value
     auto jsonKeyValue = getJsonValueFromKey(compStmt->GetKey(), data);
 
     if (dynamic_cast<StringExprAST*>(compStmt->GetValue().get())) {

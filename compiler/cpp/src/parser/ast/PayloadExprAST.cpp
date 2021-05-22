@@ -7,5 +7,5 @@
 #include "PayloadExprAST.h"
 
 std::string PayloadExprAST::GetValue() const {
-    return Value;
+    return value;
 }

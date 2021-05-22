@@ -12,8 +12,8 @@
 
 class KeyExprAST {
 private:
-    std::vector<std::unique_ptr<IdentifierExprAST>> Identifiers;
+    std::vector<std::unique_ptr<IdentifierExprAST>> identifiers;
 public:
-    explicit KeyExprAST(std::vector<std::unique_ptr<IdentifierExprAST>> stmts): Identifiers(std::move(stmts)) {}
+    explicit KeyExprAST(std::vector<std::unique_ptr<IdentifierExprAST>> stmts): identifiers(std::move(stmts)) {}
     const std::vector<std::unique_ptr<IdentifierExprAST>> &GetIdentifiers();
 };

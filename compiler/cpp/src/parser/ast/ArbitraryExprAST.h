@@ -12,8 +12,8 @@
 
 class ArbitraryExprAST : public ExprAST {
 private:
-    std::string Value;
+    std::string value;
 public:
-    explicit ArbitraryExprAST(std::string value): Value(std::move(value)) {}
+    explicit ArbitraryExprAST(std::string value): value(std::move(value)) {}
     std::string GetValue() const;
 };
