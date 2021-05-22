@@ -16,7 +16,7 @@ builds:
 archives:
   - files:
       - LICENSE
-      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
+      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/* # Waiting for implementation: https://github.com/goreleaser/goreleaser/issues/1638
     format_overrides:
       - goos: windows
         format: zip
