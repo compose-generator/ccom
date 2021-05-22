@@ -37,10 +37,12 @@ std::string getOutput(bool isSingleStatement, TopLevelExprAST* ast, const json& 
 std::string getOutputOfContent(ContentExprAST* content, const json& data) {
     std::string result;
 
-    for (const std::unique_ptr<ExprAST>& section : content->GetSections()) {
-        if (auto* arbitrarySection = dynamic_cast<ArbitraryExprAST*>(section.get())) { // Is section an arbitrary section?
+    for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->GetSections()) {
+        if (contentBlock->GetType() == ContentBlockExprAST::ARBITRARY_EXPR) { // Is section an arbitrary section?
+            auto* arbitrarySection = static_cast<ArbitraryExprAST*>(contentBlock.get());
             result += getOutputOfArbitrarySection(arbitrarySection);
-        } else if (auto* sectionExpr = dynamic_cast<SectionExprAST*>(section.get())) { // Is section a relevant section?
+        } else if (contentBlock->GetType() == ContentBlockExprAST::SECTION_EXPR) { // Is section a relevant section?
+            auto* sectionExpr = static_cast<SectionExprAST*>(contentBlock.get());
             result += getOutputOfRelevantSection(sectionExpr, data);
         }
     }

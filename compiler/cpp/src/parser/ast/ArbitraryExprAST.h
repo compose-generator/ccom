@@ -8,12 +8,12 @@
 
 #include <string>
 #include <utility>
-#include "ExprAST.h"
+#include "ContentBlockExprAST.h"
 
-class ArbitraryExprAST : public ExprAST {
+class ArbitraryExprAST : public ContentBlockExprAST {
 private:
     std::string value;
 public:
-    explicit ArbitraryExprAST(std::string value): value(std::move(value)) {}
+    explicit ArbitraryExprAST(std::string value): ContentBlockExprAST(ContentBlockExprAST::Type::ARBITRARY_EXPR), value(std::move(value)) {}
     std::string GetValue() const;
 };

@@ -165,15 +165,15 @@ std::unique_ptr<SectionExprAST> parseSection() {
 }
 
 std::unique_ptr<ContentExprAST> parseContent() {
-    std::vector<std::unique_ptr<ExprAST>> sections;
+    std::vector<std::unique_ptr<ContentBlockExprAST>> contentBlocks;
     while (curTok.getType() != TOK_EOF) {
         if (curTok.getType() == TOK_ARBITRARY) {
-            sections.push_back(parseArbitrary()); // Consume arbitrary string
+            contentBlocks.push_back(parseArbitrary()); // Consume arbitrary string
             continue;
         }
-        sections.push_back(parseSection()); // Consume section
+        contentBlocks.push_back(parseSection()); // Consume section
     }
-    return std::make_unique<ContentExprAST>(std::move(sections));
+    return std::make_unique<ContentExprAST>(std::move(contentBlocks));
 }
 
 TopLevelExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string& fileInput, const std::string& lineCommentChars,

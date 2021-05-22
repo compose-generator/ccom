@@ -9,15 +9,14 @@
 #include <vector>
 #include <memory>
 #include <algorithm>
-#include "ExprAST.h"
 #include "SectionExprAST.h"
 #include "TopLevelExprAST.h"
 
 class ContentExprAST: public TopLevelExprAST {
 private:
-    std::vector<std::unique_ptr<ExprAST>> sections;
+    std::vector<std::unique_ptr<ContentBlockExprAST>> sections;
 public:
-    explicit ContentExprAST(std::vector<std::unique_ptr<ExprAST>> sections):
+    explicit ContentExprAST(std::vector<std::unique_ptr<ContentBlockExprAST>> sections):
         TopLevelExprAST(TopLevelExprAST::Type::CONTENT_EXPR), sections(std::move(sections)) {}
-    const std::vector<std::unique_ptr<ExprAST>> &GetSections();
+    const std::vector<std::unique_ptr<ContentBlockExprAST>> &GetSections();
 };

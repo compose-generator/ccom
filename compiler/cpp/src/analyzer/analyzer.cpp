@@ -40,8 +40,9 @@ void checkDataTypeCompatibility(bool isSingleStatement, TopLevelExprAST* ast, co
 
 void checkDataTypeCompatibilityContent(ContentExprAST* content, const json& data) {
     // Loop through sections
-    for (const std::unique_ptr<ExprAST>& section : content->GetSections()) {
-        if (auto* relevantSection = dynamic_cast<SectionExprAST*>(section.get())) {
+    for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->GetSections()) {
+        if (contentBlock->GetType() == ContentBlockExprAST::SECTION_EXPR) {
+            auto* relevantSection = static_cast<SectionExprAST*>(contentBlock.get());
             // Loop through comBlocks
             for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->GetComBlocks()) {
                 switch (comBlock->GetType()) {

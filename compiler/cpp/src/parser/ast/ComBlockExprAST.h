@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include "ExprAST.h"
-
 class ComBlockExprAST {
 public:
     enum Type { COM_BLOCK_EXPR, COM_LINE_BLOCK_EXPR, COM_BLOCK_BLOCK_EXPR };
