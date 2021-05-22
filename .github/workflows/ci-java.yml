@@ -14,6 +14,10 @@ jobs:
         with:
           java-version: '15'
           distribution: 'adopt'
+      - name: Change current directory
+        run: |
+          pwd
+          cd compiler/java
       - name: Cache Maven packages
         uses: actions/cache@v2
         with:
