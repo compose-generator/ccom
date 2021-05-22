@@ -37,7 +37,7 @@ std::string getOutput(bool isSingleStatement, TopLevelExprAST* ast, const json& 
 std::string getOutputOfContent(ContentExprAST* content, const json& data) {
     std::string result;
 
-    for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->GetSections()) {
+    for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->GetContentBlocks()) {
         if (contentBlock->GetType() == ContentBlockExprAST::ARBITRARY_EXPR) { // Is section an arbitrary section?
             auto* arbitrarySection = static_cast<ArbitraryExprAST*>(contentBlock.get());
             result += getOutputOfArbitrarySection(arbitrarySection);

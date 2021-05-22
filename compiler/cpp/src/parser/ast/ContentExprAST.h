@@ -14,9 +14,9 @@
 
 class ContentExprAST : public TopLevelExprAST {
 private:
-    std::vector<std::unique_ptr<ContentBlockExprAST>> sections;
+    std::vector<std::unique_ptr<ContentBlockExprAST>> contentBlocks;
 public:
     explicit ContentExprAST(std::vector<std::unique_ptr<ContentBlockExprAST>> sections):
-        TopLevelExprAST(TopLevelExprAST::Type::CONTENT_EXPR), sections(std::move(sections)) {}
-    const std::vector<std::unique_ptr<ContentBlockExprAST>> &GetSections();
+        TopLevelExprAST(TopLevelExprAST::Type::CONTENT_EXPR), contentBlocks(std::move(sections)) {}
+    const std::vector<std::unique_ptr<ContentBlockExprAST>> &GetContentBlocks();
 };
