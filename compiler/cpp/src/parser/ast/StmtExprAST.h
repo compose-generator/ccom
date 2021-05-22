@@ -11,5 +11,12 @@
 
 class StmtExprAST: public ExprAST {
 public:
-    ~StmtExprAST() override = default;
+    enum Type { STMT_EXPR, HAS_STMT_EXPR, COMP_STMT_EXPR };
+
+    explicit StmtExprAST(): type(STMT_EXPR) {}
+    Type GetType();
+protected:
+    explicit StmtExprAST(Type t): type(t) {}
+private:
+    Type type;
 };

@@ -64,7 +64,8 @@ void checkDataTypeCompatibilityStmtList(ExprAST* ast, const json& data) {
     auto* stmtList = dynamic_cast<StmtLstExprAST*>(ast);
     // Loop through statements
     for (const std::unique_ptr<StmtExprAST>& stmt : stmtList->GetStatements()) {
-        if (auto* compStmt = dynamic_cast<CompStmtExprAST*>(stmt.get())) {
+        if (stmt->GetType() == StmtExprAST::COMP_STMT_EXPR) {
+            auto* compStmt = static_cast<CompStmtExprAST*>(stmt.get());
             checkDataTypeCompatibilityCompStmt(compStmt, data);
         }
     }

@@ -82,10 +82,19 @@ bool evaluateStmtList(ExprAST* ast, const json& data) {
     auto* stmtList = dynamic_cast<StmtLstExprAST*>(ast);
     // Loop through statements
     for (const std::unique_ptr<StmtExprAST>& stmt : stmtList->GetStatements()) {
-        if (auto* hasStmt = dynamic_cast<HasStmtExprAST*>(stmt.get())) {
-            if (evaluateHasStatement(hasStmt, data)) return true;
-        } else if (auto* compStmt = dynamic_cast<CompStmtExprAST*>(stmt.get())) {
-            if (evaluateCompStatement(compStmt, data)) return true;
+        switch (stmt->GetType()) {
+            case StmtExprAST::HAS_STMT_EXPR: {
+                auto* hasStmt = static_cast<HasStmtExprAST*>(stmt.get());
+                if (evaluateHasStatement(hasStmt, data)) return true;
+                continue;
+            }
+            case StmtExprAST::COMP_STMT_EXPR: {
+                auto* compStmt = static_cast<CompStmtExprAST*>(stmt.get());
+                if (evaluateCompStatement(compStmt, data)) return true;
+                continue;
+            }
+            default:
+                throw std::runtime_error("Got unknown Stmt object");
         }
     }
     return false;

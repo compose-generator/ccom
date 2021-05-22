@@ -23,7 +23,7 @@ private:
     std::unique_ptr<ValueExprAST> value;
 public:
     explicit CompStmtExprAST(std::unique_ptr<KeyExprAST> key, Operator op, std::unique_ptr<ValueExprAST> value):
-            key(std::move(key)), op(op), value(std::move(value)) {}
+            StmtExprAST(StmtExprAST::Type::COMP_STMT_EXPR), key(std::move(key)), op(op), value(std::move(value)) {}
     Operator GetOperator() const;
     const std::unique_ptr<KeyExprAST> &GetKey();
     const std::unique_ptr<ValueExprAST> &GetValue();

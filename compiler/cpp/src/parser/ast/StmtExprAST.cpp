@@ -5,3 +5,7 @@
 //
 
 #include "StmtExprAST.h"
+
+StmtExprAST::Type StmtExprAST::GetType() {
+    return type;
+}

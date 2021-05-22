@@ -16,7 +16,7 @@ private:
     bool isInverted;
 public:
     explicit HasStmtExprAST(std::unique_ptr<KeyExprAST> key, bool inverted):
-            key(std::move(key)), isInverted(inverted) {}
+        StmtExprAST(StmtExprAST::Type::HAS_STMT_EXPR), key(std::move(key)), isInverted(inverted) {}
     const std::unique_ptr<KeyExprAST> &GetKey();
     bool GetInverted() const;
 };
