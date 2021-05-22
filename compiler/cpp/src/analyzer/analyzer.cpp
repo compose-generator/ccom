@@ -65,15 +65,20 @@ void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& d
     // Check if 'value' has the same type as the JSON key value
     auto jsonKeyValue = getJsonValueFromKey(compStmt->GetKey(), data);
 
-    if (dynamic_cast<StringExprAST*>(compStmt->GetValue().get())) {
-        if (!jsonKeyValue.is_string())
-            throw std::runtime_error(jsonKeyValue.dump() + " is not a string");
-    } else if (dynamic_cast<BooleanExprAST*>(compStmt->GetValue().get())) {
-        if (!jsonKeyValue.is_boolean())
-            throw std::runtime_error(jsonKeyValue.dump() + " is not a boolean");
-    } else {
-        if (!jsonKeyValue.is_number_integer())
-            throw std::runtime_error(jsonKeyValue.dump() + " is not an integer");
+    switch (compStmt->GetValue()->GetType()) {
+        case ValueExprAST::STRING_EXPR:
+            if (!jsonKeyValue.is_string())
+                throw std::runtime_error(jsonKeyValue.dump() + " is not a string");
+            return;
+        case ValueExprAST::BOOLEAN_EXPR:
+            if (!jsonKeyValue.is_boolean())
+                throw std::runtime_error(jsonKeyValue.dump() + " is not a boolean");
+            return;
+        case ValueExprAST::NUMBER_EXPR:
+            if (!jsonKeyValue.is_number_integer())
+                throw std::runtime_error(jsonKeyValue.dump() + " is not an integer");
+        case ValueExprAST::VALUE_EXPR:
+            throw std::runtime_error(jsonKeyValue.dump() + " is an unknown data type");
     }
 }
 

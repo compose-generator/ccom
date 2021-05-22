@@ -5,3 +5,7 @@
 //
 
 #include "ValueExprAST.h"
+
+ValueExprAST::Type ValueExprAST::GetType() {
+    return type;
+}

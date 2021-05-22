@@ -49,6 +49,7 @@ std::unique_ptr<ValueExprAST> parseValue() {
         case TOK_STRING:
             return parseString(); // Consume string
         default:
+            // Should never happen
             throw std::runtime_error("Invalid token. Expected number, boolean or string at " + curTok.getCodePos() + " got" + std::to_string(curTok.getType()));
     }
 }

@@ -12,6 +12,6 @@ class NumberExprAST : public ValueExprAST {
 private:
     int value;
 public:
-    explicit NumberExprAST(int val): value(val) {}
+    explicit NumberExprAST(int val): ValueExprAST(ValueExprAST::Type::NUMBER_EXPR), value(val) {}
     int GetValue() const;
 };

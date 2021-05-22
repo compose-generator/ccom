@@ -10,6 +10,6 @@ class BooleanExprAST : public ValueExprAST {
 private:
     bool value;
 public:
-    explicit BooleanExprAST(bool val): value(val) {}
+    explicit BooleanExprAST(bool val): ValueExprAST(ValueExprAST::Type::BOOLEAN_EXPR), value(val) {}
     bool GetValue() const;
 };
