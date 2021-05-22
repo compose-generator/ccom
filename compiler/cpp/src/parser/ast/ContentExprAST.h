@@ -12,7 +12,7 @@
 #include "SectionExprAST.h"
 #include "TopLevelExprAST.h"
 
-class ContentExprAST: public TopLevelExprAST {
+class ContentExprAST : public TopLevelExprAST {
 private:
     std::vector<std::unique_ptr<ContentBlockExprAST>> sections;
 public:

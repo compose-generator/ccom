@@ -16,7 +16,7 @@ private:
     std::unique_ptr<PayloadExprAST> payload;
 public:
     explicit IfBlockExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
-            stmtList(std::move(stmtList)), payload(std::move(payload)) {}
+        stmtList(std::move(stmtList)), payload(std::move(payload)) {}
     const std::unique_ptr<StmtLstExprAST> &GetStmtList();
     const std::unique_ptr<PayloadExprAST> &GetPayload();
 };

@@ -17,7 +17,7 @@ json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
 
         if (identifierIndex >= 0) { // Identifier has an index attached to it
             if (data.empty())
-                throw std::runtime_error("index " + std::to_string(identifierIndex) + " does not exist in identifier " + identifierName);
+                throw std::runtime_error("Index " + std::to_string(identifierIndex) + " does not exist in identifier " + identifierName);
             data = data[identifierIndex];
         }
     }
