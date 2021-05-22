@@ -13,5 +13,5 @@ private:
     std::string value;
 public:
     explicit PayloadExprAST(std::string val): value(std::move(val)) {}
-    std::string GetValue() const;
+    std::string getValue() const;
 };

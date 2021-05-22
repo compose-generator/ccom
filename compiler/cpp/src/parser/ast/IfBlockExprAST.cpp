@@ -6,10 +6,10 @@
 
 #include "IfBlockExprAST.h"
 
-std::unique_ptr<StmtLstExprAST> const &IfBlockExprAST::GetStmtList() {
+std::unique_ptr<StmtLstExprAST> const &IfBlockExprAST::getStmtList() {
     return stmtList;
 }
 
-std::unique_ptr<PayloadExprAST> const &IfBlockExprAST::GetPayload() {
+std::unique_ptr<PayloadExprAST> const &IfBlockExprAST::getPayload() {
     return payload;
 }

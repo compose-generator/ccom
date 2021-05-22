@@ -11,7 +11,7 @@ public:
     enum Type { VALUE_EXPR, NUMBER_EXPR, BOOLEAN_EXPR, STRING_EXPR };
 
     explicit ValueExprAST(): type(VALUE_EXPR) {}
-    Type GetType();
+    Type getType();
 protected:
     explicit ValueExprAST(Type t): type(t) {}
 private:

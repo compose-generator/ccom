@@ -6,6 +6,6 @@
 
 #include "ArbitraryExprAST.h"
 
-std::string ArbitraryExprAST::GetValue() const {
+std::string ArbitraryExprAST::getValue() const {
     return value;
 }

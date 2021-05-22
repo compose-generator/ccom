@@ -6,6 +6,6 @@
 
 #include "KeyExprAST.h"
 
-std::vector<std::unique_ptr<IdentifierExprAST>> const &KeyExprAST::GetIdentifiers() {
+std::vector<std::unique_ptr<IdentifierExprAST>> const &KeyExprAST::getIdentifiers() {
     return identifiers;
 }

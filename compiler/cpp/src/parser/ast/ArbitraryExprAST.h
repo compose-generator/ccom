@@ -15,5 +15,5 @@ private:
     std::string value;
 public:
     explicit ArbitraryExprAST(std::string value): ContentBlockExprAST(ContentBlockExprAST::Type::ARBITRARY_EXPR), value(std::move(value)) {}
-    std::string GetValue() const;
+    std::string getValue() const;
 };

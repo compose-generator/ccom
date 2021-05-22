@@ -9,7 +9,7 @@ public:
     enum Type { CONTENT_BLOCK_EXPR, SECTION_EXPR, ARBITRARY_EXPR };
 
     explicit ContentBlockExprAST(): type(CONTENT_BLOCK_EXPR) {}
-    Type GetType();
+    Type getType();
 protected:
     explicit ContentBlockExprAST(Type t): type(t) {}
 private:

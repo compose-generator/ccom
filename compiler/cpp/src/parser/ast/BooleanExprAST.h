@@ -11,5 +11,5 @@ private:
     bool value;
 public:
     explicit BooleanExprAST(bool val): ValueExprAST(ValueExprAST::Type::BOOLEAN_EXPR), value(val) {}
-    bool GetValue() const;
+    bool getValue() const;
 };

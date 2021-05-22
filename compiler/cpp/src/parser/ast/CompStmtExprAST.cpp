@@ -6,14 +6,14 @@
 
 #include "CompStmtExprAST.h"
 
-Operator CompStmtExprAST::GetOperator() const {
+Operator CompStmtExprAST::getOperator() const {
     return op;
 }
 
-std::unique_ptr<KeyExprAST> const &CompStmtExprAST::GetKey() {
+std::unique_ptr<KeyExprAST> const &CompStmtExprAST::getKey() {
     return key;
 }
 
-std::unique_ptr<ValueExprAST> const &CompStmtExprAST::GetValue() {
+std::unique_ptr<ValueExprAST> const &CompStmtExprAST::getValue() {
     return value;
 }

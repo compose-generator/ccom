@@ -6,6 +6,6 @@
 
 #include "ComBlockExprAST.h"
 
-ComBlockExprAST::Type ComBlockExprAST::GetType() {
+ComBlockExprAST::Type ComBlockExprAST::getType() {
     return type;
 }

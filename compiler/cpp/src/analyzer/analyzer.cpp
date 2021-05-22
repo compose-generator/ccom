@@ -7,9 +7,9 @@
 #include "analyzer.h"
 
 json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
-    for (const std::unique_ptr<IdentifierExprAST>& identifier : key->GetIdentifiers()) {
-        std::string identifierName = identifier->GetName();
-        int identifierIndex = identifier->GetIndex();
+    for (const std::unique_ptr<IdentifierExprAST>& identifier : key->getIdentifiers()) {
+        std::string identifierName = identifier->getName();
+        int identifierIndex = identifier->getIndex();
         if (!data.contains(identifierName))
             throw std::runtime_error("Identifier " + identifierName + " does not exist in data input");
 
@@ -28,7 +28,7 @@ json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
 
 void checkDataTypeCompatibility(bool isSingleStatement, TopLevelExprAST* ast, const json& data) {
     if (isSingleStatement) {
-        if (ast->GetType() != TopLevelExprAST::STMT_LST_EXPR)
+        if (ast->getType() != TopLevelExprAST::STMT_LST_EXPR)
             throw std::runtime_error("Input was no single statement list");
         auto* stmtLst = static_cast<StmtLstExprAST*>(ast);
         checkDataTypeCompatibilityStmtList(stmtLst, data);
@@ -40,20 +40,20 @@ void checkDataTypeCompatibility(bool isSingleStatement, TopLevelExprAST* ast, co
 
 void checkDataTypeCompatibilityContent(ContentExprAST* content, const json& data) {
     // Loop through sections
-    for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->GetContentBlocks()) {
-        if (contentBlock->GetType() == ContentBlockExprAST::SECTION_EXPR) {
+    for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->getContentBlocks()) {
+        if (contentBlock->getType() == ContentBlockExprAST::SECTION_EXPR) {
             auto* relevantSection = static_cast<SectionExprAST*>(contentBlock.get());
             // Loop through comBlocks
-            for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->GetComBlocks()) {
-                switch (comBlock->GetType()) {
+            for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->getComBlocks()) {
+                switch (comBlock->getType()) {
                     case ComBlockExprAST::COM_LINE_BLOCK_EXPR: {
                         auto* lineBlockExpr = static_cast<ComLineBlockExprAST*>(comBlock.get());
-                        checkDataTypeCompatibilityStmtList(lineBlockExpr->GetStmtList().get(), data);
+                        checkDataTypeCompatibilityStmtList(lineBlockExpr->getStmtList().get(), data);
                         continue;
                     }
                     case ComBlockExprAST::COM_BLOCK_BLOCK_EXPR: {
                         auto* blockBlockExpr = static_cast<ComBlockBlockExprAST*>(comBlock.get());
-                        checkDataTypeCompatibilityStmtList(blockBlockExpr->GetIfBlock()->GetStmtList().get(), data);
+                        checkDataTypeCompatibilityStmtList(blockBlockExpr->getIfBlock()->getStmtList().get(), data);
                         continue;
                     }
                     default:
@@ -66,8 +66,8 @@ void checkDataTypeCompatibilityContent(ContentExprAST* content, const json& data
 
 void checkDataTypeCompatibilityStmtList(StmtLstExprAST* stmtLst, const json& data) {
     // Loop through statements
-    for (const std::unique_ptr<StmtExprAST>& stmt : stmtLst->GetStatements()) {
-        if (stmt->GetType() == StmtExprAST::COMP_STMT_EXPR) {
+    for (const std::unique_ptr<StmtExprAST>& stmt : stmtLst->getStatements()) {
+        if (stmt->getType() == StmtExprAST::COMP_STMT_EXPR) {
             auto* compStmt = static_cast<CompStmtExprAST*>(stmt.get());
             checkDataTypeCompatibilityCompStmt(compStmt, data);
         }
@@ -76,9 +76,9 @@ void checkDataTypeCompatibilityStmtList(StmtLstExprAST* stmtLst, const json& dat
 
 void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& data) {
     // Check if 'value' has the same type as the JSON key value
-    auto jsonKeyValue = getJsonValueFromKey(compStmt->GetKey(), data);
+    auto jsonKeyValue = getJsonValueFromKey(compStmt->getKey(), data);
 
-    switch (compStmt->GetValue()->GetType()) {
+    switch (compStmt->getValue()->getType()) {
         case ValueExprAST::STRING_EXPR:
             if (!jsonKeyValue.is_string())
                 throw std::runtime_error(jsonKeyValue.dump() + " is not a string");

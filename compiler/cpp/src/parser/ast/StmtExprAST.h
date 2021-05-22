@@ -13,7 +13,7 @@ public:
     enum Type { STMT_EXPR, HAS_STMT_EXPR, COMP_STMT_EXPR };
 
     explicit StmtExprAST(): type(STMT_EXPR) {}
-    Type GetType();
+    Type getType();
 protected:
     explicit StmtExprAST(Type t): type(t) {}
 private:

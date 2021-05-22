@@ -4,6 +4,6 @@
 
 #include "BooleanExprAST.h"
 
-bool BooleanExprAST::GetValue() const {
+bool BooleanExprAST::getValue() const {
     return value;
 }

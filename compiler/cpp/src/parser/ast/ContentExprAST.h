@@ -18,5 +18,5 @@ private:
 public:
     explicit ContentExprAST(std::vector<std::unique_ptr<ContentBlockExprAST>> sections):
         TopLevelExprAST(TopLevelExprAST::Type::CONTENT_EXPR), contentBlocks(std::move(sections)) {}
-    const std::vector<std::unique_ptr<ContentBlockExprAST>> &GetContentBlocks();
+    const std::vector<std::unique_ptr<ContentBlockExprAST>> &getContentBlocks();
 };

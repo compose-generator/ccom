@@ -15,5 +15,5 @@ private:
     std::string value;
 public:
     explicit StringExprAST(std::string val): ValueExprAST(ValueExprAST::Type::STRING_EXPR), value(std::move(val)) {}
-    std::string GetValue() const;
+    std::string getValue() const;
 };

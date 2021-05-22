@@ -6,6 +6,6 @@
 
 #include "ContentExprAST.h"
 
-std::vector<std::unique_ptr<ContentBlockExprAST>> const &ContentExprAST::GetContentBlocks() {
+std::vector<std::unique_ptr<ContentBlockExprAST>> const &ContentExprAST::getContentBlocks() {
     return contentBlocks;
 }

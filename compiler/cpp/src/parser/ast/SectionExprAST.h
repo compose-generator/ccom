@@ -17,5 +17,5 @@ private:
 public:
     explicit SectionExprAST(std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks):
             ContentBlockExprAST(ContentBlockExprAST::Type::SECTION_EXPR), comBlocks(std::move(comBlocks)) {}
-    const std::vector<std::unique_ptr<ComBlockExprAST>> &GetComBlocks();
+    const std::vector<std::unique_ptr<ComBlockExprAST>> &getComBlocks();
 };

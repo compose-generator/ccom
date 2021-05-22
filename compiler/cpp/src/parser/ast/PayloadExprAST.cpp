@@ -6,6 +6,6 @@
 
 #include "PayloadExprAST.h"
 
-std::string PayloadExprAST::GetValue() const {
+std::string PayloadExprAST::getValue() const {
     return value;
 }

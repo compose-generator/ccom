@@ -16,6 +16,6 @@ private:
 public:
     explicit IdentifierExprAST(std::string Name): name(std::move(Name)) {}
     IdentifierExprAST(std::string name, int index): name(std::move(name)), index(index) {}
-    std::string GetName() const;
-    int GetIndex() const;
+    std::string getName() const;
+    int getIndex() const;
 };

@@ -18,5 +18,5 @@ private:
 public:
     explicit StmtLstExprAST(std::vector<std::unique_ptr<StmtExprAST>> stmts):
             TopLevelExprAST(TopLevelExprAST::Type::STMT_LST_EXPR), stmts(std::move(stmts)) {}
-    const std::vector<std::unique_ptr<StmtExprAST>> &GetStatements();
+    const std::vector<std::unique_ptr<StmtExprAST>> &getStatements();
 };

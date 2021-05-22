@@ -6,6 +6,6 @@
 
 #include "ValueExprAST.h"
 
-ValueExprAST::Type ValueExprAST::GetType() {
+ValueExprAST::Type ValueExprAST::getType() {
     return type;
 }

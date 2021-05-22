@@ -9,7 +9,7 @@ public:
     enum Type { TOP_LEVEL_EXPR, CONTENT_EXPR, STMT_LST_EXPR };
 
     explicit TopLevelExprAST(): type(TOP_LEVEL_EXPR) {}
-    Type GetType();
+    Type getType();
 protected:
     explicit TopLevelExprAST(Type t): type(t) {}
 private:

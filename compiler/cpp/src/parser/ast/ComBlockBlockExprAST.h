@@ -16,5 +16,5 @@ private:
 public:
     explicit ComBlockBlockExprAST(std::unique_ptr<IfBlockExprAST> ifBlock):
         ComBlockExprAST(ComBlockBlockExprAST::Type::COM_BLOCK_BLOCK_EXPR), ifBlock(std::move(ifBlock)) {}
-    const std::unique_ptr<IfBlockExprAST> &GetIfBlock();
+    const std::unique_ptr<IfBlockExprAST> &getIfBlock();
 };
