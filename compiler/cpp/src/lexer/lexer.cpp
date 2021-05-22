@@ -61,6 +61,32 @@ Token getTok() {
     // Are we in payload context?
     if (currentContext == PAYLOAD) return consumePayload();
 
+    // Is it a conditional comment identifier?
+    std::string laResult;
+    if (isLookaheadLineCommentChars()) {
+        // Consume LineCommentChars
+        for (int i = 0; i < LineCommentChars.length(); i++) advance();
+        // Update context
+        currentContext = SECTION;
+        return Token(TOK_COM_LINE_IDEN, LineNum, ColNum);
+    } else if (isLookaheadPayloadCommentChars()) {
+        // Consume PayloadCommentChars
+        for (int i = 0; i < PayloadCommentChars.length(); i++) advance();
+        return Token(TOK_COM_IDEN_PAYLOAD, LineNum, ColNum);
+    } else if (isLookaheadBlockCommentCharOpen()) {
+        // Consume BlockCommentCharsOpen
+        for (int i = 0; i < BlockCommentCharsOpen.length(); i++) advance();
+        // Update context
+        currentContext = SECTION;
+        return Token(TOK_COM_BLOCK_IDEN_OPEN, LineNum, ColNum);
+    } else if (isLookaheadBlockCommentCharClose()) {
+        // Consume BlockCommentCharsClose
+        for (int i = 0; i < BlockCommentCharsClose.length(); i++) advance();
+        // Update context
+        currentContext = ARBITRARY;
+        return Token(TOK_COM_BLOCK_IDEN_CLOSE, LineNum, ColNum);
+    }
+
     // Is it a primitive char, that can be returned immediately?
     switch (CurrentChar) {
         case '.': {
@@ -98,6 +124,22 @@ Token getTok() {
             expect('=');
             return Token(TOK_EQUALS, LineNum, ColNum);
         }
+        case '<': {
+            expect('<');
+            if (CurrentChar == '=') {
+                expect('=');
+                return Token(TOK_LESS_EQUALS, LineNum, ColNum);
+            }
+            return Token(TOK_LESS_THEN, LineNum, ColNum);
+        }
+        case '>': {
+            expect('>');
+            if (CurrentChar == '=') {
+                expect('=');
+                return Token(TOK_GREATER_EQUALS, LineNum, ColNum);
+            }
+            return Token(TOK_GREATER_THEN, LineNum, ColNum);
+        }
         case '"': { // String literal
             return consumeStringLiteral();
         }
@@ -107,32 +149,6 @@ Token getTok() {
 
             // Is it an integer?
             if (isdigit(CurrentChar)) return Token(TOK_NUMBER, consumeNumber(), LineNum, ColNum);
-
-            // Is it a conditional comment identifier?
-            std::string laResult;
-            if (isLookaheadLineCommentChars()) {
-                // Consume LineCommentChars
-                for (int i = 0; i < LineCommentChars.length(); i++) advance();
-                // Update context
-                currentContext = SECTION;
-                return Token(TOK_COM_LINE_IDEN, LineNum, ColNum);
-            } else if (isLookaheadPayloadCommentChars()) {
-                // Consume PayloadCommentChars
-                for (int i = 0; i < PayloadCommentChars.length(); i++) advance();
-                return Token(TOK_COM_IDEN_PAYLOAD, LineNum, ColNum);
-            } else if (isLookaheadBlockCommentCharOpen()) {
-                // Consume BlockCommentCharsOpen
-                for (int i = 0; i < BlockCommentCharsOpen.length(); i++) advance();
-                // Update context
-                currentContext = SECTION;
-                return Token(TOK_COM_BLOCK_IDEN_OPEN, LineNum, ColNum);
-            } else if (isLookaheadBlockCommentCharClose()) {
-                // Consume BlockCommentCharsClose
-                for (int i = 0; i < BlockCommentCharsClose.length(); i++) advance();
-                // Update context
-                currentContext = ARBITRARY;
-                return Token(TOK_COM_BLOCK_IDEN_CLOSE, LineNum, ColNum);
-            }
         }
     }
 

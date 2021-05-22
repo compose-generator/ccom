@@ -43,6 +43,10 @@ enum TokenType {
     TOK_OR, // |
     TOK_EQUALS, // ==
     TOK_NOT_EQUALS, // !=
+    TOK_GREATER_THEN, // >
+    TOK_LESS_THEN, // <
+    TOK_GREATER_EQUALS, // >=
+    TOK_LESS_EQUALS, // <=
 
     // Misc
     TOK_IDENTIFIER, // e.g. test
