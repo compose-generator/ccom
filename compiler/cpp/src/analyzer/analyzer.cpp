@@ -26,16 +26,19 @@ json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
 
 // ------------------------------------------- Check Data Type Compatibility -------------------------------------------
 
-void checkDataTypeCompatibility(bool isSingleStatement, ExprAST* ast, const json& data) {
+void checkDataTypeCompatibility(bool isSingleStatement, TopLevelExprAST* ast, const json& data) {
     if (isSingleStatement) {
-        checkDataTypeCompatibilityStmtList(ast, data);
+        if (ast->GetType() != TopLevelExprAST::STMT_LST_EXPR)
+            throw std::runtime_error("Input was no single statement list");
+        auto* stmtLst = static_cast<StmtLstExprAST*>(ast);
+        checkDataTypeCompatibilityStmtList(stmtLst, data);
     } else {
-        checkDataTypeCompatibilityContent(ast, data);
+        auto* content = static_cast<ContentExprAST*>(ast);
+        checkDataTypeCompatibilityContent(content, data);
     }
 }
 
-void checkDataTypeCompatibilityContent(ExprAST* ast, const json& data) {
-    auto* content = dynamic_cast<ContentExprAST*>(ast);
+void checkDataTypeCompatibilityContent(ContentExprAST* content, const json& data) {
     // Loop through sections
     for (const std::unique_ptr<ExprAST>& section : content->GetSections()) {
         if (auto* relevantSection = dynamic_cast<SectionExprAST*>(section.get())) {
@@ -60,10 +63,9 @@ void checkDataTypeCompatibilityContent(ExprAST* ast, const json& data) {
     }
 }
 
-void checkDataTypeCompatibilityStmtList(ExprAST* ast, const json& data) {
-    auto* stmtList = dynamic_cast<StmtLstExprAST*>(ast);
+void checkDataTypeCompatibilityStmtList(StmtLstExprAST* stmtLst, const json& data) {
     // Loop through statements
-    for (const std::unique_ptr<StmtExprAST>& stmt : stmtList->GetStatements()) {
+    for (const std::unique_ptr<StmtExprAST>& stmt : stmtLst->GetStatements()) {
         if (stmt->GetType() == StmtExprAST::COMP_STMT_EXPR) {
             auto* compStmt = static_cast<CompStmtExprAST*>(stmt.get());
             checkDataTypeCompatibilityCompStmt(compStmt, data);
@@ -92,11 +94,11 @@ void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& d
     }
 }
 
-ExprAST* executeSemanticAnalysis(bool isSingleStatement, const std::string& fileInput, const json& data,
+TopLevelExprAST* executeSemanticAnalysis(bool isSingleStatement, const std::string& fileInput, const json& data,
                                  const std::string& lineCommentChars, const std::string& blockCommentCharsOpen,
                                  const std::string& blockCommentCharsClose) {
     // Parse Abstract Syntax Tree
-    ExprAST* ast = executeSyntaxAnalysis(isSingleStatement, fileInput, lineCommentChars,
+    TopLevelExprAST* ast = executeSyntaxAnalysis(isSingleStatement, fileInput, lineCommentChars,
                                          blockCommentCharsOpen, blockCommentCharsClose);
 
     // Execute semantic checks

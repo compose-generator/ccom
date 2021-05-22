@@ -12,12 +12,12 @@
 
 using json = nlohmann::json;
 
-ExprAST* executeSemanticAnalysis(bool isSingleStatement, const std::string &fileInput, const json& data,
+TopLevelExprAST* executeSemanticAnalysis(bool isSingleStatement, const std::string &fileInput, const json& data,
                                const std::string &lineCommentChars, const std::string &blockCommentCharsOpen,
                                const std::string &blockCommentCharsClose);
 
 json getJsonValueFromKey(const std::unique_ptr<KeyExprAST>&, json);
-void checkDataTypeCompatibility(bool, ExprAST*, const json&);
-void checkDataTypeCompatibilityContent(ExprAST*, const json&);
-void checkDataTypeCompatibilityStmtList(ExprAST*, const json&);
+void checkDataTypeCompatibility(bool, TopLevelExprAST*, const json&);
+void checkDataTypeCompatibilityContent(ContentExprAST*, const json&);
+void checkDataTypeCompatibilityStmtList(StmtLstExprAST*, const json&);
 void checkDataTypeCompatibilityCompStmt(CompStmtExprAST*, const json&);

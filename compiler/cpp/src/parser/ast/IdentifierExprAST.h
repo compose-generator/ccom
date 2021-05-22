@@ -10,7 +10,7 @@
 #include <utility>
 #include "ExprAST.h"
 
-class IdentifierExprAST: public ExprAST {
+class IdentifierExprAST {
 private:
     std::string name;
     int index = -1;

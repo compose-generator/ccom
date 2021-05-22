@@ -9,7 +9,7 @@
 #include <vector>
 #include "ExprAST.h"
 
-class StmtExprAST: public ExprAST {
+class StmtExprAST {
 public:
     enum Type { STMT_EXPR, HAS_STMT_EXPR, COMP_STMT_EXPR };
 

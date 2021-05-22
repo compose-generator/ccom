@@ -22,18 +22,21 @@ bool getExistenceOfJsonKey(const std::unique_ptr<KeyExprAST> &key, json data) {
     return true;
 }
 
-std::string getOutput(bool isSingleStatement, ExprAST* ast, const json& data) {
+std::string getOutput(bool isSingleStatement, TopLevelExprAST* ast, const json& data) {
     if (isSingleStatement) {
-        return evaluateStmtList(ast, data) ? "true" : "false";
+        if (ast->GetType() != TopLevelExprAST::STMT_LST_EXPR)
+            throw std::runtime_error("Input was no single statement list");
+        auto* stmtLst = static_cast<StmtLstExprAST*>(ast);
+        return evaluateStmtList(stmtLst, data) ? "true" : "false";
     } else {
-        return getOutputOfContent(ast, data);
+        auto* content = static_cast<ContentExprAST*>(ast);
+        return getOutputOfContent(content, data);
     }
 }
 
-std::string getOutputOfContent(ExprAST* ast, const json& data) {
+std::string getOutputOfContent(ContentExprAST* content, const json& data) {
     std::string result;
 
-    auto* content = dynamic_cast<ContentExprAST*>(ast);
     for (const std::unique_ptr<ExprAST>& section : content->GetSections()) {
         if (auto* arbitrarySection = dynamic_cast<ArbitraryExprAST*>(section.get())) { // Is section an arbitrary section?
             result += getOutputOfArbitrarySection(arbitrarySection);
@@ -78,8 +81,7 @@ std::string getOutputOfRelevantSection(SectionExprAST* relevantSection, const js
     return result;
 }
 
-bool evaluateStmtList(ExprAST* ast, const json& data) {
-    auto* stmtList = dynamic_cast<StmtLstExprAST*>(ast);
+bool evaluateStmtList(StmtLstExprAST* stmtList, const json& data) {
     // Loop through statements
     for (const std::unique_ptr<StmtExprAST>& stmt : stmtList->GetStatements()) {
         switch (stmt->GetType()) {
@@ -143,7 +145,7 @@ std::string interpretInput(bool isSingleStatement, const std::string& fileInput,
     json data = json::parse(dataInput);
 
     // Get semantically checked AST
-    ExprAST* ast = executeSemanticAnalysis(isSingleStatement, fileInput, data, lineCommentChars,
+    TopLevelExprAST* ast = executeSemanticAnalysis(isSingleStatement, fileInput, data, lineCommentChars,
                                            blockCommentCharsOpen, blockCommentCharsClose);
 
     return getOutput(isSingleStatement, ast, data);

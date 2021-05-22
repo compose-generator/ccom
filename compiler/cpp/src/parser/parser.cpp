@@ -176,7 +176,7 @@ std::unique_ptr<ContentExprAST> parseContent() {
     return std::make_unique<ContentExprAST>(std::move(sections));
 }
 
-ExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string& fileInput, const std::string& lineCommentChars,
+TopLevelExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string& fileInput, const std::string& lineCommentChars,
                                const std::string& blockCommentCharsOpen, const std::string& blockCommentCharsClose) {
     initLexer(isSingleStatement, fileInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose);
 
@@ -184,7 +184,7 @@ ExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string& fileIn
     getNextToken();
 
     // Build AST
-    ExprAST* ast;
+    TopLevelExprAST* ast;
     if (isSingleStatement) {
         ast = parseStmtList().release();
     } else {

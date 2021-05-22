@@ -15,10 +15,10 @@ using json = nlohmann::json;
 std::string interpretInput(bool, const std::string&, const std::string&, const std::string&,
                          const std::string&, const std::string&);
 
-std::string getOutput(bool, ExprAST*, const json&);
-std::string getOutputOfContent(ExprAST*, const json&);
+std::string getOutput(bool, TopLevelExprAST*, const json&);
+std::string getOutputOfContent(ContentExprAST*, const json&);
 std::string getOutputOfArbitrarySection(ArbitraryExprAST*);
 std::string getOutputOfRelevantSection(SectionExprAST*, const json&);
-bool evaluateStmtList(ExprAST *ast, const json &data);
+bool evaluateStmtList(StmtLstExprAST *ast, const json &data);
 bool evaluateHasStatement(HasStmtExprAST*, const json&);
 bool evaluateCompStatement(CompStmtExprAST*, const json&);

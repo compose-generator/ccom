@@ -14,6 +14,8 @@ add_executable(compiler
         src/parser/parser.h
         src/parser/ast/ExprAST.cpp
         src/parser/ast/ExprAST.h
+        src/parser/ast/TopLevelExprAST.cpp
+        src/parser/ast/TopLevelExprAST.h
         src/parser/ast/NumberExprAST.cpp
         src/parser/ast/NumberExprAST.h
         src/parser/ast/StringExprAST.cpp
