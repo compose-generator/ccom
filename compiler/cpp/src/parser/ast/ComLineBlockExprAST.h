@@ -7,18 +7,18 @@
 #pragma once
 
 #include <memory>
-#include "ExprAST.h"
 #include "StmtLstExprAST.h"
 #include "PayloadExprAST.h"
 #include "ComBlockExprAST.h"
 
 class ComLineBlockExprAST : public ComBlockExprAST {
 private:
-    std::unique_ptr<StmtLstExprAST> StmtList;
-    std::unique_ptr<PayloadExprAST> Payload;
+    std::unique_ptr<StmtLstExprAST> stmtList;
+    std::unique_ptr<PayloadExprAST> payload;
 public:
     explicit ComLineBlockExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
-            StmtList(std::move(stmtList)), Payload(std::move(payload)) {}
-    const std::unique_ptr<StmtLstExprAST> &GetStmtList();
-    const std::unique_ptr<PayloadExprAST> &GetPayload();
+            ComBlockExprAST(ComLineBlockExprAST::Type::COM_LINE_BLOCK_EXPR),
+            stmtList(std::move(stmtList)), payload(std::move(payload)) {}
+    const std::unique_ptr<StmtLstExprAST> &getStmtList();
+    const std::unique_ptr<PayloadExprAST> &getPayload();
 };

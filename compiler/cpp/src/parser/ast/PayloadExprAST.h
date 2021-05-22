@@ -10,8 +10,8 @@
 
 class PayloadExprAST {
 private:
-    std::string Value;
+    std::string value;
 public:
-    explicit PayloadExprAST(std::string val): Value(std::move(val)) {}
-    std::string GetValue() const;
+    explicit PayloadExprAST(std::string val): value(std::move(val)) {}
+    std::string getValue() const;
 };

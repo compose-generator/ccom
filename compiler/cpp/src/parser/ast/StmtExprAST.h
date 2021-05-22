@@ -7,9 +7,15 @@
 #pragma once
 
 #include <vector>
-#include "ExprAST.h"
 
-class StmtExprAST: public ExprAST {
+class StmtExprAST {
 public:
-    ~StmtExprAST() override = default;
+    enum Type { STMT_EXPR, HAS_STMT_EXPR, COMP_STMT_EXPR };
+
+    explicit StmtExprAST(): type(STMT_EXPR) {}
+    Type getType();
+protected:
+    explicit StmtExprAST(Type t): type(t) {}
+private:
+    Type type;
 };

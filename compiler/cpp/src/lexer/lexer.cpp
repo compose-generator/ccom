@@ -15,23 +15,20 @@ unsigned int MaxLookahead;
 
 // Input data to be worked with
 std::string FileInput;
-int InputStringPos = -1;
+int InputStringPos = 0;
 int CurrentChar = 0;
 unsigned int LineNum = 1;
 unsigned int ColNum = 0;
 
 Context currentContext = ARBITRARY; // Default ARBITRARY
 
-
 int advance() {
+    // Return EOF, when string ends
+    if (InputStringPos >= FileInput.length() - 1)
+        return CurrentChar = EOF;
     InputStringPos++;
-    if (InputStringPos > FileInput.length() - 1) {
-        CurrentChar = EOF; // Return EOF, when string ends
-    } else {
-        CurrentChar = (unsigned char) FileInput[InputStringPos];
-        ColNum++;
-    }
-    return CurrentChar;
+    ColNum++;
+    return CurrentChar = (unsigned char) FileInput[InputStringPos];
 }
 
 void expect(int input) {

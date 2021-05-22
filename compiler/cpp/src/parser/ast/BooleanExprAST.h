@@ -8,8 +8,8 @@
 
 class BooleanExprAST : public ValueExprAST {
 private:
-    bool Value;
+    bool value;
 public:
-    explicit BooleanExprAST(bool val): Value(val) {}
-    bool GetValue() const;
+    explicit BooleanExprAST(bool val): ValueExprAST(ValueExprAST::Type::BOOLEAN_EXPR), value(val) {}
+    bool getValue() const;
 };

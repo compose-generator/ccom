@@ -8,14 +8,14 @@
 
 #include <vector>
 #include <memory>
-#include "ExprAST.h"
 #include "ComBlockExprAST.h"
+#include "ContentBlockExprAST.h"
 
-class SectionExprAST : public ExprAST {
+class SectionExprAST : public ContentBlockExprAST {
 private:
-    std::vector<std::unique_ptr<ComBlockExprAST>> ComBlocks;
+    std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks;
 public:
     explicit SectionExprAST(std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks):
-            ComBlocks(std::move(comBlocks)) {}
-    const std::vector<std::unique_ptr<ComBlockExprAST>> &GetComBlocks();
+            ContentBlockExprAST(ContentBlockExprAST::Type::SECTION_EXPR), comBlocks(std::move(comBlocks)) {}
+    const std::vector<std::unique_ptr<ComBlockExprAST>> &getComBlocks();
 };

@@ -12,8 +12,9 @@
 
 class ComBlockBlockExprAST: public ComBlockExprAST {
 private:
-    std::unique_ptr<IfBlockExprAST> IfBlock;
+    std::unique_ptr<IfBlockExprAST> ifBlock;
 public:
-    explicit ComBlockBlockExprAST(std::unique_ptr<IfBlockExprAST> ifBlock): IfBlock(std::move(ifBlock)) {}
-    const std::unique_ptr<IfBlockExprAST> &GetIfBlock();
+    explicit ComBlockBlockExprAST(std::unique_ptr<IfBlockExprAST> ifBlock):
+        ComBlockExprAST(ComBlockBlockExprAST::Type::COM_BLOCK_BLOCK_EXPR), ifBlock(std::move(ifBlock)) {}
+    const std::unique_ptr<IfBlockExprAST> &getIfBlock();
 };
