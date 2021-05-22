@@ -104,40 +104,50 @@ bool evaluateStmtList(StmtLstExprAST* stmtList, const json& data) {
     return false;
 }
 
-bool evaluateHasStatement(HasStmtExprAST* ast, const json& data) {
-    bool isKeyExisting = getExistenceOfJsonKey(ast->getKey(), data);
-    if (ast->getInverted()) return !isKeyExisting;
+bool evaluateHasStatement(HasStmtExprAST* hasStmt, const json& data) {
+    bool isKeyExisting = getExistenceOfJsonKey(hasStmt->getKey(), data);
+    if (hasStmt->getInverted()) return !isKeyExisting;
     return isKeyExisting;
 }
 
-bool evaluateCompStatement(CompStmtExprAST* ast, const json& data) {
-    json keyValue = getJsonValueFromKey(ast->getKey(), data);
+bool evaluateCompStatement(CompStmtExprAST* compStmt, const json& data) {
+    json keyValue = getJsonValueFromKey(compStmt->getKey(), data);
+    Operator op = compStmt->getOperator();
     if (keyValue.is_string()) {
-        auto value = keyValue.get<std::string>();
-        if (ast->getValue()->getType() == ValueExprAST::STRING_EXPR) {
-            auto *expectedValue = static_cast<StringExprAST*>(ast->getValue().get());
-            return value == expectedValue->getValue();
+        auto actualValue = keyValue.get<std::string>();
+        if (compStmt->getValue()->getType() == ValueExprAST::STRING_EXPR) {
+            auto *expectedValue = static_cast<StringExprAST*>(compStmt->getValue().get());
+            return evaluateCondition(actualValue, expectedValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out
-        throw std::runtime_error("Internal compiler error - JSON value was string and hardcoded was not");
+        throw std::runtime_error("Internal compiler error - JSON actualValue was string and hardcoded was not");
     } else if (keyValue.is_boolean()) {
-        auto value = keyValue.get<bool>();
-        if (ast->getValue()->getType() == ValueExprAST::BOOLEAN_EXPR) {
-            auto *expectedValue = static_cast<BooleanExprAST*>(ast->getValue().get());
-            return value == expectedValue->getValue();
+        auto actualValue = keyValue.get<bool>();
+        if (compStmt->getValue()->getType() == ValueExprAST::BOOLEAN_EXPR) {
+            auto *expectedValue = static_cast<BooleanExprAST*>(compStmt->getValue().get());
+            return evaluateCondition(actualValue, expectedValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out
-        throw std::runtime_error("Internal compiler error - JSON value was boolean and hardcoded was not");
+        throw std::runtime_error("Internal compiler error - JSON actualValue was boolean and hardcoded was not");
     } else if (keyValue.is_number_integer()) {
-        auto value = keyValue.get<int>();
-        if (ast->getValue()->getType() == ValueExprAST::NUMBER_EXPR) {
-            auto* expectedValue = static_cast<NumberExprAST*>(ast->getValue().get());
-            return value == expectedValue->getValue();
+        auto actualValue = keyValue.get<int>();
+        if (compStmt->getValue()->getType() == ValueExprAST::NUMBER_EXPR) {
+            auto* expectedValue = static_cast<NumberExprAST*>(compStmt->getValue().get());
+            return evaluateCondition(actualValue, expectedValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out
-        throw std::runtime_error("Internal compiler error - JSON value was int and hardcoded was not");
+        throw std::runtime_error("Internal compiler error - JSON actualValue was int and hardcoded was not");
     }
     throw std::runtime_error("Unknown datatype of '" + keyValue.dump() + "'");
+}
+
+template <typename T> bool evaluateCondition(T expectedValue, T actualValue, Operator op) {
+    switch (op) {
+        case OP_EQUALS:
+            return actualValue == expectedValue;
+        case OP_NOT_EQUALS:
+            return actualValue != expectedValue;
+    }
 }
 
 std::string interpretInput(bool isSingleStatement, const std::string& fileInput,

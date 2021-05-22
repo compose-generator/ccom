@@ -21,3 +21,4 @@ std::string getOutputOfRelevantSection(SectionExprAST*, const json&);
 bool evaluateStmtList(StmtLstExprAST *ast, const json &data);
 bool evaluateHasStatement(HasStmtExprAST*, const json&);
 bool evaluateCompStatement(CompStmtExprAST*, const json&);
+template <typename T> bool evaluateCondition(T, T, Operator);
