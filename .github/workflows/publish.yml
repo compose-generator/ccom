@@ -57,7 +57,7 @@ jobs:
           path: ./bin/ccomc**
 
   build-cli:
-    name: Build cli binaries
+    name: Build CLI binaries
     if: startsWith(github.ref, 'refs/tags/')
     needs: build-compiler
     runs-on: ubuntu-latest
@@ -67,16 +67,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get version name
-        id: get_version
-        uses: battila7/get-version-action@v2
-
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
           go-version: 1.16
 
-      - name: Cache Go modules
+      - name: Restore Go modules cache
         uses: actions/cache@v1
         with:
           path: ~/go/pkg/mod
@@ -115,37 +111,60 @@ jobs:
           NFPM_PUBLISH_RPM_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
           NFPM_PUBLISH_APK_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
 
-      - name: Deploy Ubuntu
-        run: |
-          curl -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.deb" "${{ secrets.NEXUS_URL }}/ubuntu-focal/"
-          curl -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.deb" "${{ secrets.NEXUS_URL }}/ubuntu-groovy/"
-          curl -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.deb" "${{ secrets.NEXUS_URL }}/ubuntu-hirsute/"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: dist-output
+          path: dist/
 
-#      - name: Setup JFrog CLI
-#        uses: jfrog/setup-jfrog-cli@v1
-#        env:
-#          JF_ARTIFACTORY_1: ${{ secrets.ARTIFACTORY_ACCESS_TOKEN }}
-#
-#      - name: Deploy to Alpine repository
+  deploy:
+    name: Deploy to Nexus
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build-cli
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        arch:
+          - amd64
+          - 386
+          - arm64
+          - armv5
+          #- armv6
+          - armv7
+    steps:
+      - name: Get version name
+        id: get_version
+        uses: battila7/get-version-action@v2
+
+      - name: Download dist output
+        uses: actions/download-artifact@v2
+        with:
+          name: dist-output
+
+      - name: Deploy to Debian / Raspbian repo
+        run: |
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-bullseye/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-buster/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-stretch/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-jessie/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-wheezy/"
+
+      - name: Deploy to Ubuntu repo
+        run: |
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-hirsute/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-groovy/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-focal/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-bionic/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-xenial/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-trusty/"
+      
+      - name: Deploy to CentOS repo
+        run: |
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --upload-file ./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.rpm ${{ secrets.NEXUS_URL }}/centos/ccom-latest.rpm
+      
+      - name: Deploy to Fedora repo
+        run: |
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --upload-file ./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.rpm ${{ secrets.NEXUS_URL }}/fedora/ccom-latest.rpm
+
+#      - name: Deploy to Alpine repo
 #        run: |
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.apk" alpine/3.13/main/x86_64/ccom_${{ steps.get_version.outputs.version }}_amd64.apk
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.apk" alpine/3.12/main/x86_64/ccom_${{ steps.get_version.outputs.version }}_amd64.apk
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.apk" alpine/3.11/main/x86_64/ccom_${{ steps.get_version.outputs.version }}_amd64.apk
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.apk" alpine/3.10/main/x86_64/ccom_${{ steps.get_version.outputs.version }}_amd64.apk
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_arm64.apk" alpine/3.13/main/aarch64/ccom_${{ steps.get_version.outputs.version }}_arm64.apk
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_arm64.apk" alpine/3.12/main/aarch64/ccom_${{ steps.get_version.outputs.version }}_arm64.apk
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_arm64.apk" alpine/3.11/main/aarch64/ccom_${{ steps.get_version.outputs.version }}_arm64.apk
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_arm64.apk" alpine/3.10/main/aarch64/ccom_${{ steps.get_version.outputs.version }}_arm64.apk
-#      
-#      - name: Deploy to Debian repository
-#        run: |
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/amd64
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_arm64.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/arm64
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_armv5.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/armv5
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_armv7.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/armv7
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_386.deb" debian/pool/ --deb buster,stretch,jessie,wheezy,trusty,xenial,bionic,focal,groovy/main/i386
-#      
-#      - name: Deploy to RPM repository
-#        run: |
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_amd64.rpm" rpm/x86_64/stable/ccom/${{ steps.get_version.outputs.version }}/ccom_${{ steps.get_version.outputs.version }}_amd64.rpm
-#          jfrog rt u "dist/ccom_${{ steps.get_version.outputs.version }}_linux_arm64.rpm" rpm/aarch64/stable/ccom/${{ steps.get_version.outputs.version }}/ccom_${{ steps.get_version.outputs.version }}_arm64.rpm
+#          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ steps.get_version.outputs.version }}_linux_${{ matrix.arch }}.apk" "${{ secrets.NEXUS_URL }}/alpine/"
