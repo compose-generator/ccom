@@ -1,4 +1,4 @@
-package filereader;
+package com.c.filereader;
 
 import java.util.PrimitiveIterator;
 

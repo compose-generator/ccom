@@ -1,4 +1,4 @@
-package filereader;
+package com.c.filereader;
 
 /**
  * Error indicating that the next char in the file did not equal the expected char.
