@@ -21,15 +21,17 @@ public class FileReader {
      */
     private String currentLine = "";
 
-    // Current position in code (row and column)
+    // Current position in code (line and column)
     /**
      * The current line we are looking at (first element of buffer) in the file.
      */
-    private int posRow;
+    private int posLine = -1;
     /**
      * The current column we are looking at (first element of buffer) in the current line of the file.
      */
-    private int posCol;
+    private int posCol = -1;
+
+    private boolean isEof = false;
 
 
     /**
@@ -42,13 +44,10 @@ public class FileReader {
         this.nextChars = new LimitedQueue<>(maxLookAhead);
 
         // Advance to load first characters into buffer
+        readNextLine();
         for (int i = 0; i < maxLookAhead; i++) {
             advance();
         }
-
-        // Keep position in sync with first element of buffer
-        posRow = 0;
-        posCol = 0;
     }
 
     /**
@@ -74,9 +73,9 @@ public class FileReader {
     /**
      * Consumes current char and advances to next character.
      */
-    private void advance() {
+    public void advance() {
         // Check for EOF
-        if (!file.hasNext()) {
+        if (isEof) {
             nextChars.add((char) -1);
             return; // nothing to do anymore after having reached EOF
         }
@@ -84,13 +83,11 @@ public class FileReader {
         // Check if we need to read the next line
         if (posCol == currentLine.length() - 1) {
             readNextLine(); // will refresh line buffer
-            posCol = 0; // reset column
-            posRow = 0; // reset row
         }
 
         // Add to next chars buffer
-        nextChars.add((char) file.nextInt());
-        posRow++;
+        posCol++;
+        nextChars.add(currentLine.charAt(posCol));
     }
 
     /**
@@ -102,13 +99,17 @@ public class FileReader {
 
         lineReader:
         while (true) {
+
             // Check for EOF
             if (!file.hasNext()) {
-                currentLine = "";
-                return;
+                isEof = true;
+                // construct a dummy currentLine for advance() to read from once at the end
+                line.append((char) -1);
+                break;
             }
-            int nextChar = file.next();
-            switch (nextChar) {
+
+            char next = (char) file.nextInt();
+            switch (next) {
                 case '\r':  // carriage return
                     // convert '\r\n' line breaks to a simple '\n'
                     continue;
@@ -116,11 +117,14 @@ public class FileReader {
                     line.append('\n');
                     break lineReader;
                 default:
-                    line.append(nextChar);
+                    line.append(next);
             }
+
         }
 
         currentLine = line.toString();
+        posLine++;
+        posCol = -1;
     }
 
     /**
@@ -150,7 +154,7 @@ public class FileReader {
      * @return formatted line number and column
      */
     private String locationToLineAndCol() {
-        return "@L" + posRow + "C" + posCol;
+        return "@" + posLine + ":" + posCol;
     }
 
 }

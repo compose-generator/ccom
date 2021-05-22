@@ -6,7 +6,7 @@ package com.c.filereader;
 public class UnexpectedCharError extends Exception {
 
     public UnexpectedCharError(char expected, char got, String position) {
-        super("Expected char '" + expected + "', but got '" + got + "' " + position);
+        super("Expected '" + expected + "' but got '" + got + "' " + position);
     }
 
 }
