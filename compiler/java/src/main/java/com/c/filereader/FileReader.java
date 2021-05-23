@@ -266,4 +266,12 @@ public class FileReader {
         return posMsg.toString();
     }
 
+    public int getPosLine() {
+        return posLine;
+    }
+
+    public int getPosCol() {
+        return posCol;
+    }
+
 }
