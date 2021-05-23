@@ -69,9 +69,9 @@ public class FileReader {
      *
      * @param file the input file as a string
      */
-    public FileReader(String file, int maxLookAhead) throws MaxLookAheadError {
+    public FileReader(String file, int maxLookAhead) throws MaxLookAheadException {
         if (maxLookAhead < 1)
-            throw new MaxLookAheadError(maxLookAhead);
+            throw new MaxLookAheadException(maxLookAhead);
 
         this.file = file.chars().iterator();
         this.nextChars = new LimitedQueue<>(maxLookAhead);
@@ -209,11 +209,11 @@ public class FileReader {
      * Checks if the next char is the expected character. Advances one character after a successful check.
      *
      * @param c expected char (to compare the next char against)
-     * @throws UnexpectedCharError if the next char is not the expected character
+     * @throws UnexpectedCharException if the next char is not the expected character
      */
-    public void expect(char c) throws UnexpectedCharError {
+    public void expect(char c) throws UnexpectedCharException {
         if (nextChars.getFirst() != c)
-            throw new UnexpectedCharError(c, nextChars.getFirst(), toPosString());
+            throw new UnexpectedCharException(c, nextChars.getFirst(), toPosString());
         advance();
     }
 
