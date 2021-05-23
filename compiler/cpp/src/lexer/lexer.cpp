@@ -279,7 +279,7 @@ void initLexer(bool isSingleStatement, const std::string& inputFileInput, const 
     blockCommentCharsClose = inputBlockCommentCharsClose;
     payloadCommentChars = inputLineCommentChars;
     maxLookahead = std::max({lineCommentChars.length(), blockCommentCharsOpen.length(),
-                             blockCommentCharsClose.length(), payloadCommentChars.length()}) + 1;
+                             blockCommentCharsClose.length(), payloadCommentChars.length()});
     currentContext = isSingleStatement ? SECTION : ARBITRARY;
 
     // Load first char into the buffer
