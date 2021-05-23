@@ -158,7 +158,7 @@ public class Lexer {
      *
      * @return the next token
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
-     * @throws UnknownCharException if a char cannot be processed to a valid Token
+     * @throws UnknownCharException    if a char cannot be processed to a valid Token
      */
     public Token advance() throws UnknownCharException, UnexpectedCharException {
         char nextChar = reader.lookAhead();
@@ -226,7 +226,7 @@ public class Lexer {
      *
      * @return a Token describing part of the conditional comments section, e.g. an "if" identifier
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
-     * @throws UnknownCharException if a char cannot be processed to a valid Token
+     * @throws UnknownCharException    if a char cannot be processed to a valid Token
      */
     private Token consumeSection() throws UnexpectedCharException, UnknownCharException {
         String nextChars = Arrays.toString(reader.lookAheads());
