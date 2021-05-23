@@ -8,7 +8,7 @@ public class Lexer {
     private final String commentBlockIdentifierClose;
 
     private enum Context {
-        PRORGRAM_CODE, // Strings before or after a conditional section
+        ARBITRARY, // Strings before or after a conditional section
         SECTION, // Conditional section
         PAYLOAD // Payload content in a conditional section
     }
