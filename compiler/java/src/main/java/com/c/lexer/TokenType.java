@@ -17,9 +17,10 @@ public enum TokenType {
     OR, // |
     EQUALS, // ==
     NOT_EQUALS, // !=
+    LESS, // <
+    LESS_EQUAL, // <=
     GREATER, // >
     GREATER_EQUAL, // >=
-    LESS_EQUAL, // <=
 
     // Data types
     IDENTIFIER, // e.g. myIdentifier
@@ -34,8 +35,8 @@ public enum TokenType {
     // The following examples refer to Java
     COMMENT_PAYLOAD_IDENTIFIER, // //
     COMMENT_LINE_IDENTIFIER, // //?
-    COMMENT_BLOCK_IDENTIFIER_OPEN, // /*?
-    COMMENT_BLOCK_IDENTIFIER_CLOSE, // */
+    COMMENT_BLOCK_OPEN_IDENTIFIER, // /*?
+    COMMENT_BLOCK_CLOSE_IDENTIFIER, // */
 
     // actual program code or data (in languages like JSON or yml)
     // // that is not relevant for us since we are enriching existent languages

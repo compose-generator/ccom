@@ -3,14 +3,20 @@ package com.c.lexer;
 public class Token {
     private TokenType type;
     private String value;
-    private int lineNum;
-    private int colNum;
+    private int posLine;
+    private int posCol;
 
-    public Token(TokenType type, String value, int lineNum, int colNum) {
+    public Token(TokenType type, String value, int lineNum, int posCol) {
         this.type = type;
         this.value = value;
-        this.lineNum = lineNum;
-        this.colNum = colNum;
+        this.posLine = lineNum;
+        this.posCol = posCol;
+    }
+
+    public Token(TokenType type, int posLine, int posCol) {
+        this.type = type;
+        this.posLine = posLine;
+        this.posCol = posCol;
     }
 
     public TokenType getType() {
@@ -25,7 +31,7 @@ public class Token {
      * @return the code position where this Token occurs (line and column number)
      */
     public String getCodePos() {
-        return "Line " + lineNum + ",Col " + colNum;
+        return "Line " + posLine + ",Col " + posCol;
     }
 
 }
