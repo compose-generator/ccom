@@ -6,6 +6,6 @@
 
 #include "StringExprAST.h"
 
-std::string StringExprAST::GetValue() const {
-    return Value;
+std::string StringExprAST::getValue() const {
+    return value;
 }

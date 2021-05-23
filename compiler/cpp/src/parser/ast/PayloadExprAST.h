@@ -4,17 +4,14 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_PAYLOADEXPRAST_H
-#define COMPILER_PAYLOADEXPRAST_H
+#pragma once
 
 #include <string>
 
 class PayloadExprAST {
 private:
-    std::string Value;
+    std::string value;
 public:
-    explicit PayloadExprAST(std::string val): Value(std::move(val)) {}
-    std::string GetValue() const;
+    explicit PayloadExprAST(std::string val): value(std::move(val)) {}
+    std::string getValue() const;
 };
-
-#endif //COMPILER_PAYLOADEXPRAST_H

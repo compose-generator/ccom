@@ -6,6 +6,6 @@
 
 #include "ComBlockBlockExprAST.h"
 
-std::unique_ptr<IfBlockExprAST> const &ComBlockBlockExprAST::GetIfBlock() {
-    return IfBlock;
+std::unique_ptr<IfBlockExprAST> const &ComBlockBlockExprAST::getIfBlock() {
+    return ifBlock;
 }

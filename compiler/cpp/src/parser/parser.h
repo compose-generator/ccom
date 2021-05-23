@@ -4,8 +4,7 @@
 // Created by Marc on 02.05.2021.
 //
 
-#ifndef COMPILER_PARSER_H
-#define COMPILER_PARSER_H
+#pragma once
 
 #include <string>
 #include <iostream>
@@ -13,6 +12,7 @@
 #include <vector>
 #include "ast/ArbitraryExprAST.h"
 #include "ast/NumberExprAST.h"
+#include "ast/BooleanExprAST.h"
 #include "ast/StringExprAST.h"
 #include "ast/IdentifierExprAST.h"
 #include "ast/StmtExprAST.h"
@@ -31,11 +31,13 @@
 
 Token getNextToken();
 
-ExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string &fileInput, const std::string &lineCommentChars,
-                               const std::string &blockCommentCharsOpen, const std::string &blockCommentCharsClose);
+TopLevelExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string &fileInput,
+                                       const std::string &lineCommentChars, const std::string &blockCommentCharsOpen,
+                                       const std::string &blockCommentCharsClose);
 
 std::unique_ptr<ArbitraryExprAST> parseArbitrary();
 std::unique_ptr<NumberExprAST> parseNumber();
+std::unique_ptr<BooleanExprAST> parseBoolean();
 std::unique_ptr<StringExprAST> parseString();
 std::unique_ptr<ValueExprAST> parseValue();
 std::unique_ptr<IdentifierExprAST> parseIdentifier();
@@ -50,5 +52,3 @@ std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock();
 std::unique_ptr<ComLineBlockExprAST> parseComLineBlock();
 std::unique_ptr<SectionExprAST> parseSection();
 std::unique_ptr<ContentExprAST> parseContent();
-
-#endif //COMPILER_PARSER_H

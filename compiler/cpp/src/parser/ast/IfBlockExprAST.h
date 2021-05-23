@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_IFBLOCKEXPRAST_H
-#define COMPILER_IFBLOCKEXPRAST_H
+#pragma once
 
 #include <memory>
 #include "StmtLstExprAST.h"
@@ -13,13 +12,11 @@
 
 class IfBlockExprAST {
 private:
-    std::unique_ptr<StmtLstExprAST> StmtList;
-    std::unique_ptr<PayloadExprAST> Payload;
+    std::unique_ptr<StmtLstExprAST> stmtList;
+    std::unique_ptr<PayloadExprAST> payload;
 public:
     explicit IfBlockExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
-        StmtList(std::move(stmtList)), Payload(std::move(payload)) {}
-    const std::unique_ptr<StmtLstExprAST> &GetStmtList();
-    const std::unique_ptr<PayloadExprAST> &GetPayload();
+        stmtList(std::move(stmtList)), payload(std::move(payload)) {}
+    const std::unique_ptr<StmtLstExprAST> &getStmtList();
+    const std::unique_ptr<PayloadExprAST> &getPayload();
 };
-
-#endif //COMPILER_IFBLOCKEXPRAST_H

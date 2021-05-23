@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_HASSTMTEXPRAST_H
-#define COMPILER_HASSTMTEXPRAST_H
+#pragma once
 
 #include <memory>
 #include "KeyExprAST.h"
@@ -13,13 +12,11 @@
 
 class HasStmtExprAST : public StmtExprAST {
 private:
-    std::unique_ptr<KeyExprAST> Key;
-    bool Inverted;
+    std::unique_ptr<KeyExprAST> key;
+    bool isInverted;
 public:
     explicit HasStmtExprAST(std::unique_ptr<KeyExprAST> key, bool inverted):
-            Key(std::move(key)), Inverted(inverted) {}
-    const std::unique_ptr<KeyExprAST> &GetKey();
-    bool GetInverted() const;
+        StmtExprAST(StmtExprAST::Type::HAS_STMT_EXPR), key(std::move(key)), isInverted(inverted) {}
+    const std::unique_ptr<KeyExprAST> &getKey();
+    bool getInverted() const;
 };
-
-#endif //COMPILER_HASSTMTEXPRAST_H

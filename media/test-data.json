@@ -7,6 +7,7 @@
                 "name": "spring-maven",
                 "dir": "./spring-maven",
                 "type": "frontend",
+                "size": 5,
                 "preselected": false
             },
             {
@@ -14,6 +15,7 @@
                 "name": "spring-gradle",
                 "dir": "./spring-gradle",
                 "type": "frontend",
+                "size": 9,
                 "preselected": false
             }
         ],

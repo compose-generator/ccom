@@ -6,6 +6,10 @@
 
 #include "IdentifierExprAST.h"
 
-std::string IdentifierExprAST::GetName() const {
-    return Name;
+std::string IdentifierExprAST::getName() const {
+    return name;
+}
+
+int IdentifierExprAST::getIndex() const {
+    return index;
 }

@@ -6,10 +6,10 @@
 
 #include "HasStmtExprAST.h"
 
-std::unique_ptr<KeyExprAST> const &HasStmtExprAST::GetKey() {
-    return Key;
+std::unique_ptr<KeyExprAST> const &HasStmtExprAST::getKey() {
+    return key;
 }
 
-bool HasStmtExprAST::GetInverted() const {
-    return Inverted;
+bool HasStmtExprAST::getInverted() const {
+    return isInverted;
 };

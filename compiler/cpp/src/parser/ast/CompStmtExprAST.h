@@ -4,8 +4,7 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_COMPSTMTEXPRAST_H
-#define COMPILER_COMPSTMTEXPRAST_H
+#pragma once
 
 #include <memory>
 #include "KeyExprAST.h"
@@ -14,20 +13,22 @@
 
 enum Operator {
     OP_EQUALS,
-    OP_NOT_EQUALS
+    OP_NOT_EQUALS,
+    OP_GREATER,
+    OP_LESS,
+    OP_GREATER_EQUAL,
+    OP_LESS_EQUAL,
 };
 
 class CompStmtExprAST : public StmtExprAST {
 private:
-    Operator Op;
-    std::unique_ptr<KeyExprAST> Key;
-    std::unique_ptr<ValueExprAST> Value;
+    Operator op;
+    std::unique_ptr<KeyExprAST> key;
+    std::unique_ptr<ValueExprAST> value;
 public:
     explicit CompStmtExprAST(std::unique_ptr<KeyExprAST> key, Operator op, std::unique_ptr<ValueExprAST> value):
-        Key(std::move(key)), Op(op), Value(std::move(value)) {}
-    Operator GetOperator() const;
-    const std::unique_ptr<KeyExprAST> &GetKey();
-    const std::unique_ptr<ValueExprAST> &GetValue();
+            StmtExprAST(StmtExprAST::Type::COMP_STMT_EXPR), key(std::move(key)), op(op), value(std::move(value)) {}
+    Operator getOperator() const;
+    const std::unique_ptr<KeyExprAST> &getKey();
+    const std::unique_ptr<ValueExprAST> &getValue();
 };
-
-#endif //COMPILER_COMPSTMTEXPRAST_H

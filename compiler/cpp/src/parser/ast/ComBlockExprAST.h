@@ -4,14 +4,16 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_COMBLOCKEXPRAST_H
-#define COMPILER_COMBLOCKEXPRAST_H
+#pragma once
 
-#include "ExprAST.h"
-
-class ComBlockExprAST : public ExprAST {
+class ComBlockExprAST {
 public:
-    virtual ~ComBlockExprAST() = default;
-};
+    enum Type { COM_BLOCK_EXPR, COM_LINE_BLOCK_EXPR, COM_BLOCK_BLOCK_EXPR };
 
-#endif //COMPILER_COMBLOCKEXPRAST_H
+    explicit ComBlockExprAST(): type(COM_BLOCK_EXPR) {}
+    Type getType();
+protected:
+    explicit ComBlockExprAST(Type t): type(t) {}
+private:
+    Type type;
+};

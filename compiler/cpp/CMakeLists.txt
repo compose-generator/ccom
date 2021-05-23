@@ -12,8 +12,8 @@ add_executable(compiler
         src/lexer/Token.h
         src/parser/parser.cpp
         src/parser/parser.h
-        src/parser/ast/ExprAST.cpp
-        src/parser/ast/ExprAST.h
+        src/parser/ast/TopLevelExprAST.cpp
+        src/parser/ast/TopLevelExprAST.h
         src/parser/ast/NumberExprAST.cpp
         src/parser/ast/NumberExprAST.h
         src/parser/ast/StringExprAST.cpp
@@ -46,8 +46,12 @@ add_executable(compiler
         src/parser/ast/ComBlockExprAST.h
         src/parser/ast/ContentExprAST.cpp
         src/parser/ast/ContentExprAST.h
+        src/parser/ast/ContentBlockExprAST.cpp
+        src/parser/ast/ContentBlockExprAST.h
         src/parser/ast/ArbitraryExprAST.cpp
         src/parser/ast/ArbitraryExprAST.h
+        src/parser/ast/BooleanExprAST.cpp
+        src/parser/ast/BooleanExprAST.h
         src/analyzer/analyzer.cpp
         src/analyzer/analyzer.h
         src/interpreter/interpreter.cpp

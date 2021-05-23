@@ -4,13 +4,10 @@
 // Created by Marc on 02.05.2021.
 //
 
-#ifndef COMPILER_MAIN_H
-#define COMPILER_MAIN_H
+#pragma once
 
 #include <iostream>
 #include <vector>
 #include "interpreter/interpreter.h"
 
 int main(int, char**);
-
-#endif //COMPILER_MAIN_H

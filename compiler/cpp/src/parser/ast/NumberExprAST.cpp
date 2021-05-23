@@ -6,6 +6,6 @@
 
 #include "NumberExprAST.h"
 
-int NumberExprAST::GetValue() const {
-    return Value;
+int NumberExprAST::getValue() const {
+    return value;
 }

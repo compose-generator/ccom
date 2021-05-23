@@ -6,6 +6,6 @@
 
 #include "SectionExprAST.h"
 
-std::vector<std::unique_ptr<ComBlockExprAST>> const &SectionExprAST::GetComBlocks() {
-    return ComBlocks;
+std::vector<std::unique_ptr<ComBlockExprAST>> const &SectionExprAST::getComBlocks() {
+    return comBlocks;
 }

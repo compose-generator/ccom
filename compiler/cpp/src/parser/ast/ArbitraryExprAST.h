@@ -4,19 +4,16 @@
 // Created by Marc on 09.05.2021.
 //
 
-#ifndef COMPILER_ARBITRARYEXPRAST_H
-#define COMPILER_ARBITRARYEXPRAST_H
+#pragma once
 
 #include <string>
 #include <utility>
-#include "ExprAST.h"
+#include "ContentBlockExprAST.h"
 
-class ArbitraryExprAST : public ExprAST {
+class ArbitraryExprAST : public ContentBlockExprAST {
 private:
-    std::string Value;
+    std::string value;
 public:
-    explicit ArbitraryExprAST(std::string value): Value(std::move(value)) {}
-    std::string GetValue() const;
+    explicit ArbitraryExprAST(std::string value): ContentBlockExprAST(ContentBlockExprAST::Type::ARBITRARY_EXPR), value(std::move(value)) {}
+    std::string getValue() const;
 };
-
-#endif //COMPILER_ARBITRARYEXPRAST_H

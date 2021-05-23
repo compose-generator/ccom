@@ -4,11 +4,9 @@
 // Created by Marc on 14.05.2021.
 //
 
-#ifndef COMPILER_INTERPRETER_H
-#define COMPILER_INTERPRETER_H
+#pragma once
 
 #include <string>
-#include "../parser/ast/ExprAST.h"
 #include "../analyzer/analyzer.h"
 
 using json = nlohmann::json;
@@ -16,12 +14,11 @@ using json = nlohmann::json;
 std::string interpretInput(bool, const std::string&, const std::string&, const std::string&,
                          const std::string&, const std::string&);
 
-std::string getOutput(bool, ExprAST*, const json&);
-std::string getOutputOfContent(ExprAST*, const json&);
+std::string getOutput(bool, TopLevelExprAST*, const json&);
+std::string getOutputOfContent(ContentExprAST*, const json&);
 std::string getOutputOfArbitrarySection(ArbitraryExprAST*);
 std::string getOutputOfRelevantSection(SectionExprAST*, const json&);
-bool evaluateStmtList(ExprAST *ast, const json &data);
+bool evaluateStmtList(StmtLstExprAST *ast, const json &data);
 bool evaluateHasStatement(HasStmtExprAST*, const json&);
 bool evaluateCompStatement(CompStmtExprAST*, const json&);
-
-#endif //COMPILER_INTERPRETER_H
+template <typename T> bool evaluateCondition(T, T, Operator);

@@ -4,17 +4,14 @@
 // Created by Marc on 04.05.2021.
 //
 
-#ifndef COMPILER_NUMBEREXPRAST_H
-#define COMPILER_NUMBEREXPRAST_H
+#pragma once
 
 #include "ValueExprAST.h"
 
 class NumberExprAST : public ValueExprAST {
 private:
-    int Value;
+    int value;
 public:
-    explicit NumberExprAST(int val): Value(val) {}
-    int GetValue() const;
+    explicit NumberExprAST(int val): ValueExprAST(ValueExprAST::Type::NUMBER_EXPR), value(val) {}
+    int getValue() const;
 };
-
-#endif //COMPILER_NUMBEREXPRAST_H
