@@ -50,13 +50,18 @@ public class FileReaderTest {
     @DisplayName("Max look ahead is less than 1")
     public void testMaxLookAheadLessThan1() {
         // Initialize
-        int maxLookAhead = 0;
-        String file = "\n";
+        String file = "testfile";
 
         try {
-            new FileReader(file, maxLookAhead);
+            new FileReader(file, 0);
         } catch (MaxLookAheadError err) {
             assertThat(err.getMessage()).isEqualTo("Max look ahead was 0 but must be greater than 0");
+        }
+
+        try {
+            new FileReader(file, -10);
+        } catch (MaxLookAheadError err) {
+            assertThat(err.getMessage()).isEqualTo("Max look ahead was -10 but must be greater than 0");
         }
     }
 
