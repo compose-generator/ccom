@@ -10,10 +10,9 @@ import (
 	"strings"
 )
 
-// -------------------------------------------------- Public functions --------------------------------------------------
-
-func ProcessInput(
+func processInput(
 	fileInput string,
+	compiler string,
 	blockCommentCharsOpen string,
 	blockCommentCharsClose string,
 	dataInput string,
@@ -28,7 +27,7 @@ func ProcessInput(
 	if !silentFlag {
 		fmt.Print("Analyzing inputs ... ")
 	}
-	analyze(&fileInput, &dataInput, lang, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose, modeSingle)
+	analyze(&fileInput, &dataInput, &compiler, lang, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose, modeSingle)
 	if !silentFlag {
 		fmt.Println("done")
 	}
@@ -37,7 +36,17 @@ func ProcessInput(
 	if !silentFlag {
 		fmt.Print("Compiling ... ")
 	}
-	result := util.ExecuteAndWaitWithOutput("./ccomc", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+
+	var result string
+	switch compiler {
+	case "cpp", "c++":
+		result = util.ExecuteAndWaitWithOutput("./ccomc", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+	case "java":
+		result = util.ExecuteAndWaitWithOutput("./ccomc-java.jar", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+	default:
+		log.Fatal("Invalid compiler name. Only 'cpp' and 'java' are allowed values.")
+	}
+
 	if !silentFlag {
 		fmt.Println("done")
 	}
@@ -61,11 +70,10 @@ func ProcessInput(
 	}
 }
 
-// ------------------------------------------------- Private functions --------------------------------------------------
-
 func analyze(
 	fileInput *string,
 	dataInput *string,
+	compiler *string,
 	lang string,
 	lineCommentChars *string,
 	blockCommentCharsOpen *string,
@@ -75,6 +83,9 @@ func analyze(
 	// Ensure value of input data
 	if *dataInput == "" {
 		*dataInput = "{}"
+	}
+	if *compiler == "" {
+		*compiler = "cpp"
 	}
 	if lang != "" {
 		*lineCommentChars, *blockCommentCharsOpen, *blockCommentCharsClose = getCommentCharsFromLang(lang)
