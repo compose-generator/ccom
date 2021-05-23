@@ -232,13 +232,9 @@ Token consumeStringLiteral() {
     expect('"');
     std::stringstream stringStr;
     while(curChar != '"' && curChar != EOF) {
-        if (curChar == '\\') {
-            stringStr << (char) advance();
-            advance();
-        } else {
-            stringStr << (char) curChar;
-            advance();
-        }
+        if (curChar == '\\') advance();
+        stringStr << (char) curChar;
+        advance();
     }
     expect('"');
     return Token(TOK_STRING, stringStr.str(), lineNum, colNum);
