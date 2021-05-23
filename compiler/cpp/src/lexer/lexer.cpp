@@ -245,23 +245,19 @@ Token consumeStringLiteral() {
 }
 
 bool isLookaheadPayloadCommentChars() {
-    return !payloadCommentChars.empty()
-        && getLookahead().substr(0, payloadCommentChars.length()) == payloadCommentChars;
+    return !payloadCommentChars.empty() && getLookahead().find(payloadCommentChars) == 0;
 }
 
 bool isLookaheadLineCommentChars() {
-    return !lineCommentChars.empty()
-        && getLookahead().substr(0, lineCommentChars.length()) == lineCommentChars;
+    return !lineCommentChars.empty() && getLookahead().find(lineCommentChars) == 0;
 }
 
 bool isLookaheadBlockCommentCharOpen() {
-    return !blockCommentCharsOpen.empty()
-        && getLookahead().substr(0, blockCommentCharsOpen.length()) == blockCommentCharsOpen;
+    return !blockCommentCharsOpen.empty() && getLookahead().find(blockCommentCharsOpen) == 0;
 }
 
 bool isLookaheadBlockCommentCharClose() {
-    return !blockCommentCharsClose.empty()
-        && getLookahead().substr(0, blockCommentCharsClose.length()) == blockCommentCharsClose;
+    return !blockCommentCharsClose.empty() && getLookahead().find(blockCommentCharsClose) == 0;
 }
 
 bool isLookaheadBlockCommentCharCloseWithBrace() {
