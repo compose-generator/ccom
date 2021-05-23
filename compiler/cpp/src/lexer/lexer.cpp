@@ -7,41 +7,41 @@
 #include "lexer.h"
 
 // CommentChars, built from user input
-std::string LineCommentChars;
-std::string BlockCommentCharsOpen;
-std::string BlockCommentCharsClose;
-std::string PayloadCommentChars;
-unsigned int MaxLookahead;
+std::string lineCommentChars;
+std::string blockCommentCharsOpen;
+std::string blockCommentCharsClose;
+std::string payloadCommentChars;
+unsigned int maxLookahead;
 
 // Input data to be worked with
-std::string FileInput;
-int InputStringPos = 0;
-int CurrentChar = 0;
-unsigned int LineNum = 1;
-unsigned int ColNum = 0;
+std::string fileInput;
+int inputStringPos = 0;
+int curChar = 0;
+unsigned int lineNum = 1;
+unsigned int colNum = 0;
 
 Context currentContext = ARBITRARY; // Default ARBITRARY
 
 int advance() {
     // Return EOF, when string ends
-    if (InputStringPos >= FileInput.length() - 1)
-        return CurrentChar = EOF;
-    InputStringPos++;
-    ColNum++;
-    return CurrentChar = (unsigned char) FileInput[InputStringPos];
+    if (inputStringPos >= fileInput.length() - 1)
+        return curChar = EOF;
+    inputStringPos++;
+    colNum++;
+    return curChar = (unsigned char) fileInput[inputStringPos];
 }
 
 void expect(int input) {
-    if (CurrentChar != input)
+    if (curChar != input)
         throw std::runtime_error("Expected '" + std::string(1, (char) input) + "', but got '"
-                                 + std::string(1, (char) CurrentChar) +"' at L"
-                                 + std::to_string(LineNum) + "C" + std::to_string(ColNum));
+                                 + std::string(1, (char) curChar) + "' at L"
+                                 + std::to_string(lineNum) + "C" + std::to_string(colNum));
     advance();
 }
 
 std::string getLookahead() {
-    int length = std::min((int) FileInput.length() - InputStringPos, (int) MaxLookahead);
-    return FileInput.substr(InputStringPos, length);
+    int length = std::min((int) fileInput.length() - inputStringPos, (int) maxLookahead);
+    return fileInput.substr(inputStringPos, length);
 }
 
 Token getTok() {
@@ -49,7 +49,7 @@ Token getTok() {
     skipWhitespaces();
 
     // Check for EOF
-    if (isEOF()) return Token(TOK_EOF, LineNum, ColNum);
+    if (isEOF()) return Token(TOK_EOF, lineNum, colNum);
 
     // Are we in arbitrary context?
     if (currentContext == ARBITRARY) {
@@ -61,96 +61,112 @@ Token getTok() {
     // Are we in payload context?
     if (currentContext == PAYLOAD) return consumePayload();
 
+    // Is it a conditional comment identifier?
+    std::string laResult;
+    if (isLookaheadLineCommentChars()) {
+        // Consume lineCommentChars
+        for (int i = 0; i < lineCommentChars.length(); i++) advance();
+        // Update context
+        currentContext = SECTION;
+        return Token(TOK_COM_LINE_IDEN, lineNum, colNum);
+    } else if (isLookaheadPayloadCommentChars()) {
+        // Consume payloadCommentChars
+        for (int i = 0; i < payloadCommentChars.length(); i++) advance();
+        return Token(TOK_COM_IDEN_PAYLOAD, lineNum, colNum);
+    } else if (isLookaheadBlockCommentCharOpen()) {
+        // Consume blockCommentCharsOpen
+        for (int i = 0; i < blockCommentCharsOpen.length(); i++) advance();
+        // Update context
+        currentContext = SECTION;
+        return Token(TOK_COM_BLOCK_IDEN_OPEN, lineNum, colNum);
+    } else if (isLookaheadBlockCommentCharClose()) {
+        // Consume blockCommentCharsClose
+        for (int i = 0; i < blockCommentCharsClose.length(); i++) advance();
+        // Update context
+        currentContext = ARBITRARY;
+        return Token(TOK_COM_BLOCK_IDEN_CLOSE, lineNum, colNum);
+    }
+
     // Is it a primitive char, that can be returned immediately?
-    switch (CurrentChar) {
+    switch (curChar) {
         case '.': {
             expect('.');
-            return Token(TOK_DOT, LineNum, ColNum);
+            return Token(TOK_DOT, lineNum, colNum);
         }
         case '{': {
             expect('{');
             currentContext = PAYLOAD;
-            return Token(TOK_BRACE_OPEN, LineNum, ColNum);
+            return Token(TOK_BRACE_OPEN, lineNum, colNum);
         }
         case '}': {
             expect('}');
             if (!isLookaheadBlockCommentCharClose())
                 currentContext = ARBITRARY;
-            return Token(TOK_BRACE_CLOSE, LineNum, ColNum);
+            return Token(TOK_BRACE_CLOSE, lineNum, colNum);
         }
         case '[': {
             expect('[');
             std::string idx = consumeNumber();
             expect(']');
-            return Token(TOK_INDEX, idx, LineNum, ColNum);
+            return Token(TOK_INDEX, idx, lineNum, colNum);
         }
         case '|': {
             expect('|');
-            return Token(TOK_OR, LineNum, ColNum);
+            return Token(TOK_OR, lineNum, colNum);
         }
         case '!': { // !=
             expect('!');
             expect('=');
-            return Token(TOK_NOT_EQUALS, LineNum, ColNum);
+            return Token(TOK_NOT_EQUALS, lineNum, colNum);
         }
         case '=': { // ==
             expect('=');
             expect('=');
-            return Token(TOK_EQUALS, LineNum, ColNum);
+            return Token(TOK_EQUALS, lineNum, colNum);
+        }
+        case '<': { // < or <=
+            expect('<');
+            if (curChar == '=') {
+                expect('=');
+                return Token(TOK_LESS_EQUAL, lineNum, colNum);
+            }
+            return Token(TOK_LESS, lineNum, colNum);
+        }
+        case '>': { // > or >=
+            expect('>');
+            if (curChar == '=') {
+                expect('=');
+                return Token(TOK_GREATER_EQUAL, lineNum, colNum);
+            }
+            return Token(TOK_GREATER, lineNum, colNum);
         }
         case '"': { // String literal
             return consumeStringLiteral();
         }
         default: {
             // Is it a char array?
-            if (isalpha(CurrentChar)) return consumeIdentifierOrKeyword();
+            if (isalpha(curChar)) return consumeIdentifierOrKeyword();
 
             // Is it an integer?
-            if (isdigit(CurrentChar)) return Token(TOK_NUMBER, consumeNumber(), LineNum, ColNum);
-
-            // Is it a conditional comment identifier?
-            std::string laResult;
-            if (isLookaheadLineCommentChars()) {
-                // Consume LineCommentChars
-                for (int i = 0; i < LineCommentChars.length(); i++) advance();
-                // Update context
-                currentContext = SECTION;
-                return Token(TOK_COM_LINE_IDEN, LineNum, ColNum);
-            } else if (isLookaheadPayloadCommentChars()) {
-                // Consume PayloadCommentChars
-                for (int i = 0; i < PayloadCommentChars.length(); i++) advance();
-                return Token(TOK_COM_IDEN_PAYLOAD, LineNum, ColNum);
-            } else if (isLookaheadBlockCommentCharOpen()) {
-                // Consume BlockCommentCharsOpen
-                for (int i = 0; i < BlockCommentCharsOpen.length(); i++) advance();
-                // Update context
-                currentContext = SECTION;
-                return Token(TOK_COM_BLOCK_IDEN_OPEN, LineNum, ColNum);
-            } else if (isLookaheadBlockCommentCharClose()) {
-                // Consume BlockCommentCharsClose
-                for (int i = 0; i < BlockCommentCharsClose.length(); i++) advance();
-                // Update context
-                currentContext = ARBITRARY;
-                return Token(TOK_COM_BLOCK_IDEN_CLOSE, LineNum, ColNum);
-            }
+            if (isdigit(curChar)) return Token(TOK_NUMBER, consumeNumber(), lineNum, colNum);
         }
     }
 
     // Otherwise, just return the character as its ascii value.
-    Token result = Token(TOK_UNKNOWN, std::string(1, (char) CurrentChar), LineNum, ColNum);
+    Token result = Token(TOK_UNKNOWN, std::string(1, (char) curChar), lineNum, colNum);
     advance();
     return result;
 }
 
 bool isEOF() {
-    return CurrentChar == EOF;
+    return curChar == EOF;
 }
 
 void skipWhitespaces() {
-    while (isspace(CurrentChar)) {
-        if (CurrentChar == '\n') {
-            ColNum = -1;
-            LineNum++;
+    while (isspace(curChar)) {
+        if (curChar == '\n') {
+            colNum = -1;
+            lineNum++;
         }
         advance();
     }
@@ -159,111 +175,111 @@ void skipWhitespaces() {
 Token consumeArbitrary() {
     std::stringstream arbitraryStr;
     while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharOpen() && !isEOF()) {
-        if (CurrentChar == '\n') {
-            ColNum = -1;
-            LineNum++;
+        if (curChar == '\n') {
+            colNum = -1;
+            lineNum++;
         }
-        arbitraryStr << (char) CurrentChar;
+        arbitraryStr << (char) curChar;
         advance();
     }
     currentContext = SECTION;
-    return Token(TOK_ARBITRARY, arbitraryStr.str(), LineNum, ColNum);
+    return Token(TOK_ARBITRARY, arbitraryStr.str(), lineNum, colNum);
 }
 
 Token consumePayload() {
     std::stringstream payloadStr;
     while(!isLookaheadLineCommentChars() && !isLookaheadBlockCommentCharCloseWithBrace() && !isEOF()) {
-        if (CurrentChar == '\n') {
-            ColNum = -1;
-            LineNum++;
+        if (curChar == '\n') {
+            colNum = -1;
+            lineNum++;
         } else if (isLookaheadPayloadCommentChars()) {
-            // Consume PayloadCommentChars
-            for (int i = 0; i < PayloadCommentChars.length(); i++) advance();
+            // Consume payloadCommentChars
+            for (int i = 0; i < payloadCommentChars.length(); i++) advance();
         }
-        payloadStr << (char) CurrentChar;
+        payloadStr << (char) curChar;
         advance();
     }
     currentContext = SECTION;
-    return Token(TOK_ARBITRARY, payloadStr.str(), LineNum, ColNum);
+    return Token(TOK_ARBITRARY, payloadStr.str(), lineNum, colNum);
 }
 
 std::string consumeNumber() {
     std::stringstream numStr;
     do {
-        numStr << (char) CurrentChar;
+        numStr << (char) curChar;
         advance();
-    } while (isdigit(CurrentChar));
+    } while (isdigit(curChar));
     return numStr.str();
 }
 
 Token consumeIdentifierOrKeyword() {
     std::stringstream identifierStr;
-    identifierStr << (char) CurrentChar;
+    identifierStr << (char) curChar;
     while (isalnum(advance())) // [a-zA-Z0-9]*
-        identifierStr << (char) CurrentChar;
+        identifierStr << (char) curChar;
 
     // Is keyword?
     std::string identifierName = identifierStr.str();
-    if (identifierName == "if") return Token(TOK_IF, LineNum, ColNum);
-    if (identifierName == "has") return Token(TOK_HAS, LineNum, ColNum);
-    if (identifierName == "not") return Token(TOK_NOT, LineNum, ColNum);
-    if (identifierName == "true") return Token(TOK_TRUE, LineNum, ColNum);
-    if (identifierName == "false") return Token(TOK_FALSE, LineNum, ColNum);
-    return Token(TOK_IDENTIFIER, identifierName, LineNum, ColNum);
+    if (identifierName == "if") return Token(TOK_IF, lineNum, colNum);
+    if (identifierName == "has") return Token(TOK_HAS, lineNum, colNum);
+    if (identifierName == "not") return Token(TOK_NOT, lineNum, colNum);
+    if (identifierName == "true") return Token(TOK_TRUE, lineNum, colNum);
+    if (identifierName == "false") return Token(TOK_FALSE, lineNum, colNum);
+    return Token(TOK_IDENTIFIER, identifierName, lineNum, colNum);
 }
 
 Token consumeStringLiteral() {
     expect('"');
     std::stringstream stringStr;
-    while(CurrentChar != '"' && CurrentChar != EOF) {
-        if (CurrentChar == '\\') {
+    while(curChar != '"' && curChar != EOF) {
+        if (curChar == '\\') {
             stringStr << (char) advance();
             advance();
         } else {
-            stringStr << (char) CurrentChar;
+            stringStr << (char) curChar;
             advance();
         }
     }
     expect('"');
-    return Token(TOK_STRING, stringStr.str(), LineNum, ColNum);
+    return Token(TOK_STRING, stringStr.str(), lineNum, colNum);
 }
 
 bool isLookaheadPayloadCommentChars() {
-    return !PayloadCommentChars.empty()
-        && getLookahead().substr(0, PayloadCommentChars.length()) == PayloadCommentChars;
+    return !payloadCommentChars.empty()
+        && getLookahead().substr(0, payloadCommentChars.length()) == payloadCommentChars;
 }
 
 bool isLookaheadLineCommentChars() {
-    return !LineCommentChars.empty()
-        && getLookahead().substr(0, LineCommentChars.length()) == LineCommentChars;
+    return !lineCommentChars.empty()
+        && getLookahead().substr(0, lineCommentChars.length()) == lineCommentChars;
 }
 
 bool isLookaheadBlockCommentCharOpen() {
-    return !BlockCommentCharsOpen.empty()
-        && getLookahead().substr(0, BlockCommentCharsOpen.length()) == BlockCommentCharsOpen;
+    return !blockCommentCharsOpen.empty()
+        && getLookahead().substr(0, blockCommentCharsOpen.length()) == blockCommentCharsOpen;
 }
 
 bool isLookaheadBlockCommentCharClose() {
-    return !BlockCommentCharsClose.empty()
-        && getLookahead().substr(0, BlockCommentCharsClose.length()) == BlockCommentCharsClose;
+    return !blockCommentCharsClose.empty()
+        && getLookahead().substr(0, blockCommentCharsClose.length()) == blockCommentCharsClose;
 }
 
 bool isLookaheadBlockCommentCharCloseWithBrace() {
-    return !BlockCommentCharsClose.empty()
-           && getLookahead().substr(0, BlockCommentCharsClose.length() +1) == "}" + BlockCommentCharsClose;
+    return !blockCommentCharsClose.empty()
+           && getLookahead().substr(0, blockCommentCharsClose.length() + 1) == "}" + blockCommentCharsClose;
 }
 
-void initLexer(bool isSingleStatement, const std::string& fileInput, const std::string& lineCommentChars,
-               const std::string& blockCommentCharsOpen, const std::string& blockCommentCharsClose) {
-    FileInput = fileInput;
+void initLexer(bool isSingleStatement, const std::string& inputFileInput, const std::string& inputLineCommentChars,
+               const std::string& inputBlockCommentCharsOpen, const std::string& inputBlockCommentCharsClose) {
+    fileInput = inputFileInput;
 
     // Build conditional comment chars, based on comment chars input
-    LineCommentChars = lineCommentChars.empty() ? "" : lineCommentChars + "?";
-    BlockCommentCharsOpen = blockCommentCharsOpen.empty() ? "" : blockCommentCharsOpen + "?";
-    BlockCommentCharsClose = blockCommentCharsClose;
-    PayloadCommentChars = lineCommentChars;
-    MaxLookahead = std::max({LineCommentChars.length(), BlockCommentCharsOpen.length(),
-                             BlockCommentCharsClose.length(), PayloadCommentChars.length()}) +1;
+    lineCommentChars = inputLineCommentChars.empty() ? "" : inputLineCommentChars + "?";
+    blockCommentCharsOpen = inputBlockCommentCharsOpen.empty() ? "" : inputBlockCommentCharsOpen + "?";
+    blockCommentCharsClose = inputBlockCommentCharsClose;
+    payloadCommentChars = inputLineCommentChars;
+    maxLookahead = std::max({lineCommentChars.length(), blockCommentCharsOpen.length(),
+                             blockCommentCharsClose.length(), payloadCommentChars.length()}) + 1;
     currentContext = isSingleStatement ? SECTION : ARBITRARY;
 
     // Load first char into the buffer

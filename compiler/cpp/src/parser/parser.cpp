@@ -83,6 +83,18 @@ std::unique_ptr<CompStmtExprAST> parseCompStmt() {
         case TOK_NOT_EQUALS:
             op = OP_NOT_EQUALS;
             break;
+        case TOK_GREATER:
+            op = OP_GREATER;
+            break;
+        case TOK_LESS:
+            op = OP_LESS;
+            break;
+        case TOK_GREATER_EQUAL:
+            op = OP_GREATER_EQUAL;
+            break;
+        case TOK_LESS_EQUAL:
+            op = OP_LESS_EQUAL;
+            break;
         default:
             throw std::runtime_error("Unknown comparison operator at " + curTok.getCodePos());
     }

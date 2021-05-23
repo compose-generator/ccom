@@ -114,39 +114,41 @@ bool evaluateCompStatement(CompStmtExprAST* compStmt, const json& data) {
     json keyValue = getJsonValueFromKey(compStmt->getKey(), data);
     Operator op = compStmt->getOperator();
     if (keyValue.is_string()) {
-        auto actualValue = keyValue.get<std::string>();
+        auto leftValue = keyValue.get<std::string>();
         if (compStmt->getValue()->getType() == ValueExprAST::STRING_EXPR) {
-            auto *expectedValue = static_cast<StringExprAST*>(compStmt->getValue().get());
-            return evaluateCondition(actualValue, expectedValue->getValue(), op);
+            auto *rightValue = static_cast<StringExprAST*>(compStmt->getValue().get());
+            return evaluateCondition(leftValue, rightValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out
-        throw std::runtime_error("Internal compiler error - JSON actualValue was string and hardcoded was not");
+        throw std::runtime_error("Internal compiler error - left value was string and right was not");
     } else if (keyValue.is_boolean()) {
-        auto actualValue = keyValue.get<bool>();
+        auto leftValue = keyValue.get<bool>();
         if (compStmt->getValue()->getType() == ValueExprAST::BOOLEAN_EXPR) {
-            auto *expectedValue = static_cast<BooleanExprAST*>(compStmt->getValue().get());
-            return evaluateCondition(actualValue, expectedValue->getValue(), op);
+            auto *rightValue = static_cast<BooleanExprAST*>(compStmt->getValue().get());
+            return evaluateCondition(leftValue, rightValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out
-        throw std::runtime_error("Internal compiler error - JSON actualValue was boolean and hardcoded was not");
+        throw std::runtime_error("Internal compiler error - left value was boolean and right was not");
     } else if (keyValue.is_number_integer()) {
-        auto actualValue = keyValue.get<int>();
+        auto leftValue = keyValue.get<int>();
         if (compStmt->getValue()->getType() == ValueExprAST::NUMBER_EXPR) {
-            auto* expectedValue = static_cast<NumberExprAST*>(compStmt->getValue().get());
-            return evaluateCondition(actualValue, expectedValue->getValue(), op);
+            auto* rightValue = static_cast<NumberExprAST*>(compStmt->getValue().get());
+            return evaluateCondition(leftValue, rightValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out
-        throw std::runtime_error("Internal compiler error - JSON actualValue was int and hardcoded was not");
+        throw std::runtime_error("Internal compiler error - left value was int and right was not");
     }
     throw std::runtime_error("Unknown datatype of '" + keyValue.dump() + "'");
 }
 
-template <typename T> bool evaluateCondition(T expectedValue, T actualValue, Operator op) {
+template <typename T> bool evaluateCondition(T leftValue, T rightValue, Operator op) {
     switch (op) {
-        case OP_EQUALS:
-            return actualValue == expectedValue;
-        case OP_NOT_EQUALS:
-            return actualValue != expectedValue;
+        case OP_EQUALS: return leftValue == rightValue;
+        case OP_NOT_EQUALS: return leftValue != rightValue;
+        case OP_GREATER: return leftValue > rightValue;
+        case OP_LESS: return leftValue < rightValue;
+        case OP_GREATER_EQUAL: return leftValue >= rightValue;
+        case OP_LESS_EQUAL: return leftValue <= rightValue;
     }
 }
 
