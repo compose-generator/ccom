@@ -1,8 +1,8 @@
 package com.c.lexer;
 
-public class InvalidSectionException extends Exception {
+public class UnknownCharException extends Exception {
 
-    public InvalidSectionException(char next) {
+    public UnknownCharException(char next) {
         super("Read an invalid char that cannot be processed to a valid Token: " + next);
     }
 

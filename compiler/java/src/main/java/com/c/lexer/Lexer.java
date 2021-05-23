@@ -144,7 +144,7 @@ public class Lexer {
      * @param t expected Token (to compare the next Token against)
      * @throws UnexpectedTokenException if the next Token ís not equal to the expected Token
      */
-    public void expect(Token t) throws UnexpectedTokenException, UnexpectedCharException, InvalidSectionException {
+    public void expect(Token t) throws UnexpectedTokenException, UnexpectedCharException, UnknownCharException {
         if (!nextToken.equals(t))
             throw new UnexpectedTokenException(t, nextToken, reader.toPosString());
         advance();
@@ -158,9 +158,9 @@ public class Lexer {
      *
      * @return the next token
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
-     * @throws InvalidSectionException if a char cannot be processed to a valid Token
+     * @throws UnknownCharException if a char cannot be processed to a valid Token
      */
-    public Token advance() throws InvalidSectionException, UnexpectedCharException {
+    public Token advance() throws UnknownCharException, UnexpectedCharException {
         char nextChar = reader.lookAhead();
 
         // SKip whitespaces
@@ -226,9 +226,9 @@ public class Lexer {
      *
      * @return a Token describing part of the conditional comments section, e.g. an "if" identifier
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
-     * @throws InvalidSectionException if a char cannot be processed to a valid Token
+     * @throws UnknownCharException if a char cannot be processed to a valid Token
      */
-    private Token consumeSection() throws UnexpectedCharException, InvalidSectionException {
+    private Token consumeSection() throws UnexpectedCharException, UnknownCharException {
         String nextChars = Arrays.toString(reader.lookAheads());
 
         if (isEOF()) return consumeEOF();
@@ -264,7 +264,7 @@ public class Lexer {
         if (isLookAheadCommentBlockCloseIdentifier()) return consumeCommentBlockCloseIdentifier();
         if (isLookAheadCommentPayloadIdentifier()) return consumeCommentPayloadIdentifier();
 
-        throw new InvalidSectionException(reader.lookAhead());
+        throw new UnknownCharException(reader.lookAhead());
     }
 
 
