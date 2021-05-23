@@ -45,6 +45,7 @@ public class FileReaderTest {
         expectEOF(reader, maxLookAhead);
     }
 
+
     // --------------------------------------- Max look ahead ----------------------------------------------------------
     @Test
     @DisplayName("Max look ahead is less than 1")
@@ -63,6 +64,55 @@ public class FileReaderTest {
         } catch (MaxLookAheadError err) {
             assertThat(err.getMessage()).isEqualTo("Max look ahead was -10 but must be greater than 0");
         }
+    }
+
+    @Test
+    @DisplayName("Max look ahead of 1 and expect with one character")
+    public void testLookAheadMaxOneWithOneChar() throws UnexpectedCharError, MaxLookAheadError {
+        // Initialize
+        int maxLookAhead = 1;
+        String file = "{";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('{');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{'});
+        reader.expect('{');
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
+    @DisplayName("Max look ahead of 2 and expect with one character")
+    public void testLookAheadMaxTwoWithOneChar() throws UnexpectedCharError, MaxLookAheadError {
+        // Initialize
+        int maxLookAhead = 2;
+        String file = "{";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('{');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{', (char) -1});
+        reader.expect('{');
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
+    @DisplayName("Max look ahead of 1 and expect with two character")
+    public void testLookAheadMaxOneWithTwoChars() throws UnexpectedCharError, MaxLookAheadError {
+        // Initialize
+        int maxLookAhead = 1;
+        String file = "{a";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('{');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{'});
+        reader.expect('{');
+
+        assertThat(reader.lookAhead()).isEqualTo('a');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'a'});
+        reader.expect('a');
+
+        expectEOF(reader, maxLookAhead);
     }
 
 
