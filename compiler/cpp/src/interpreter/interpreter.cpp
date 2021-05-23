@@ -145,10 +145,10 @@ template <typename T> bool evaluateCondition(T leftValue, T rightValue, Operator
     switch (op) {
         case OP_EQUALS: return leftValue == rightValue;
         case OP_NOT_EQUALS: return leftValue != rightValue;
-        case OP_GREATER_THEN: return leftValue > rightValue;
-        case OP_LESS_THEN: return leftValue < rightValue;
-        case OP_GREATER_EQUALS: return leftValue >= rightValue;
-        case OP_LESS_EQUALS: return leftValue <= rightValue;
+        case OP_GREATER: return leftValue > rightValue;
+        case OP_LESS: return leftValue < rightValue;
+        case OP_GREATER_EQUAL: return leftValue >= rightValue;
+        case OP_LESS_EQUAL: return leftValue <= rightValue;
     }
 }
 
