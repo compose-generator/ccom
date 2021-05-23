@@ -52,6 +52,103 @@ public class FileReaderTest {
     // --------------------------------------- Look ahead + expect -----------------------------------------------------
 
     @Test
+    @DisplayName("Look ahead and expect with just one simple line break")
+    public void testLookAheadWithSimpleLineBreak() throws UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = "\n";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', (char) -1, (char) -1, (char) -1});
+        reader.expect('\n');
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
+    @DisplayName("Look ahead and expect with one character")
+    public void testLookAheadOneChar() throws UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = "{";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('{');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{', (char) -1, (char) -1, (char) -1});
+        reader.expect('{');
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
+    @DisplayName("Look ahead and expect with two characters")
+    public void testLookAheadTwoChars() throws UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = "{a";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('{');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{', 'a', (char) -1, (char) -1});
+        reader.expect('{');
+
+        assertThat(reader.lookAhead()).isEqualTo('a');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'a', (char) -1, (char) -1, (char) -1});
+        reader.expect('a');
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
+    @DisplayName("Look ahead and expect with two characters and simple line break")
+    public void testLookAheadTwoCharsWithSimpleLineBreak() throws UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = "/!\n";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('/');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'/', '!', '\n', (char) -1});
+        reader.expect('/');
+
+        assertThat(reader.lookAhead()).isEqualTo('!');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'!', '\n', (char) -1, (char) -1});
+        reader.expect('!');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', (char) -1, (char) -1, (char) -1});
+        reader.expect('\n');
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
+    @DisplayName("Look ahead and expect with two characters and carriage return + new line")
+    public void testLookAheadTwoCharsWithCarriageReturnAndNewLine() throws UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = "/!\r\n";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('/');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'/', '!', '\n', (char) -1});
+        reader.expect('/');
+
+        assertThat(reader.lookAhead()).isEqualTo('!');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'!', '\n', (char) -1, (char) -1});
+        reader.expect('!');
+
+        // Carriage return is omitted
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', (char) -1, (char) -1, (char) -1});
+        reader.expect('\n');
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
     @DisplayName("Look ahead and expect with multiple lines")
     public void testLookAheadMultipleLines() throws IOException, UnexpectedCharError {
         // Initialize

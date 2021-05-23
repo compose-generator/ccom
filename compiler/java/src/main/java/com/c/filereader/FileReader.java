@@ -72,6 +72,10 @@ public class FileReader {
 
         // Advance to load first characters into buffer
         readNextLine();
+        // even if EOF is reached when having read just one line
+        // we need to add the next chars in the advance() call
+        // afterwards: hasReachedEof is set with the next readNextLine() call
+        hasHeadReachedEof = false;
         for (int i = 0; i < maxLookAhead; i++) {
             advanceHead();
         }
