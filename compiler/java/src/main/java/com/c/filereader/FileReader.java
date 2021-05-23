@@ -69,7 +69,10 @@ public class FileReader {
      *
      * @param file the input file as a string
      */
-    public FileReader(String file, int maxLookAhead) {
+    public FileReader(String file, int maxLookAhead) throws MaxLookAheadError {
+        if (maxLookAhead < 1)
+            throw new MaxLookAheadError(maxLookAhead);
+
         this.file = file.chars().iterator();
         this.nextChars = new LimitedQueue<>(maxLookAhead);
         // we take the worst case length here (if every line contained only a single character)

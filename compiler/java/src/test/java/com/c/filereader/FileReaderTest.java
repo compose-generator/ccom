@@ -27,7 +27,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("EOF in empty file")
-    public void testEmptyFile() throws UnexpectedCharError {
+    public void testEmptyFile() throws UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = "";
@@ -45,12 +45,27 @@ public class FileReaderTest {
         expectEOF(reader, maxLookAhead);
     }
 
+    // --------------------------------------- Max look ahead ----------------------------------------------------------
+    @Test
+    @DisplayName("Max look ahead is less than 1")
+    public void testMaxLookAheadLessThan1() {
+        // Initialize
+        int maxLookAhead = 0;
+        String file = "\n";
+
+        try {
+            new FileReader(file, maxLookAhead);
+        } catch (MaxLookAheadError err) {
+            assertThat(err.getMessage()).isEqualTo("Max look ahead was 0 but must be greater than 0");
+        }
+    }
+
 
     // --------------------------------------- Look ahead + expect -----------------------------------------------------
 
     @Test
     @DisplayName("Look ahead and expect with just one simple line break")
-    public void testLookAheadWithSimpleLineBreak() throws UnexpectedCharError {
+    public void testLookAheadWithSimpleLineBreak() throws UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = "\n";
@@ -65,7 +80,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Look ahead and expect with one character")
-    public void testLookAheadOneChar() throws UnexpectedCharError {
+    public void testLookAheadOneChar() throws UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = "{";
@@ -80,7 +95,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Look ahead and expect with two characters")
-    public void testLookAheadTwoChars() throws UnexpectedCharError {
+    public void testLookAheadTwoChars() throws UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = "{a";
@@ -99,7 +114,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Look ahead and expect with two characters and simple line break")
-    public void testLookAheadTwoCharsWithSimpleLineBreak() throws UnexpectedCharError {
+    public void testLookAheadTwoCharsWithSimpleLineBreak() throws UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = "/!\n";
@@ -122,7 +137,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Look ahead and expect with two characters and carriage return + new line")
-    public void testLookAheadTwoCharsWithCarriageReturnAndNewLine() throws UnexpectedCharError {
+    public void testLookAheadTwoCharsWithCarriageReturnAndNewLine() throws UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = "/!\r\n";
@@ -147,7 +162,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Look ahead and epxect with multiple lines")
-    public void testLookAheadMultipleLines() throws IOException, UnexpectedCharError {
+    public void testLookAheadMultipleLines() throws IOException, UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
@@ -189,7 +204,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Exception msg on unexpected char at the beginning")
-    public void testPositionOnUnexpectedCharBeginning() throws IOException {
+    public void testPositionOnUnexpectedCharBeginning() throws IOException, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
@@ -207,7 +222,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Exception msg on unexpected char in the middle.")
-    public void testPositionOnUnexpectedCharMiddle() throws IOException, UnexpectedCharError {
+    public void testPositionOnUnexpectedCharMiddle() throws IOException, UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
@@ -230,7 +245,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Exception msg on unexpected char at the end")
-    public void testPositionOnUnexpectedCharEnd() throws IOException, UnexpectedCharError {
+    public void testPositionOnUnexpectedCharEnd() throws IOException, UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
@@ -259,7 +274,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Position msg with caret with just one simple line break")
-    public void testPosMsgWithCaretSimpleLineBreak() throws UnexpectedCharError {
+    public void testPosMsgWithCaretSimpleLineBreak() throws UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = "\n";
@@ -279,7 +294,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Position msg with caret with one character")
-    public void testPosMsgWithCaretOneChar() throws UnexpectedCharError {
+    public void testPosMsgWithCaretOneChar() throws UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = "{";
@@ -299,7 +314,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Position msg with multiples advances after EOF")
-    public void testPosMsgWithCaretWithMultiplesAdvancesAfterEOF() throws UnexpectedCharError, IOException {
+    public void testPosMsgWithCaretWithMultiplesAdvancesAfterEOF() throws UnexpectedCharError, IOException, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
@@ -330,7 +345,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Position msg with caret at the beginning")
-    public void testPositionMsgWithCaretBeginning() throws IOException {
+    public void testPositionMsgWithCaretBeginning() throws IOException, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
@@ -344,7 +359,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Position msg with caret in the middle.")
-    public void testPositionMsgWithCaretMiddle() throws IOException, UnexpectedCharError {
+    public void testPositionMsgWithCaretMiddle() throws IOException, UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
@@ -363,7 +378,7 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Position msg with caret at the end")
-    public void testPositionMsgWithCaretEnd() throws IOException, UnexpectedCharError {
+    public void testPositionMsgWithCaretEnd() throws IOException, UnexpectedCharError, MaxLookAheadError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
