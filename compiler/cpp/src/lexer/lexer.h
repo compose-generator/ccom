@@ -12,6 +12,7 @@
 #include <iostream>
 #include <sstream>
 #include "Token.h"
+#include "../exception/UnexpectedCharException.h"
 
 enum Context {
     ARBITRARY, // Before / after conditional section

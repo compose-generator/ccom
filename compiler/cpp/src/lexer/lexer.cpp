@@ -33,9 +33,7 @@ int advance() {
 
 void expect(int input) {
     if (curChar != input)
-        throw std::runtime_error("Expected '" + std::string(1, (char) input) + "', but got '"
-                                 + std::string(1, (char) curChar) + "' at L"
-                                 + std::to_string(lineNum) + "C" + std::to_string(colNum));
+        throw UnexpectedCharException((char) input, (char) curChar, lineNum, colNum);
     advance();
 }
 
@@ -152,10 +150,8 @@ Token getTok() {
         }
     }
 
-    // Otherwise, just return the character as its ascii value.
-    Token result = Token(TOK_UNKNOWN, std::string(1, (char) curChar), lineNum, colNum);
-    advance();
-    return result;
+    // Otherwise, throw an exception
+    throw UnexpectedCharException((char) curChar, lineNum, colNum);
 }
 
 bool isEOF() {

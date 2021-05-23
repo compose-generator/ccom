@@ -55,7 +55,9 @@ add_executable(compiler
         src/analyzer/analyzer.cpp
         src/analyzer/analyzer.h
         src/interpreter/interpreter.cpp
-        src/interpreter/interpreter.h)
+        src/interpreter/interpreter.h
+        src/exception/UnexpectedCharException.cpp
+        src/exception/UnexpectedCharException.h)
 
 include(FetchContent)
 

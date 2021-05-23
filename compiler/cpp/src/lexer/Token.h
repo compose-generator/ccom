@@ -24,9 +24,6 @@ public:
 };
 
 enum TokenType {
-    // Unknown token type
-    TOK_UNKNOWN,
-
     // End of file
     TOK_EOF,
 
