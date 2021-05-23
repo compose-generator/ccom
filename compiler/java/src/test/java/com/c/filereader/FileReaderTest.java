@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileReaderTest {
 
-    // ---------------------------------------- Util -------------------------------------------------------------------
+    // ---------------------------------------- EOF  -------------------------------------------------------------------
 
     /**
      * Checks that EOF is reached.
@@ -24,9 +24,6 @@ public class FileReaderTest {
         Arrays.fill(bufferExpect, (char) -1);
         assertThat(reader.lookAheads()).isEqualTo(bufferExpect);
     }
-
-
-    // ---------------------------------------- EOF --------------------------------------------------------------------
 
     @Test
     @DisplayName("EOF in empty file")
@@ -149,7 +146,7 @@ public class FileReaderTest {
     }
 
     @Test
-    @DisplayName("Look ahead and expect with multiple lines")
+    @DisplayName("Look ahead and epxect with multiple lines")
     public void testLookAheadMultipleLines() throws IOException, UnexpectedCharError {
         // Initialize
         int maxLookAhead = 4;
@@ -188,11 +185,11 @@ public class FileReaderTest {
     }
 
 
-    // ------------------------------------- Code position -------------------------------------------------------------
+    // ------------------------------- Code position (without caret) ---------------------------------------------------
 
     @Test
     @DisplayName("Exception msg on unexpected char at the beginning")
-    public void testPositionOnUnexpectedChar1() throws IOException {
+    public void testPositionOnUnexpectedCharBeginning() throws IOException {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
@@ -210,26 +207,15 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Exception msg on unexpected char in the middle.")
-    public void testPositionOnUnexpectedChar2() throws IOException, UnexpectedCharError {
+    public void testPositionOnUnexpectedCharMiddle() throws IOException, UnexpectedCharError {
         // Initialize
         int maxLookAhead = 4;
         String file = fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
-        assertThat(reader.lookAhead()).isEqualTo('a');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'a', 'b', '\n', 'c'});
         reader.expect('a');
-
-        assertThat(reader.lookAhead()).isEqualTo('b');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'b', '\n', 'c', 'd'});
         reader.expect('b');
-
-        assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', 'c', 'd', 'e'});
         reader.expect('\n');
-
-        assertThat(reader.lookAhead()).isEqualTo('c');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'c', 'd', 'e', '\n'});
         reader.expect('c');
 
         try {
@@ -240,6 +226,165 @@ public class FileReaderTest {
         }
 
         throw new Error("Expected reader.expect() to throw an error, but it didn't");
+    }
+
+    @Test
+    @DisplayName("Exception msg on unexpected char at the end")
+    public void testPositionOnUnexpectedCharEnd() throws IOException, UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = fileToString("TwoBasicLines.txt");
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        reader.expect('a');
+        reader.expect('b');
+        reader.expect('\n');
+        reader.expect('c');
+        reader.expect('d');
+        reader.expect('e');
+
+        assertThat(reader.lookAhead()).isNotEqualTo('!');
+        try {
+            reader.expect('!');
+        } catch (UnexpectedCharError err) {
+            assertThat(err.getMessage()).isEqualTo("Expected '!' but got '\n' @2:4");
+            return;
+        }
+
+        throw new Error("Expected reader.expect() to throw an error, but it didn't");
+    }
+
+
+    // ------------------------------- Code position (with caret) ------------------------------------------------------
+
+    @Test
+    @DisplayName("Position msg with caret with just one simple line break")
+    public void testPosMsgWithCaretSimpleLineBreak() throws UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = "\n";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        String expect1 = "" +
+                "\n" +
+                "^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect1);
+
+        reader.expect('\n');
+        String expect2 = "" +
+                (char) -1 + "\n" +
+                "^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect2);
+    }
+
+    @Test
+    @DisplayName("Position msg with caret with one character")
+    public void testPosMsgWithCaretOneChar() throws UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = "{";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        String expect1 = "" +
+                "{\n" +
+                "^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect1);
+
+        reader.expect('{');
+        String expect2 = "" +
+                "{" + (char) -1 + "\n" +
+                " ^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect2);
+    }
+
+    @Test
+    @DisplayName("Position msg with multiples advances after EOF")
+    public void testPosMsgWithCaretWithMultiplesAdvancesAfterEOF() throws UnexpectedCharError, IOException {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = fileToString("TwoBasicLines.txt");
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        reader.expect('a');
+        reader.expect('b');
+        reader.expect('\n');
+        reader.expect('c');
+        reader.expect('d');
+        reader.expect('e');
+        reader.expect('\n');
+        String expect = "" +
+                (char) -1 + "\n" +
+                "^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect);
+
+        reader.advance();
+        reader.advance();
+        reader.advance();
+        reader.advance();
+        reader.advance();
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect);
+
+        reader.advance();
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("Position msg with caret at the beginning")
+    public void testPositionMsgWithCaretBeginning() throws IOException {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = fileToString("TwoBasicLines.txt");
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        String expect = "" +
+                "ab\n" +
+                "^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("Position msg with caret in the middle.")
+    public void testPositionMsgWithCaretMiddle() throws IOException, UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = fileToString("TwoBasicLines.txt");
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        reader.expect('a');
+        reader.expect('b');
+        reader.expect('\n');
+        reader.expect('c');
+
+        String expect = "" +
+                "cde\n" +
+                " ^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect);
+    }
+
+    @Test
+    @DisplayName("Position msg with caret at the end")
+    public void testPositionMsgWithCaretEnd() throws IOException, UnexpectedCharError {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = fileToString("TwoBasicLines.txt");
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        reader.expect('a');
+        reader.expect('b');
+        reader.expect('\n');
+        reader.expect('c');
+        reader.expect('d');
+        reader.expect('e');
+        String expect1 = "" +
+                "cde\n" +
+                "   ^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect1);
+
+        reader.expect('\n');
+        String expect2 = "" +
+                (char) -1 + "\n" +
+                "^";
+        assertThat(reader.toPosStringWithCaret()).isEqualTo(expect2);
     }
 
 }

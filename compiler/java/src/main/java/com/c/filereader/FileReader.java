@@ -53,6 +53,11 @@ public class FileReader {
      */
     private boolean hasHeadReachedEof = false;
 
+    /**
+     * Flag for whether the "normal" position has reached EOF (end of file) or not.
+     */
+    private boolean hasReachedEof = false;
+
 
     // --------------------------------------- Constructor -------------------------------------------------------------
 
@@ -139,9 +144,8 @@ public class FileReader {
      * Advances one char with the "normal" position.
      */
     private void advanceNormal() {
-        // Empty file?
-        // We must not use if(isEof) file here since isEof only refers to the HEAD position (!)
-        if (nextLines.isEmpty()) return;
+        // reached EOF?
+        if (hasReachedEof) return;
 
         // Need to jump to next line with current position?
         if (posCol == nextLines.getFirst().length()) {
@@ -152,6 +156,11 @@ public class FileReader {
 
         // Advance with "normal" position and HEAD
         posCol++;
+
+        // Check for EOF for next call to advanceNormal()
+        if (nextChars.getFirst().equals((char) -1)) {
+            hasReachedEof = true;
+        }
     }
 
     /**
@@ -201,7 +210,7 @@ public class FileReader {
      */
     public void expect(char c) throws UnexpectedCharError {
         if (nextChars.getFirst() != c)
-            throw new UnexpectedCharError(c, nextChars.getFirst(), locationToLineAndCol());
+            throw new UnexpectedCharError(c, nextChars.getFirst(), toPosString());
         advance();
     }
 
@@ -211,7 +220,7 @@ public class FileReader {
     /**
      * @return formatted line number and column
      */
-    private String locationToLineAndCol() {
+    private String toPosString() {
         return "@" + posLine + ":" + posCol;
     }
 
@@ -222,8 +231,25 @@ public class FileReader {
      *
      * @return the current line with a caret at the current position
      */
-    public String getCaretPositionMsg() {
-        return nextLines.getFirst() + " ".repeat(posCol) + "^\n";
+    public String toPosStringWithCaret() {
+        String currentLine = nextLines.isEmpty() ? String.valueOf((char) -1) : nextLines.getFirst();
+
+        // Strip last EOF for print out if no EOF yet
+        if (!hasReachedEof) {
+            if (currentLine.endsWith(String.valueOf((char) -1)))
+                currentLine = currentLine.substring(0, currentLine.length() - 1);
+        }
+
+        StringBuilder posMsg = new StringBuilder(currentLine);
+
+        // Add \n at the end if not already there
+        if (!currentLine.endsWith("\n"))
+            posMsg.append('\n');
+
+        posMsg.append(" ".repeat(posCol - 1));
+        posMsg.append("^");
+
+        return posMsg.toString();
     }
 
 }
