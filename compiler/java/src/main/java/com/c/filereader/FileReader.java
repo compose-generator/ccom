@@ -20,10 +20,16 @@ public class FileReader {
 
     // --------------------------------------- Member variables --------------------------------------------------------
 
-    // Input data as stream
+    // File
+
+    /**
+     * The input file as a char stream.
+     */
     private final PrimitiveIterator.OfInt file;
 
+
     // Buffer
+
     /**
      * A buffer for the next n characters where n is equal to maxLookAhead (as passed to the constructor)
      */
@@ -31,7 +37,9 @@ public class FileReader {
 
     private final LimitedQueue<String> nextLines;
 
+
     // Position in file
+
     /**
      * The current line we are looking at in the file.
      */
@@ -47,7 +55,9 @@ public class FileReader {
      */
     private int posHeadCol = 0; // line starts at column 1
 
+
     // EOF flag
+
     /**
      * Flag for whether the HEAD has reached EOF (end of file) or not.
      */
@@ -62,12 +72,13 @@ public class FileReader {
     // --------------------------------------- Constructor -------------------------------------------------------------
 
     /**
-     * Constructs a file reader operating on a file given as a string.
+     * Constructs a FileReader operating on a file given as String.
      * <p>
      * Note that it would be easy to modify this constructor to be able to pass in a stream instead of a string.
      * The FileReader converts the file that is given as a string (in the current implementation) to a stream anyway.
      *
-     * @param file the input file as a string
+     * @param file the input file as String
+     * @throws MaxLookAheadException if the max look ahead is less than 1
      */
     public FileReader(String file, int maxLookAhead) throws MaxLookAheadException {
         if (maxLookAhead < 1)
@@ -203,7 +214,7 @@ public class FileReader {
     }
 
 
-    // --------------------------------------- Expect  -----------------------------------------------------------------
+    // --------------------------------------- Expect ------------------------------------------------------------------
 
     /**
      * Checks if the next char is the expected character. Advances one character after a successful check.
@@ -223,7 +234,7 @@ public class FileReader {
     /**
      * @return formatted line number and column
      */
-    private String toPosString() {
+    public String toPosString() {
         return "@" + posLine + ":" + posCol;
     }
 
