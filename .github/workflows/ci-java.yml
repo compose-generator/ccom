@@ -31,4 +31,4 @@ jobs:
 
       - name: Run the Maven verify phase
         working-directory: compiler/java
-        run: mvn --batch-mode --update-snapshots verify
+        run: mvn verify --batch-mode --update-snapshots --quiet --no-transfer-progress
