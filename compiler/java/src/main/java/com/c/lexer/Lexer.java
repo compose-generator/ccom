@@ -116,7 +116,8 @@ public class Lexer {
         commentIdentifierLengths.add(commentBlockOpenIdentifier.length());
         commentIdentifierLengths.add(commentBlockCloseIdentifier.length());
         commentIdentifierLengths.add(commentPayloadIdentifier.length());
-        int maxLookAhead = Collections.max(commentIdentifierLengths);
+        // We need one character more than the max for the method isLookAheadCommentBlockCloseIdentifierWithBrace()
+        int maxLookAhead = Collections.max(commentIdentifierLengths) + 1;
 
         // Construct FileReader
         this.reader = new FileReader(file, maxLookAhead);
