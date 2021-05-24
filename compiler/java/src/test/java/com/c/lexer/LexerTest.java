@@ -86,6 +86,30 @@ public class LexerTest {
 
     // ---------------------------- Look ahead + expect - individual token types ---------------------------------------
 
+    private Token constructExpectedTokenIndividualTokenTestStart(LanguageDescription language) {
+        int column;
+        TokenType type;
+        if (!language.getCommentLineIdentifier().isEmpty()) { // line comment
+            column = language.getCommentLineIdentifier().length();
+            type = TokenType.COMMENT_LINE_IDENTIFIER;
+        } else { // block comment
+            column = language.getCommentBlockOpenIdentifier().length();
+            type = TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER;
+        }
+        column++; // for ? after actual comment
+        column++; // for space
+
+        return new Token(type, 1, column);
+    }
+
+    private Token checkCommentStart(Lexer lexer, LanguageDescription language) throws UnexpectedTokenException, UnexpectedCharException, UnknownCharException {
+        Token expectedToken = constructExpectedTokenIndividualTokenTestStart(language);
+        assertThat(lexer.lookAhead()).isEqualTo(expectedToken);
+        lexer.expect(expectedToken);
+
+        return expectedToken;
+    }
+
     @Test
     @DisplayName("Test Token EOF in empty file")
     public void testTokenEOFInEmptyFile() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
@@ -98,23 +122,27 @@ public class LexerTest {
     @DisplayName("Test Token IF")
     public void testTokenIf() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
         testForEveryLanguage("If", (lexer, language) -> {
-            // Construct expected token
-            int column;
-            TokenType type;
-            if (!language.getCommentLineIdentifier().isEmpty()) { // line comment
-                column = language.getCommentLineIdentifier().length();
-                type = TokenType.COMMENT_LINE_IDENTIFIER;
-            } else { // block comment
-                column = language.getCommentBlockOpenIdentifier().length();
-                type = TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER;
-            }
-            column++; // for ? after actual comment
-            column++; // for space
-            Token expectedToken = new Token(type, 1, column);
+            Token expectedToken = checkCommentStart(lexer, language);
 
-            // Test
-            assertThat(lexer.lookAhead()).isEqualTo(expectedToken);
-            lexer.expect(expectedToken);
+            // +1 for space
+            // +2 for "if"
+            Token expectedIfToken = new Token(TokenType.IF, 1, expectedToken.getPosCol() + 1 + 2);
+            assertThat(lexer.lookAhead()).isEqualTo(expectedIfToken);
+            lexer.expect(expectedIfToken);
+        });
+    }
+
+    @Test
+    @DisplayName("Test Token HAS")
+    public void testTokenHas() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("Has", (lexer, language) -> {
+            Token expectedToken = checkCommentStart(lexer, language);
+
+            // +1 for space
+            // +3 for "has"
+            Token expectedHasToken = new Token(TokenType.HAS, 1, expectedToken.getPosCol() + 1 + 3);
+            assertThat(lexer.lookAhead()).isEqualTo(expectedHasToken);
+            lexer.expect(expectedHasToken);
         });
     }
 

@@ -60,4 +60,12 @@ public class Token {
                 '}';
     }
 
+    public int getPosLine() {
+        return posLine;
+    }
+
+    public int getPosCol() {
+        return posCol;
+    }
+
 }
