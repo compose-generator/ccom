@@ -143,7 +143,7 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo("{" + -1 + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("{" + (char) -1 + (char) -1 + (char) -1);
         reader.expect('{');
 
         expectEOF(reader, maxLookAhead);
@@ -158,11 +158,11 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo("{" + "a" + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("{" + "a" + (char) -1 + (char) -1);
         reader.expect('{');
 
         assertThat(reader.lookAhead()).isEqualTo('a');
-        assertThat(reader.lookAheads()).isEqualTo("a" + -1 + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("a" + (char) -1 + (char) -1 + (char) -1);
         reader.expect('a');
 
         expectEOF(reader, maxLookAhead);
@@ -177,15 +177,15 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('/');
-        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + -1);
+        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + (char) -1);
         reader.expect('/');
 
         assertThat(reader.lookAhead()).isEqualTo('!');
-        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + (char) -1 + (char) -1);
         reader.expect('!');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + -1 + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -200,24 +200,24 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('/');
-        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + -1);
+        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + (char) -1);
         reader.expect('/');
 
         assertThat(reader.lookAhead()).isEqualTo('!');
-        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + (char) -1 + (char) -1);
         reader.expect('!');
 
         // Carriage return is omitted
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + -1 + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
     }
 
     @Test
-    @DisplayName("Look ahead and epxect with multiple lines")
+    @DisplayName("Look ahead and expect with multiple lines")
     public void testLookAheadMultipleLines() throws IOException, UnexpectedCharException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
@@ -241,15 +241,15 @@ public class FileReaderTest {
         reader.expect('c');
 
         assertThat(reader.lookAhead()).isEqualTo('d');
-        assertThat(reader.lookAheads()).isEqualTo("d" + "e" + "\n" + -1);
+        assertThat(reader.lookAheads()).isEqualTo("d" + "e" + "\n" + (char) -1);
         reader.expect('d');
 
         assertThat(reader.lookAhead()).isEqualTo('e');
-        assertThat(reader.lookAheads()).isEqualTo("e" + "\n" + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("e" + "\n" + (char) -1 + (char) -1);
         reader.expect('e');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + -1 + -1 + -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
