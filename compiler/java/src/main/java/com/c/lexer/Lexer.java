@@ -107,7 +107,7 @@ public class Lexer {
 
         // Construct conditional comments identifiers based on comment identifiers of the underlying language (e.g. Java)
         this.commentLineIdentifier = commentLineIdentifier.isEmpty() ? "" : commentLineIdentifier + "?";
-        this.commentBlockOpenIdentifier = commentBlockOpenIdentifier.isEmpty() ? "" : commentBlockCloseIdentifier + "?";
+        this.commentBlockOpenIdentifier = commentBlockOpenIdentifier.isEmpty() ? "" : commentBlockOpenIdentifier + "?";
         this.commentBlockCloseIdentifier = commentBlockCloseIdentifier;
         this.commentPayloadIdentifier = commentLineIdentifier; // might be "", that's ok and considered in the grammar
 
@@ -122,7 +122,10 @@ public class Lexer {
 
         // Construct FileReader
         this.reader = new FileReader(file, maxLookAhead);
-        currentContext = isSingleStatement ? Context.SECTION : Context.ARBITRARY;
+
+        // Set context
+        currentContext = isSingleStatement || isLookAheadCommentLineIdentifier() || isLookAheadCommentBlockOpenIdentifier()
+                ? Context.SECTION : Context.ARBITRARY;
 
         advance();
     }
@@ -169,16 +172,16 @@ public class Lexer {
     public Token advance() throws UnknownCharException, UnexpectedCharException {
         char nextChar = reader.lookAhead();
 
-        // EOF?
-        if (isEOF()) {
-            nextToken = consumeEOF();
-            return nextToken;
-        }
-
         // SKip whitespaces
         while (Character.isWhitespace(nextChar)) {
             reader.advance();
             nextChar = reader.lookAhead();
+        }
+
+        // EOF?
+        if (isEOF()) {
+            nextToken = consumeEOF();
+            return nextToken;
         }
 
         // Consume depending on context and get next Token
@@ -234,6 +237,12 @@ public class Lexer {
      * @throws UnknownCharException    if a char cannot be processed to a valid Token
      */
     private Token consumeSection() throws UnexpectedCharException, UnknownCharException {
+        // Check for Tokens first that require more than one character look ahead (!)
+        if (isLookAheadCommentLineIdentifier()) return consumeCommentLineIdentifier();
+        if (isLookAheadCommentBlockOpenIdentifier()) return consumeCommentBlockOpenIdentifier();
+        if (isLookAheadCommentBlockCloseIdentifier()) return consumeCommentBlockCloseIdentifier();
+        if (isLookAheadCommentPayloadIdentifier()) return consumeCommentPayloadIdentifier();
+
         switch (reader.lookAhead()) {
             case '|': // |
                 return consumeOr();
@@ -259,11 +268,6 @@ public class Lexer {
 
         if (Character.isAlphabetic(reader.lookAhead())) return consumeIdentifierOrKeyword();
         if (Character.isDigit(reader.lookAhead())) return consumeNumber();
-
-        if (isLookAheadCommentLineIdentifier()) return consumeCommentLineIdentifier();
-        if (isLookAheadCommentBlockOpenIdentifier()) return consumeCommentBlockOpenIdentifier();
-        if (isLookAheadCommentBlockCloseIdentifier()) return consumeCommentBlockCloseIdentifier();
-        if (isLookAheadCommentPayloadIdentifier()) return consumeCommentPayloadIdentifier();
 
         throw new UnknownCharException(reader.lookAhead());
     }
@@ -553,6 +557,7 @@ public class Lexer {
         reader.advance();
         while (Character.isLetterOrDigit(reader.lookAhead())) { // [a-zA-Z0-9]*
             value.append(reader.lookAhead());
+            reader.advance();
         }
 
         // Is keyword?

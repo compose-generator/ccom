@@ -20,7 +20,7 @@ public class LexerTest {
     public LexerTest() {
         // Comment identifiers for different languages
         languages.add(new LanguageDescription(".java", "//", "/*", "*/"));
-        languages.add(new LanguageDescription(".yml", "//", "/*", "*/"));
+        languages.add(new LanguageDescription(".yml", "#", "", ""));
         languages.add(new LanguageDescription(".html", "", "<!--", "-->"));
         languages.add(new LanguageDescription(".py", "#", "'''", "'''"));
     }
@@ -29,11 +29,11 @@ public class LexerTest {
     // ------------------------------------------- Util ----------------------------------------------------------------
 
     private interface LanguageCommentCallback {
-        void doTestsWithLexer(Lexer lexer, LanguageDescription language) throws UnexpectedCharException, UnknownCharException;
+        void doTestsWithLexer(Lexer lexer, LanguageDescription language) throws UnexpectedCharException, UnknownCharException, UnexpectedTokenException;
     }
 
     private void testForEveryLanguage(String filename, LanguageCommentCallback callback)
-            throws InvalidCommentsIdentifierException, UnexpectedCharException, MaxLookAheadException, UnknownCharException, IOException {
+            throws InvalidCommentsIdentifierException, UnexpectedCharException, MaxLookAheadException, UnknownCharException, IOException, UnexpectedTokenException {
         for (LanguageDescription language : languages) {
             String file = testFileReader.fileToString(filename + language.getFileExtension());
             Lexer lexer = new Lexer(
@@ -88,7 +88,7 @@ public class LexerTest {
 
     @Test
     @DisplayName("Test Token EOF in empty file")
-    public void testTokenEOFInEmptyFile() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException {
+    public void testTokenEOFInEmptyFile() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
         testForEveryLanguage("Empty", (lexer, language) -> {
             assertThat(lexer.lookAhead()).isEqualTo(new Token(TokenType.EOF, 1, 1));
         });
@@ -96,10 +96,25 @@ public class LexerTest {
 
     @Test
     @DisplayName("Test Token IF")
-    public void testTokenIf() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException {
+    public void testTokenIf() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
         testForEveryLanguage("If", (lexer, language) -> {
-            lexer.advance(); // Consume comment open, e.g. "//?"
-            assertThat(lexer.lookAhead()).isEqualTo(new Token(TokenType.IF, 1, 1));
+            // Construct expected token
+            int column;
+            TokenType type;
+            if (!language.getCommentLineIdentifier().isEmpty()) { // line comment
+                column = language.getCommentLineIdentifier().length();
+                type = TokenType.COMMENT_LINE_IDENTIFIER;
+            } else { // block comment
+                column = language.getCommentBlockOpenIdentifier().length();
+                type = TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER;
+            }
+            column++; // for ? after actual comment
+            column++; // for space
+            Token expectedToken = new Token(type, 1, column);
+
+            // Test
+            assertThat(lexer.lookAhead()).isEqualTo(expectedToken);
+            lexer.expect(expectedToken);
         });
     }
 
