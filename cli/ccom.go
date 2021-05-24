@@ -27,6 +27,11 @@ func main() {
 		Copyright: "© 2021 Marc Auberer",
 		Usage:     "Evaluate conditional comment sections of data files.",
 		Flags: []cli.Flag{
+			&cli.IntFlag{
+				Name:    "benchmark",
+				Aliases: []string{"b"},
+				Usage:   "Benchmark the specified compiler executable and run it n times",
+			},
 			&cli.StringFlag{
 				Name:    "block-comment-chars-open",
 				Aliases: []string{"bcco"},
@@ -85,6 +90,7 @@ func main() {
 			processInput(
 				c.Args().Get(0),
 				c.String("compiler"),
+				c.Int("benchmark"),
 				c.String("block-comment-chars-open"),
 				c.String("block-comment-chars-close"),
 				c.String("data"),
