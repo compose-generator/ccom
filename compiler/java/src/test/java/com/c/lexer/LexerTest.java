@@ -103,11 +103,11 @@ public class LexerTest {
     }
 
     private Token checkCommentStart(Lexer lexer, LanguageDescription language) throws UnexpectedTokenException, UnexpectedCharException, UnknownCharException {
-        Token expectedToken = constructExpectedTokenIndividualTokenTestStart(language);
-        assertThat(lexer.lookAhead()).isEqualTo(expectedToken);
-        lexer.expect(expectedToken);
+        Token expectedStartToken = constructExpectedTokenIndividualTokenTestStart(language);
+        assertThat(lexer.lookAhead()).isEqualTo(expectedStartToken);
+        lexer.expect(expectedStartToken);
 
-        return expectedToken;
+        return expectedStartToken;
     }
 
     @Test
@@ -122,11 +122,11 @@ public class LexerTest {
     @DisplayName("Test Token IF")
     public void testTokenIf() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
         testForEveryLanguage("If", (lexer, language) -> {
-            Token expectedToken = checkCommentStart(lexer, language);
+            Token expectedStartToken = checkCommentStart(lexer, language);
 
             // +1 for space
             // +2 for "if"
-            Token expectedIfToken = new Token(TokenType.IF, 1, expectedToken.getPosCol() + 1 + 2);
+            Token expectedIfToken = new Token(TokenType.IF, 1, expectedStartToken.getPosCol() + 1 + 2);
             assertThat(lexer.lookAhead()).isEqualTo(expectedIfToken);
             lexer.expect(expectedIfToken);
         });
@@ -136,11 +136,11 @@ public class LexerTest {
     @DisplayName("Test Token HAS")
     public void testTokenHas() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
         testForEveryLanguage("Has", (lexer, language) -> {
-            Token expectedToken = checkCommentStart(lexer, language);
+            Token expectedStartToken = checkCommentStart(lexer, language);
 
             // +1 for space
             // +3 for "has"
-            Token expectedHasToken = new Token(TokenType.HAS, 1, expectedToken.getPosCol() + 1 + 3);
+            Token expectedHasToken = new Token(TokenType.HAS, 1, expectedStartToken.getPosCol() + 1 + 3);
             assertThat(lexer.lookAhead()).isEqualTo(expectedHasToken);
             lexer.expect(expectedHasToken);
         });
@@ -150,13 +150,41 @@ public class LexerTest {
     @DisplayName("Test Token NOT")
     public void testTokenNot() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
         testForEveryLanguage("Not", (lexer, language) -> {
-            Token expectedToken = checkCommentStart(lexer, language);
+            Token expectedStartToken = checkCommentStart(lexer, language);
 
             // +1 for space
             // +3 for "not"
-            Token expectedNotToken = new Token(TokenType.NOT, 1, expectedToken.getPosCol() + 1 + 3);
+            Token expectedNotToken = new Token(TokenType.NOT, 1, expectedStartToken.getPosCol() + 1 + 3);
             assertThat(lexer.lookAhead()).isEqualTo(expectedNotToken);
             lexer.expect(expectedNotToken);
+        });
+    }
+
+    @Test
+    @DisplayName("Test Token TRUE")
+    public void testTokenTrue() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("True", (lexer, language) -> {
+            Token expectedStartToken = checkCommentStart(lexer, language);
+
+            // +1 for space
+            // +4 for "true"
+            Token expectedTrueToken = new Token(TokenType.TRUE, 1, expectedStartToken.getPosCol() + 1 + 4);
+            assertThat(lexer.lookAhead()).isEqualTo(expectedTrueToken);
+            lexer.expect(expectedTrueToken);
+        });
+    }
+
+    @Test
+    @DisplayName("Test Token False")
+    public void testTokenFalse() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("False", (lexer, language) -> {
+            Token expectedStartToken = checkCommentStart(lexer, language);
+
+            // +1 for space
+            // +5 for "false"
+            Token expectedFalseToken = new Token(TokenType.FALSE, 1, expectedStartToken.getPosCol() + 1 + 5);
+            assertThat(lexer.lookAhead()).isEqualTo(expectedFalseToken);
+            lexer.expect(expectedFalseToken);
         });
     }
 
