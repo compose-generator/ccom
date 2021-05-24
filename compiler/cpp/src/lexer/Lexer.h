@@ -58,12 +58,12 @@ private:
     bool isLookAheadCommentBlockCloseIdentifier();
     bool isLookAheadCommentPayloadIdentifier();
     bool isLookAheadCommentBlockCloseIdentifierWithBrace();
+
     Token constructToken(TokenType);
     Token constructToken(TokenType, std::string);
 public:
     explicit Lexer(): currentContext(ARBITRARY) {};
-    Lexer(bool isSingleStatement, const std::string& fileInput, const std::string& inputCommentLineIdentifiers,
-          const std::string& inputCommentBlockOpenIdentifiers, const std::string& inputCommentBlockCloseIdentifiers);
+    Lexer(bool, const std::string&, const std::string&, const std::string&, const std::string&);
     void advance();
     void expect(TokenType);
     Token getLookahead();

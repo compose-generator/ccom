@@ -8,6 +8,6 @@
 
 #include <iostream>
 #include <vector>
-#include "interpreter/interpreter.h"
+#include "interpreter/Interpreter.h"
 
 int main(int, char**);

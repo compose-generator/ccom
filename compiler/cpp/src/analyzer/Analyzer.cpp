@@ -1,44 +1,49 @@
-// Copyright (c) Marc Auberer 2021. All rights reserved.
-
 //
-// Created by Marc on 11.05.2021.
+// Created by Marc on 24.05.2021.
 //
 
-#include "analyzer.h"
+#include "Analyzer.h"
 
-json getJsonValueFromKey(const std::unique_ptr<KeyExprAST> &key, json data) {
-    for (const std::unique_ptr<IdentifierExprAST>& identifier : key->getIdentifiers()) {
-        std::string identifierName = identifier->getName();
-        int identifierIndex = identifier->getIndex();
-        if (!data.contains(identifierName))
-            throw std::runtime_error("Identifier " + identifierName + " does not exist in data input");
+// -------------------------------------------------- Public functions -------------------------------------------------
 
-        data = data[identifierName];
+Analyzer::Analyzer(bool isSingleStatement, const std::string &fileInput, JSONParser jsonParser,
+                   const std::string &inputCommentLineIdentifiers, const std::string &inputCommentBlockOpenIdentifiers,
+                   const std::string &inputCommentBlockCloseIdentifiers): jsonParser(jsonParser) {
+    this->isSingleStatement = isSingleStatement;
 
-        if (identifierIndex >= 0) { // Identifier has an index attached to it
-            if (data.empty())
-                throw std::runtime_error("Index " + std::to_string(identifierIndex) + " does not exist in identifier " + identifierName);
-            data = data[identifierIndex];
-        }
-    }
-    return data;
+    // Initialize parser
+    parser = Parser(isSingleStatement, fileInput, inputCommentLineIdentifiers,
+                    inputCommentBlockOpenIdentifiers, inputCommentBlockCloseIdentifiers);
+
+    // Parse abstract syntax tree
+    ast = parser.parseAST();
 }
 
-// ------------------------------------------- Check Data Type Compatibility -------------------------------------------
+TopLevelExprAST *Analyzer::getAST() {
+    return ast;
+}
 
-void checkDataTypeCompatibility(bool isSingleStatement, TopLevelExprAST* ast, const json& data) {
+void Analyzer::executeAnalysis() {
+    // Execute checks
+    checkDataTypeCompatibility();
+    // ToDo: Add more checks here
+}
+
+// ------------------------------------------------- Private functions -------------------------------------------------
+
+void Analyzer::checkDataTypeCompatibility() {
     if (isSingleStatement) {
         if (ast->getType() != TopLevelExprAST::STMT_LST_EXPR)
             throw std::runtime_error("Input was no single statement list");
         auto* stmtLst = static_cast<StmtLstExprAST*>(ast);
-        checkDataTypeCompatibilityStmtList(stmtLst, data);
+        checkDataTypeCompatibilityStmtList(stmtLst);
     } else {
         auto* content = static_cast<ContentExprAST*>(ast);
-        checkDataTypeCompatibilityContent(content, data);
+        checkDataTypeCompatibilityContent(content);
     }
 }
 
-void checkDataTypeCompatibilityContent(ContentExprAST* content, const json& data) {
+void Analyzer::checkDataTypeCompatibilityContent(ContentExprAST* content) {
     // Loop through sections
     for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->getContentBlocks()) {
         if (contentBlock->getType() == ContentBlockExprAST::SECTION_EXPR) {
@@ -48,12 +53,12 @@ void checkDataTypeCompatibilityContent(ContentExprAST* content, const json& data
                 switch (comBlock->getType()) {
                     case ComBlockExprAST::COM_LINE_BLOCK_EXPR: {
                         auto* lineBlockExpr = static_cast<ComLineBlockExprAST*>(comBlock.get());
-                        checkDataTypeCompatibilityStmtList(lineBlockExpr->getStmtList().get(), data);
+                        checkDataTypeCompatibilityStmtList(lineBlockExpr->getStmtList().get());
                         continue;
                     }
                     case ComBlockExprAST::COM_BLOCK_BLOCK_EXPR: {
                         auto* blockBlockExpr = static_cast<ComBlockBlockExprAST*>(comBlock.get());
-                        checkDataTypeCompatibilityStmtList(blockBlockExpr->getIfBlock()->getStmtList().get(), data);
+                        checkDataTypeCompatibilityStmtList(blockBlockExpr->getIfBlock()->getStmtList().get());
                         continue;
                     }
                     default:
@@ -64,19 +69,19 @@ void checkDataTypeCompatibilityContent(ContentExprAST* content, const json& data
     }
 }
 
-void checkDataTypeCompatibilityStmtList(StmtLstExprAST* stmtLst, const json& data) {
+void Analyzer::checkDataTypeCompatibilityStmtList(StmtLstExprAST* stmtLst) {
     // Loop through statements
     for (const std::unique_ptr<StmtExprAST>& stmt : stmtLst->getStatements()) {
         if (stmt->getType() == StmtExprAST::COMP_STMT_EXPR) {
             auto* compStmt = static_cast<CompStmtExprAST*>(stmt.get());
-            checkDataTypeCompatibilityCompStmt(compStmt, data);
+            checkDataTypeCompatibilityCompStmt(compStmt);
         }
     }
 }
 
-void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& data) {
+void Analyzer::checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt) {
     // Check if 'value' has the same type as the JSON key value
-    auto jsonKeyValue = getJsonValueFromKey(compStmt->getKey(), data);
+    auto jsonKeyValue = jsonParser.getJSONValueFromKey(compStmt->getKey());
 
     switch (compStmt->getValue()->getType()) {
         case ValueExprAST::STRING_EXPR:
@@ -94,17 +99,4 @@ void checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt, const json& d
         case ValueExprAST::VALUE_EXPR:
             throw std::runtime_error(jsonKeyValue.dump() + " is an unknown data type");
     }
-}
-
-TopLevelExprAST* executeSemanticAnalysis(bool isSingleStatement, const std::string& fileInput, const json& data,
-                                 const std::string& lineCommentChars, const std::string& blockCommentCharsOpen,
-                                 const std::string& blockCommentCharsClose) {
-    // Parse Abstract Syntax Tree
-    TopLevelExprAST* ast = executeSyntaxAnalysis(isSingleStatement, fileInput, lineCommentChars,
-                                         blockCommentCharsOpen, blockCommentCharsClose);
-
-    // Execute semantic checks
-    checkDataTypeCompatibility(isSingleStatement, ast, data);
-
-    return ast;
 }

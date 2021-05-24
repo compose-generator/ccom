@@ -87,6 +87,11 @@ Token Lexer::consumeSection() {
 
     if (isEOF()) return consumeEOF();
 
+    if (isLookAheadCommentLineIdentifier()) return consumeCommentLineIdentifier();
+    if (isLookAheadCommentBlockOpenIdentifier()) return consumeCommentBlockOpenIdentifier();
+    if (isLookAheadCommentBlockCloseIdentifier()) return consumeCommentBlockCloseIdentifier();
+    if (isLookAheadCommentPayloadIdentifier()) return consumeCommentPayloadIdentifier();
+
     switch (curChar) {
         case '|': return consumeOr();
         case '=': return consumeEquals();
@@ -102,11 +107,6 @@ Token Lexer::consumeSection() {
 
     if (isalpha(curChar)) return consumeIdentifierOrKeyword();
     if (isdigit(curChar)) return consumeNumber();
-
-    if (isLookAheadCommentLineIdentifier()) return consumeCommentLineIdentifier();
-    if (isLookAheadCommentBlockOpenIdentifier()) return consumeCommentBlockOpenIdentifier();
-    if (isLookAheadCommentBlockCloseIdentifier()) return consumeCommentBlockCloseIdentifier();
-    if (isLookAheadCommentPayloadIdentifier()) return consumeCommentPayloadIdentifier();
 
     throw UnexpectedCharException(curChar, reader.getLineNum(), reader.getColNum());
 }

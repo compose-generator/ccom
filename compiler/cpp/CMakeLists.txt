@@ -6,14 +6,16 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(compiler
         src/main.cpp
         src/main.h
+        src/util/JSONParser.cpp
+        src/util/JSONParser.h
         src/reader/Reader.cpp
         src/reader/Reader.h
         src/lexer/Lexer.cpp
         src/lexer/Lexer.h
         src/lexer/Token.cpp
         src/lexer/Token.h
-        src/parser/parser.cpp
-        src/parser/parser.h
+        src/parser/Parser.cpp
+        src/parser/Parser.h
         src/parser/ast/TopLevelExprAST.cpp
         src/parser/ast/TopLevelExprAST.h
         src/parser/ast/NumberExprAST.cpp
@@ -54,10 +56,10 @@ add_executable(compiler
         src/parser/ast/ArbitraryExprAST.h
         src/parser/ast/BooleanExprAST.cpp
         src/parser/ast/BooleanExprAST.h
-        src/analyzer/analyzer.cpp
-        src/analyzer/analyzer.h
-        src/interpreter/interpreter.cpp
-        src/interpreter/interpreter.h
+        src/analyzer/Analyzer.cpp
+        src/analyzer/Analyzer.h
+        src/interpreter/Interpreter.cpp
+        src/interpreter/Interpreter.h
         src/exception/UnexpectedCharException.cpp
         src/exception/UnexpectedCharException.h)
 
