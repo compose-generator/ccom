@@ -146,6 +146,20 @@ public class LexerTest {
         });
     }
 
+    @Test
+    @DisplayName("Test Token NOT")
+    public void testTokenNot() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("Not", (lexer, language) -> {
+            Token expectedToken = checkCommentStart(lexer, language);
+
+            // +1 for space
+            // +3 for "not"
+            Token expectedNotToken = new Token(TokenType.NOT, 1, expectedToken.getPosCol() + 1 + 3);
+            assertThat(lexer.lookAhead()).isEqualTo(expectedNotToken);
+            lexer.expect(expectedNotToken);
+        });
+    }
+
 
     // ------------------ Single statements (file only consists of a conditional comments section ----------------------
 
