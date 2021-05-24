@@ -1,15 +1,17 @@
 package com.c.filereader;
 
+import com.c.TestFileReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-import static com.c.testfiles.FileToString.fileToString;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class FileReaderTest {
+
+    private final TestFileReader testFileReader = new TestFileReader("filereader");
+
 
     // ---------------------------------------- EOF  -------------------------------------------------------------------
 
@@ -20,8 +22,7 @@ public class FileReaderTest {
         assertThat(reader.lookAhead()).isEqualTo((char) -1);
         reader.expect((char) -1);
 
-        Character[] bufferExpect = new Character[maxLookAhead];
-        Arrays.fill(bufferExpect, (char) -1);
+        String bufferExpect = String.valueOf((char) -1).repeat(maxLookAhead);
         assertThat(reader.lookAheads()).isEqualTo(bufferExpect);
     }
 
@@ -56,13 +57,13 @@ public class FileReaderTest {
         try {
             new FileReader(file, 0);
         } catch (MaxLookAheadException err) {
-            assertThat(err.getMessage()).isEqualTo("Max look ahead was 0 but must be greater than 0");
+            assertThat(err.getMessage()).isEqualTo("Max look ahead was 0 but must be at least 1");
         }
 
         try {
             new FileReader(file, -10);
         } catch (MaxLookAheadException err) {
-            assertThat(err.getMessage()).isEqualTo("Max look ahead was -10 but must be greater than 0");
+            assertThat(err.getMessage()).isEqualTo("Max look ahead was -10 but must be at least 1");
         }
     }
 
@@ -75,7 +76,7 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{'});
+        assertThat(reader.lookAheads()).isEqualTo("{");
         reader.expect('{');
 
         expectEOF(reader, maxLookAhead);
@@ -90,7 +91,7 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{', (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("{" + (char) -1);
         reader.expect('{');
 
         expectEOF(reader, maxLookAhead);
@@ -105,11 +106,11 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{'});
+        assertThat(reader.lookAheads()).isEqualTo("{");
         reader.expect('{');
 
         assertThat(reader.lookAhead()).isEqualTo('a');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'a'});
+        assertThat(reader.lookAheads()).isEqualTo("a");
         reader.expect('a');
 
         expectEOF(reader, maxLookAhead);
@@ -127,7 +128,7 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', (char) -1, (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -135,14 +136,14 @@ public class FileReaderTest {
 
     @Test
     @DisplayName("Look ahead and expect with one character")
-    public void testLookAheadOneChar() throws UnexpectedCharException, MaxLookAheadException {
+    public void testLookAheadOneChar() throws MaxLookAheadException, UnexpectedCharException {
         // Initialize
         int maxLookAhead = 4;
         String file = "{";
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{', (char) -1, (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("{" + -1 + -1 + -1);
         reader.expect('{');
 
         expectEOF(reader, maxLookAhead);
@@ -157,11 +158,11 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'{', 'a', (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("{" + "a" + -1 + -1);
         reader.expect('{');
 
         assertThat(reader.lookAhead()).isEqualTo('a');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'a', (char) -1, (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("a" + -1 + -1 + -1);
         reader.expect('a');
 
         expectEOF(reader, maxLookAhead);
@@ -176,15 +177,15 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('/');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'/', '!', '\n', (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + -1);
         reader.expect('/');
 
         assertThat(reader.lookAhead()).isEqualTo('!');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'!', '\n', (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + -1 + -1);
         reader.expect('!');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', (char) -1, (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("\n" + -1 + -1 + -1);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -199,17 +200,17 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('/');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'/', '!', '\n', (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + -1);
         reader.expect('/');
 
         assertThat(reader.lookAhead()).isEqualTo('!');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'!', '\n', (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + -1 + -1);
         reader.expect('!');
 
         // Carriage return is omitted
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', (char) -1, (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("\n" + -1 + -1 + -1);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -220,35 +221,35 @@ public class FileReaderTest {
     public void testLookAheadMultipleLines() throws IOException, UnexpectedCharException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
-        String file = fileToString("TwoBasicLines.txt");
+        String file = testFileReader.fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('a');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'a', 'b', '\n', 'c'});
+        assertThat(reader.lookAheads()).isEqualTo("a" + "b" + "\n" + "c");
         reader.expect('a');
 
         assertThat(reader.lookAhead()).isEqualTo('b');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'b', '\n', 'c', 'd'});
+        assertThat(reader.lookAheads()).isEqualTo("b" + "\n" + "c" + "d");
         reader.expect('b');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', 'c', 'd', 'e'});
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "c" + "d" + "e");
         reader.expect('\n');
 
         assertThat(reader.lookAhead()).isEqualTo('c');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'c', 'd', 'e', '\n'});
+        assertThat(reader.lookAheads()).isEqualTo("c" + "d" + "e" + "\n");
         reader.expect('c');
 
         assertThat(reader.lookAhead()).isEqualTo('d');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'d', 'e', '\n', (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("d" + "e" + "\n" + -1);
         reader.expect('d');
 
         assertThat(reader.lookAhead()).isEqualTo('e');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'e', '\n', (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("e" + "\n" + -1 + -1);
         reader.expect('e');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo(new Character[]{'\n', (char) -1, (char) -1, (char) -1});
+        assertThat(reader.lookAheads()).isEqualTo("\n" + -1 + -1 + -1);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -262,7 +263,7 @@ public class FileReaderTest {
     public void testPositionOnUnexpectedCharBeginning() throws IOException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
-        String file = fileToString("TwoBasicLines.txt");
+        String file = testFileReader.fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
         try {
@@ -280,7 +281,7 @@ public class FileReaderTest {
     public void testPositionOnUnexpectedCharMiddle() throws IOException, UnexpectedCharException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
-        String file = fileToString("TwoBasicLines.txt");
+        String file = testFileReader.fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
         reader.expect('a');
@@ -303,7 +304,7 @@ public class FileReaderTest {
     public void testPositionOnUnexpectedCharEnd() throws IOException, UnexpectedCharException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
-        String file = fileToString("TwoBasicLines.txt");
+        String file = testFileReader.fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
         reader.expect('a');
@@ -372,7 +373,7 @@ public class FileReaderTest {
     public void testPosMsgWithCaretWithMultiplesAdvancesAfterEOF() throws UnexpectedCharException, IOException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
-        String file = fileToString("TwoBasicLines.txt");
+        String file = testFileReader.fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
         reader.expect('a');
@@ -403,7 +404,7 @@ public class FileReaderTest {
     public void testPositionMsgWithCaretBeginning() throws IOException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
-        String file = fileToString("TwoBasicLines.txt");
+        String file = testFileReader.fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
         String expect = "" +
@@ -417,7 +418,7 @@ public class FileReaderTest {
     public void testPositionMsgWithCaretMiddle() throws IOException, UnexpectedCharException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
-        String file = fileToString("TwoBasicLines.txt");
+        String file = testFileReader.fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
         reader.expect('a');
@@ -436,7 +437,7 @@ public class FileReaderTest {
     public void testPositionMsgWithCaretEnd() throws IOException, UnexpectedCharException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
-        String file = fileToString("TwoBasicLines.txt");
+        String file = testFileReader.fileToString("TwoBasicLines.txt");
         FileReader reader = new FileReader(file, maxLookAhead);
 
         reader.expect('a');

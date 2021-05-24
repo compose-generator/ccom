@@ -1,12 +1,16 @@
-package com.c.testfiles;
+package com.c;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class FileToString {
+public class TestFileReader {
 
-    private static final String TEST_FOLDER_PATH = "./src/test/java/com/c/testfiles/";
+    private String folderPath = "./src/test/java/com/c/";
+
+    public TestFileReader(String testPackageName) {
+        this.folderPath = this.folderPath + testPackageName + "/";
+    }
 
     /**
      * Reads in file as a string.
@@ -15,8 +19,8 @@ public class FileToString {
      * @return file content as string
      * @throws IOException if the file does not exist in the testfiles folder
      */
-    public static String fileToString(String filename) throws IOException {
-        Path filePath = Path.of(TEST_FOLDER_PATH + filename);
+    public String fileToString(String filename) throws IOException {
+        Path filePath = Path.of(folderPath + filename);
         return Files.readString(filePath);
     }
 

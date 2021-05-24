@@ -1,6 +1,7 @@
 package com.c.filereader;
 
 import java.util.PrimitiveIterator;
+import java.util.stream.Collectors;
 
 /**
  * FileReader that is capable of looking ahead one char.
@@ -119,8 +120,9 @@ public class FileReader {
      *
      * @return next chars as a character list
      */
-    public Character[] lookAheads() {
-        return nextChars.toArray(new Character[0]);
+    public String lookAheads() {
+        return nextChars.stream().map(Object::toString).collect(Collectors.joining());
+//        return nextChars.toArray(new Character[0]);
     }
 
 

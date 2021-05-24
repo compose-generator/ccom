@@ -5,7 +5,6 @@ import com.c.filereader.MaxLookAheadException;
 import com.c.filereader.UnexpectedCharException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,7 +43,7 @@ public class Lexer {
     /**
      * The current context this Lexer is in.
      */
-    private Context currentContext = Context.ARBITRARY;
+    private Context currentContext;
 
 
     // Conditional comments chars
@@ -89,20 +88,22 @@ public class Lexer {
      * @throws InvalidCommentsIdentifierException if the comment identifiers are invalid
      *                                            (e.g. an identifier was provided for opening block comments but not for closing them)
      * @throws MaxLookAheadException              if the max look ahead is less than 1
+     * @throws UnexpectedCharException            if a char - read by the FileReader - was not the expected one
+     * @throws UnknownCharException               if a char cannot be processed to a valid Token
      */
     public Lexer(String file,
                  String commentLineIdentifier,
                  String commentBlockOpenIdentifier,
                  String commentBlockCloseIdentifier,
-                 boolean isSingleStatement) throws InvalidCommentsIdentifierException, MaxLookAheadException {
+                 boolean isSingleStatement) throws InvalidCommentsIdentifierException, MaxLookAheadException, UnexpectedCharException, UnknownCharException {
 
         // Check if combination of passed in comment identifiers is valid
-        if (commentLineIdentifier.isEmpty() && commentBlockOpenIdentifier.isEmpty())
-            throw new InvalidCommentsIdentifierException("You must provide at least line comments or block comments identifier");
         if (!commentBlockOpenIdentifier.isEmpty() && commentBlockCloseIdentifier.isEmpty())
             throw new InvalidCommentsIdentifierException("You provided an identifier to open block comments but not one to close them");
         if (!commentBlockCloseIdentifier.isEmpty() && commentBlockOpenIdentifier.isEmpty())
             throw new InvalidCommentsIdentifierException("You provided an identifier to close block comments but not one to open them");
+        if (commentLineIdentifier.isEmpty() && commentBlockOpenIdentifier.isEmpty())
+            throw new InvalidCommentsIdentifierException("You must provide at least line comments or block comments identifier");
 
         // Construct conditional comments identifiers based on comment identifiers of the underlying language (e.g. Java)
         this.commentLineIdentifier = commentLineIdentifier.isEmpty() ? "" : commentLineIdentifier + "?";
@@ -122,6 +123,8 @@ public class Lexer {
         // Construct FileReader
         this.reader = new FileReader(file, maxLookAhead);
         currentContext = isSingleStatement ? Context.SECTION : Context.ARBITRARY;
+
+        advance();
     }
 
 
@@ -144,6 +147,8 @@ public class Lexer {
      *
      * @param t expected Token (to compare the next Token against)
      * @throws UnexpectedTokenException if the next Token ís not equal to the expected Token
+     * @throws UnexpectedCharException  if a char - read by the FileReader - was not the expected one
+     * @throws UnknownCharException     if a char cannot be processed to a valid Token
      */
     public void expect(Token t) throws UnexpectedTokenException, UnexpectedCharException, UnknownCharException {
         if (!nextToken.equals(t))
@@ -164,6 +169,12 @@ public class Lexer {
     public Token advance() throws UnknownCharException, UnexpectedCharException {
         char nextChar = reader.lookAhead();
 
+        // EOF?
+        if (isEOF()) {
+            nextToken = consumeEOF();
+            return nextToken;
+        }
+
         // SKip whitespaces
         while (Character.isWhitespace(nextChar)) {
             reader.advance();
@@ -172,17 +183,11 @@ public class Lexer {
 
         // Consume depending on context and get next Token
         switch (currentContext) {
-            case ARBITRARY:
-                nextToken = consumeArbitrary();
-                break;
-            case PAYLOAD:
-                nextToken = consumePayload();
-                break;
-            case SECTION:
-                nextToken = consumeSection();
+            case ARBITRARY -> nextToken = consumeArbitrary();
+            case PAYLOAD -> nextToken = consumePayload();
+            case SECTION -> nextToken = consumeSection();
         }
 
-        advance();
         return nextToken;
     }
 
@@ -208,7 +213,6 @@ public class Lexer {
      */
     private Token consumePayload() {
         StringBuilder value = new StringBuilder();
-        // TODO: do we allow the payload to include comments itself?
         while (!isLookAheadCommentLineIdentifier() && !isLookAheadCommentBlockCloseIdentifierWithBrace() && !isEOF()) {
             value.append(reader.lookAhead());
             reader.advance();
@@ -230,11 +234,7 @@ public class Lexer {
      * @throws UnknownCharException    if a char cannot be processed to a valid Token
      */
     private Token consumeSection() throws UnexpectedCharException, UnknownCharException {
-        String nextChars = Arrays.toString(reader.lookAheads());
-
-        if (isEOF()) return consumeEOF();
-
-        switch (nextChars.charAt(0)) {
+        switch (reader.lookAhead()) {
             case '|': // |
                 return consumeOr();
             case '=': // ==
@@ -282,28 +282,28 @@ public class Lexer {
      * @return true iff there exists a line comment identifier and the next chars are equal to it
      */
     private boolean isLookAheadCommentLineIdentifier() {
-        return !commentLineIdentifier.isEmpty() && Arrays.toString(reader.lookAheads()).startsWith(commentLineIdentifier);
+        return !commentLineIdentifier.isEmpty() && reader.lookAheads().startsWith(commentLineIdentifier);
     }
 
     /**
      * @return true iff there exists an open block comment identifier and the next chars are equal to it
      */
     private boolean isLookAheadCommentBlockOpenIdentifier() {
-        return !commentBlockOpenIdentifier.isEmpty() && Arrays.toString(reader.lookAheads()).startsWith(commentBlockOpenIdentifier);
+        return !commentBlockOpenIdentifier.isEmpty() && reader.lookAheads().startsWith(commentBlockOpenIdentifier);
     }
 
     /**
      * @return true iff there exists an close block comment identifier and the next chars are equal to it
      */
     private boolean isLookAheadCommentBlockCloseIdentifier() {
-        return !commentBlockCloseIdentifier.isEmpty() && Arrays.toString(reader.lookAheads()).startsWith(commentBlockCloseIdentifier);
+        return !commentBlockCloseIdentifier.isEmpty() && reader.lookAheads().startsWith(commentBlockCloseIdentifier);
     }
 
     /**
      * @return true iff there exists an payload comment identifier and the next chars are equal to it
      */
     private boolean isLookAheadCommentPayloadIdentifier() {
-        return !commentPayloadIdentifier.isEmpty() && Arrays.toString(reader.lookAheads()).startsWith(commentPayloadIdentifier);
+        return !commentPayloadIdentifier.isEmpty() && reader.lookAheads().startsWith(commentPayloadIdentifier);
     }
 
     /**
@@ -311,7 +311,7 @@ public class Lexer {
      * "}" + the close block comment identifier
      */
     private boolean isLookAheadCommentBlockCloseIdentifierWithBrace() {
-        return !commentBlockCloseIdentifier.isEmpty() && Arrays.toString(reader.lookAheads()).startsWith("}" + commentBlockCloseIdentifier);
+        return !commentBlockCloseIdentifier.isEmpty() && reader.lookAheads().startsWith("}" + commentBlockCloseIdentifier);
     }
 
 
@@ -547,10 +547,9 @@ public class Lexer {
      * Consumes an identifier (e.g. "myIdentifier") or a keyword (e.g. "if", "has", "true" etc.).
      *
      * @return a Token representing the identifier (and its name stored as value in the Token) or a keyword.
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
-    private Token consumeIdentifierOrKeyword() throws UnexpectedCharException {
-        StringBuilder value = new StringBuilder(reader.lookAhead());
+    private Token consumeIdentifierOrKeyword() {
+        StringBuilder value = new StringBuilder(String.valueOf(reader.lookAhead()));
         reader.advance();
         while (Character.isLetterOrDigit(reader.lookAhead())) { // [a-zA-Z0-9]*
             value.append(reader.lookAhead());
