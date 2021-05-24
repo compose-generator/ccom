@@ -217,6 +217,12 @@ public class Lexer {
     private Token consumePayload() {
         StringBuilder value = new StringBuilder();
         while (!isLookAheadCommentLineIdentifier() && !isLookAheadCommentBlockCloseIdentifierWithBrace() && !isEOF()) {
+            if (isLookAheadCommentPayloadIdentifier()) {
+                // Ignore payload comment identifiers
+                for (int i = 0; i < commentPayloadIdentifier.length(); i++) {
+                    reader.advance();
+                }
+            }
             value.append(reader.lookAhead());
             reader.advance();
         }
