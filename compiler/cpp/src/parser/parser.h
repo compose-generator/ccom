@@ -27,7 +27,7 @@
 #include "ast/SectionExprAST.h"
 #include "ast/ContentExprAST.h"
 #include "../lexer/Token.h"
-#include "../lexer/lexer.h"
+#include "../lexer/Lexer.h"
 
 Token getNextToken();
 

@@ -6,7 +6,7 @@
 
 #include "main.h"
 
-// CLI call: ./ccom <single-stmt> <file-input> <data-input> <line-com-chars> <block-com-open-chars> <block-com-close-chars>
+// CLI call: ./ccom <single-stmt> <file-input> <data-input> <com-line-iden> <com-block-open-iden> <com-block-close-iden>
 int main(int argc, char** argv) {
     // Parse cli args
     std::vector<std::string> args;
@@ -16,14 +16,22 @@ int main(int argc, char** argv) {
     bool singleStatementMode = args[1] == "true";
     std::string fileInput = args[2];
     std::string dataInput = args[3];
+    std::string comLineIden = args[4];
+    std::string comBlockOpenIden = args[5];
+    std::string comBlockCloseIden = args[6];
 
     // Replace file input with test string
     //fileInput = "property1:= value\n//? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\n// test payload}\n// - another test payload\n//? }\nattribute2: value2";
     //fileInput = "property1:= value\n/*? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\ntest payload\n- }another test payload\n}*/\nattribute2: value2";
-    //fileInput = "//? if not has test.marc | test.marc.dominic.24 != \"Test\" { Test payload //? }";
+    fileInput = "//? if not has test.marc | test.marc.dominic.24 != \"Test\" { Test payload //? }";
+
+    comLineIden = "//";
+    comBlockOpenIden = "/*";
+    comBlockCloseIden = "*/";
 
     // Start compiler pipeline
-    std::string output = interpretInput(singleStatementMode, fileInput, dataInput, args[4], args[5], args[6]);
+    std::string output = interpretInput(singleStatementMode, fileInput, dataInput, comLineIden,
+                                        comBlockOpenIden, comBlockCloseIden);
 
     // Print output
     std::cout << output;

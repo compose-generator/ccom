@@ -6,8 +6,10 @@ set(CMAKE_CXX_STANDARD 20)
 add_executable(compiler
         src/main.cpp
         src/main.h
-        src/lexer/lexer.cpp
-        src/lexer/lexer.h
+        src/reader/Reader.cpp
+        src/reader/Reader.h
+        src/lexer/Lexer.cpp
+        src/lexer/Lexer.h
         src/lexer/Token.cpp
         src/lexer/Token.h
         src/parser/parser.cpp

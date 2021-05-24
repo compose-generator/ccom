@@ -7,8 +7,13 @@
 #include "parser.h"
 
 // Token buffer
+Lexer lexer;
 Token curTok;
-Token getNextToken() { return curTok = getTok(); }
+Token getNextToken() {
+    curTok = lexer.getLookahead();
+    lexer.advance();
+    return curTok;
+}
 
 void expectToken(int tokenType) {
     if (curTok.getType() != tokenType) throw std::runtime_error("Syntax error at " + curTok.getCodePos());
@@ -190,10 +195,14 @@ std::unique_ptr<ContentExprAST> parseContent() {
 
 TopLevelExprAST* executeSyntaxAnalysis(bool isSingleStatement, const std::string& fileInput, const std::string& lineCommentChars,
                                const std::string& blockCommentCharsOpen, const std::string& blockCommentCharsClose) {
-    initLexer(isSingleStatement, fileInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose);
+    lexer = Lexer(isSingleStatement, fileInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose);
 
-    // Fill buffer with first token
-    getNextToken();
+    // Test
+    while (lexer.getLookahead().getType() != TOK_EOF) {
+        std::cout << "Cur Tok: " << lexer.getLookahead().getType() << lexer.getLookahead().getValue() << std::endl;
+        lexer.advance();
+    }
+    std::cout << "End" << std::endl;
 
     // Build AST
     TopLevelExprAST* ast;
