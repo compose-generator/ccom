@@ -10,9 +10,9 @@ updates:
     open-pull-requests-limit: 15
     target-branch: main
     reviewers:
-      - compose-generator/core-team
+      - compose-generator/compiler-team
     assignees:
-      - compose-generator/core-team
+      - compose-generator/compiler-team
 
   # Java compiler dependency updates
   - package-ecosystem: maven
@@ -23,6 +23,6 @@ updates:
     open-pull-requests-limit: 15
     target-branch: develop
     reviewers:
-      - compose-generator/core-team
+      - compose-generator/compiler-team
     assignees:
-      - compose-generator/core-team
+      - compose-generator/compiler-team
