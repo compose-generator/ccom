@@ -134,10 +134,6 @@ public class Lexer {
         // Construct FileReader
         this.reader = new FileReader(file, maxLookAhead);
 
-        // Set starting position
-        this.tokenStartPosLine = reader.getPosLine();
-        this.tokenStartPosCol = reader.getPosCol();
-
         // Set context
         currentContext = isSingleStatement || isLookAheadCommentLineIdentifier() || isLookAheadCommentBlockOpenIdentifier()
                 ? Context.SECTION : Context.ARBITRARY;
@@ -191,8 +187,8 @@ public class Lexer {
         while (Character.isWhitespace(nextChar)) {
             reader.advance();
             nextChar = reader.lookAhead();
-            updateTokenStartPosition();
         }
+        updateTokenStartPosition();
 
         // EOF?
         if (isEOF()) {
@@ -617,7 +613,6 @@ public class Lexer {
      */
     private Token constructToken(TokenType type) {
         Token token = new Token(type, tokenStartPosLine, tokenStartPosCol);
-        updateTokenStartPosition();
         return token;
     }
 
@@ -630,7 +625,6 @@ public class Lexer {
      */
     private Token constructToken(TokenType type, String value) {
         Token token = new Token(type, value, tokenStartPosLine, tokenStartPosCol);
-        updateTokenStartPosition();
         return token;
     }
 
