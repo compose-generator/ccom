@@ -29,6 +29,8 @@ private:
     Reader reader;
     Context currentContext;
     Token curTok;
+    unsigned int tokenStartLineNum = 1;
+    unsigned int tokenStartColNum = 1;
 
     // Private functions
     Token consumeArbitrary();
@@ -61,6 +63,7 @@ private:
 
     Token constructToken(TokenType);
     Token constructToken(TokenType, std::string);
+    void updateTokenStartPosition();
 public:
     explicit Lexer(): currentContext(ARBITRARY) {};
     Lexer(bool, const std::string&, const std::string&, const std::string&, const std::string&);
