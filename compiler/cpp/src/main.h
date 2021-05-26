@@ -10,4 +10,4 @@
 #include <vector>
 #include "interpreter/Interpreter.h"
 
-int main1(int, char**);
+int main(int, char**);

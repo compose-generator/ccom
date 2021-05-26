@@ -4,7 +4,7 @@
 
 # pragma once
 
-#include <nlohmann/json.hpp>
+#include "../../lib/json/json.hpp"
 #include "../parser/ast/KeyExprAST.h"
 
 using json = nlohmann::json;
