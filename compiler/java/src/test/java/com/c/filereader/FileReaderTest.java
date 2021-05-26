@@ -116,6 +116,69 @@ public class FileReaderTest {
         expectEOF(reader, maxLookAhead);
     }
 
+    @Test
+    @DisplayName("Max look ahead - line breaks")
+    public void testLookAheadMaxLineBreaksWithPosition() throws MaxLookAheadException, UnexpectedCharException {
+        // Initialize
+        int maxLookAhead = 5;
+        String file = "}\n\n\n\n\n\n\n\n";
+        FileReader reader = new FileReader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('}');
+        assertThat(reader.lookAheads()).isEqualTo("}" + "\n" + "\n" + "\n" + "\n");
+        assertThat(reader.getPosLine()).isEqualTo(1);
+        assertThat(reader.getPosCol()).isEqualTo(1);
+        reader.expect('}');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + "\n" + "\n");
+        assertThat(reader.getPosLine()).isEqualTo(1);
+        assertThat(reader.getPosCol()).isEqualTo(2);
+        reader.expect('\n');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + "\n" + "\n");
+        assertThat(reader.getPosLine()).isEqualTo(2);
+        assertThat(reader.getPosCol()).isEqualTo(1);
+        reader.expect('\n');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + "\n" + "\n");
+        assertThat(reader.getPosLine()).isEqualTo(3);
+        assertThat(reader.getPosCol()).isEqualTo(1);
+        reader.expect('\n');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + "\n" + "\n");
+        assertThat(reader.getPosLine()).isEqualTo(4);
+        assertThat(reader.getPosCol()).isEqualTo(1);
+        reader.expect('\n');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + "\n" + (char) -1);
+        assertThat(reader.getPosLine()).isEqualTo(5);
+        assertThat(reader.getPosCol()).isEqualTo(1);
+        reader.expect('\n');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + (char) -1 + (char) -1);
+        assertThat(reader.getPosLine()).isEqualTo(6);
+        assertThat(reader.getPosCol()).isEqualTo(1);
+        reader.expect('\n');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.getPosLine()).isEqualTo(7);
+        assertThat(reader.getPosCol()).isEqualTo(1);
+        reader.expect('\n');
+
+        assertThat(reader.lookAhead()).isEqualTo('\n');
+        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.getPosLine()).isEqualTo(8);
+        assertThat(reader.getPosCol()).isEqualTo(1);
+        reader.expect('\n');
+    }
+
 
     // --------------------------------------- Look ahead + expect -----------------------------------------------------
 

@@ -1,5 +1,6 @@
 package com.c.filereader;
 
+import java.util.ArrayList;
 import java.util.PrimitiveIterator;
 import java.util.stream.Collectors;
 
@@ -36,25 +37,31 @@ public class FileReader {
      */
     private final LimitedQueue<Character> nextChars;
 
-    private final LimitedQueue<String> nextLines;
+    /**
+     * A buffer for the next n lines where n is at least equal to maxLookAhead (as passed to the constructor).
+     * <p>
+     * "At least" since there might be lots of new lines read in by the HEAD while we are still on one line
+     * with the "normal" position.
+     */
+    private final ArrayList<String> nextLines;
 
 
     // Position in file
 
     /**
-     * The current line we are looking at in the file.
+     * The current line we are looking at in the file. Counted from 1 onwards.
      */
     private int posLine = 1; // first line is line 1
 
     /**
-     * The current column we are looking at in the file.
+     * The current column we are looking at in the file. Counted from 1 onwards.
      */
     private int posCol = 1; // line starts at column 1
 
     /**
-     * The current column we are looking at in the file with the head of our buffer.
+     * The current column we are looking at in the file with the head of our buffer. Counted from 1 onwards.
      */
-    private int posHeadCol = 0; // line starts at column 1
+    private int posHeadCol = 1; // line starts at column 1
 
 
     // EOF flag
@@ -84,11 +91,10 @@ public class FileReader {
     public FileReader(String file, int maxLookAhead) throws MaxLookAheadException {
         if (maxLookAhead < 1)
             throw new MaxLookAheadException(maxLookAhead);
-
         this.file = file.chars().iterator();
+
         this.nextChars = new LimitedQueue<>(maxLookAhead);
-        // we take the worst case length here (if every line contained only a single character)
-        this.nextLines = new LimitedQueue<>(maxLookAhead);
+        this.nextLines = new ArrayList<>();
 
         // Advance to load first characters into buffer
         readNextLine();
@@ -122,7 +128,6 @@ public class FileReader {
      */
     public String lookAheads() {
         return nextChars.stream().map(Object::toString).collect(Collectors.joining());
-//        return nextChars.toArray(new Character[0]);
     }
 
 
@@ -146,14 +151,19 @@ public class FileReader {
             return; // nothing to do anymore after having reached EOF
         }
 
+        // we explicitly don't check if nextLines is empty here as it should never be (!)
+        // that's why we make a call to readNextLine() in the constructor before advanceHead()
+        String lastLine = nextLines.get(nextLines.size() - 1);
+
         // HEAD: Need to read next line into buffer?
-        if (posHeadCol == nextLines.getLast().length()) {
+        if (posHeadCol == lastLine.length() + 1) {
             readNextLine();
+            lastLine = nextLines.get(nextLines.size() - 1);
         }
 
         // Advance
+        nextChars.add(lastLine.charAt(posHeadCol - 1));
         posHeadCol++;
-        nextChars.add(nextLines.getLast().charAt(posHeadCol - 1));
     }
 
     /**
@@ -164,13 +174,13 @@ public class FileReader {
         if (hasReachedEof) return;
 
         // Need to jump to next line with current position?
-        if (posCol == nextLines.getFirst().length()) {
+        if (posCol == nextLines.get(0).length()) {
             posCol = 0;
             posLine++;
-            nextLines.removeFirst(); // advance to the next line
+            nextLines.remove(0); // advance to the next line
         }
 
-        // Advance with "normal" position and HEAD
+        // Advance with "normal" position
         posCol++;
 
         // Check for EOF for next call to advanceNormal()
@@ -212,7 +222,7 @@ public class FileReader {
         }
 
         nextLines.add(newLine.toString());
-        posHeadCol = 0;
+        posHeadCol = 1; // line start with col 1
     }
 
 
@@ -248,7 +258,7 @@ public class FileReader {
      * @return the current line with a caret at the current position
      */
     public String toPosStringWithCaret() {
-        String currentLine = nextLines.isEmpty() ? String.valueOf((char) -1) : nextLines.getFirst();
+        String currentLine = nextLines.isEmpty() ? String.valueOf((char) -1) : nextLines.get(0);
 
         // Strip last EOF for print out if no EOF yet
         if (!hasReachedEof) {
