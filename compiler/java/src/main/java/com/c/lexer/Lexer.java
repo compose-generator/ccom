@@ -27,8 +27,16 @@ public class Lexer {
      */
     private Token nextToken;
 
+    /**
+     * Buffer for the start position (line number) of the next Token.
+     */
     private int tokenStartPosLine;
+
+    /**
+     * Buffer for the start position (col number) of the next Token.
+     */
     private int tokenStartPosCol;
+
 
     // Context
 
