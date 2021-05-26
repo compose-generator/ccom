@@ -65,7 +65,6 @@ add_executable(${Name}
         src/interpreter/Interpreter.h
         src/exception/UnexpectedCharException.cpp
         src/exception/UnexpectedCharException.h
-        lib/catch/catch.hpp src/reader/ReaderTests.cpp
 
         #Tests
         src/reader/ReaderTests.cpp
@@ -95,5 +94,9 @@ target_link_libraries(${Name} gtest_main nlohmann_json::nlohmann_json)
 
 include(GoogleTest)
 gtest_discover_tests(${Name})
+#add_test(
+#        NAME ${Name}
+#        COMMAND ${Name}
+#)
 
 install(TARGETS ${Name})
