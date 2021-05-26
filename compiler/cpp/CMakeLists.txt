@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.19)
-project(compiler)
+
+set(Name CCom)
+project(${Name})
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(compiler
+add_executable(${Name}
+        # Main code
         src/main.cpp
         src/main.h
         src/util/JSONParser.cpp
@@ -61,10 +64,15 @@ add_executable(compiler
         src/interpreter/Interpreter.cpp
         src/interpreter/Interpreter.h
         src/exception/UnexpectedCharException.cpp
-        src/exception/UnexpectedCharException.h)
+        src/exception/UnexpectedCharException.h
+        lib/catch/catch.hpp src/reader/ReaderTests.cpp
 
+        #Tests
+        src/reader/ReaderTests.cpp
+)
+
+# Load json lib
 include(FetchContent)
-
 FetchContent_Declare(json
         GIT_REPOSITORY https://github.com/nlohmann/json.git
         GIT_TAG v3.9.1)
@@ -75,7 +83,17 @@ if(NOT json_POPULATED)
     add_subdirectory(${json_SOURCE_DIR} ${json_BINARY_DIR} EXCLUDE_FROM_ALL)
 endif()
 
-install(TARGETS compiler)
+# Load gtest lib
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/a3460d1aeeaa43fdf137a6adefef10ba0b59fe4b.zip)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
-target_link_libraries(compiler PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(${Name} gtest_main nlohmann_json::nlohmann_json)
 
+include(GoogleTest)
+gtest_discover_tests(${Name})
+
+install(TARGETS ${Name})

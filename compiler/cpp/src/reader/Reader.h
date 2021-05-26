@@ -7,6 +7,7 @@
 #include <string>
 #include <utility>
 #include <iostream>
+#include "../../lib/catch/catch.hpp"
 #include "../exception/UnexpectedCharException.h"
 
 class Reader {

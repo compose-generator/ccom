@@ -4,6 +4,7 @@
 
 #include "Reader.h"
 
+
 Reader::Reader(std::string fileInput, unsigned int maxLookahead):
     fileInput(std::move(fileInput)), maxLookahead(maxLookahead) {
     advance(); // Load first char into buffer
