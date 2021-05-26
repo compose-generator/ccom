@@ -221,6 +221,15 @@ public class LexerTest {
         });
     }
 
+    @Test
+    @DisplayName("Test Token IDENTIFIER")
+    public void testTokenIdentifier() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("Identifier", (lexer, language) -> {
+            int posCol = checkCommentStart(lexer, language);
+            checkExpectToken(lexer, new Token(TokenType.IDENTIFIER, "TestIdentifier", 1, posCol));
+        });
+    }
+
 
     // -- Different Context
     // TODO
