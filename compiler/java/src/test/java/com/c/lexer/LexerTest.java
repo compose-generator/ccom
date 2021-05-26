@@ -230,6 +230,24 @@ public class LexerTest {
         });
     }
 
+    @Test
+    @DisplayName("Test Token NUMBER")
+    public void testTokenNumber() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("Number", (lexer, language) -> {
+            int posCol = checkCommentStart(lexer, language);
+            checkExpectToken(lexer, new Token(TokenType.NUMBER, "42", 1, posCol));
+        });
+    }
+
+    @Test
+    @DisplayName("Test Token STRING")
+    public void testTokenString() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("String", (lexer, language) -> {
+            int posCol = checkCommentStart(lexer, language);
+            checkExpectToken(lexer, new Token(TokenType.STRING, "TestString", 1, posCol));
+        });
+    }
+
 
     // -- Different Context
     // TODO
