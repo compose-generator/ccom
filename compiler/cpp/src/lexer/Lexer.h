@@ -29,8 +29,8 @@ private:
     Reader reader;
     Context currentContext;
     Token curTok;
-    unsigned int tokenStartLineNum = 1;
-    unsigned int tokenStartColNum = 1;
+    unsigned int tokenStartLineNum;
+    unsigned int tokenStartColNum;
 
     // Private functions
     Token consumeArbitrary();

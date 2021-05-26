@@ -28,10 +28,8 @@ Lexer::Lexer(bool isSingleStatement, const std::string &fileInput, const std::st
 
 void Lexer::advance() {
     // Skip any whitespaces
-    while (isspace(reader.getLookahead())) {
-        reader.advance();
-        updateTokenStartPosition();
-    }
+    while (isspace(reader.getLookahead())) reader.advance();
+    updateTokenStartPosition();
 
     // Avoid empty arbitrary at EOF
     if (isEOF()) {
@@ -268,15 +266,11 @@ bool Lexer::isLookAheadCommentBlockCloseIdentifierWithBrace() {
 }
 
 Token Lexer::constructToken(TokenType type) {
-    Token token = Token(type, tokenStartLineNum, tokenStartColNum);
-    updateTokenStartPosition();
-    return token;
+    return Token(type, tokenStartLineNum, tokenStartColNum);
 }
 
 Token Lexer::constructToken(TokenType type, std::string value) {
-    Token token = Token(type, std::move(value), tokenStartLineNum, tokenStartColNum);
-    updateTokenStartPosition();
-    return token;
+    return Token(type, std::move(value), tokenStartLineNum, tokenStartColNum);
 }
 
 void Lexer::updateTokenStartPosition() {
