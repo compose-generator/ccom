@@ -248,6 +248,42 @@ public class LexerTest {
         });
     }
 
+    @Test
+    @DisplayName("Test Token DOT")
+    public void testTokenDot() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("Dot", (lexer, language) -> {
+            int posCol = checkCommentStart(lexer, language);
+            checkExpectToken(lexer, new Token(TokenType.DOT, 1, posCol));
+        });
+    }
+
+    @Test
+    @DisplayName("Test Token BRACE_OPEN")
+    public void testTokenBraceOpen() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("BraceOpen", (lexer, language) -> {
+            int posCol = checkCommentStart(lexer, language);
+            checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 1, posCol));
+        });
+    }
+
+    @Test
+    @DisplayName("Test Token BRACE_CLOSE")
+    public void testTokenBraceClose() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("BraceClose", (lexer, language) -> {
+            int posCol = checkCommentStart(lexer, language);
+            checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 1, posCol));
+        });
+    }
+
+    @Test
+    @DisplayName("Test Token INDEX")
+    public void testTokenIndex() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
+        testForEveryLanguage("Index", (lexer, language) -> {
+            int posCol = checkCommentStart(lexer, language);
+            checkExpectToken(lexer, new Token(TokenType.INDEX, "42", 1, posCol));
+        });
+    }
+
 
     // -- Different Context
     // TODO

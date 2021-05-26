@@ -33,10 +33,10 @@ public enum TokenType {
     BRACE_CLOSE, // }
     INDEX, // [42]
     // The following examples refer to Java
-    COMMENT_PAYLOAD_IDENTIFIER, // //
     COMMENT_LINE_IDENTIFIER, // //?
     COMMENT_BLOCK_OPEN_IDENTIFIER, // /*?
     COMMENT_BLOCK_CLOSE_IDENTIFIER, // */
+    COMMENT_PAYLOAD_IDENTIFIER, // //
 
     // actual program code or data (in languages like JSON or yml)
     // // that is not relevant for us since we are enriching existent languages

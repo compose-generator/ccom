@@ -510,7 +510,7 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeBraceClose() throws UnexpectedCharException {
-        reader.expect('{');
+        reader.expect('}');
         currentContext = Context.ARBITRARY;
         return constructToken(TokenType.BRACE_CLOSE);
     }
