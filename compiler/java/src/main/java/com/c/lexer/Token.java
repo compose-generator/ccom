@@ -8,10 +8,10 @@ public class Token {
     private final int posLine;
     private final int posCol;
 
-    public Token(TokenType type, String value, int lineNum, int posCol) {
+    public Token(TokenType type, String value, int posLine, int posCol) {
         this.type = type;
         this.value = value;
-        this.posLine = lineNum;
+        this.posLine = posLine;
         this.posCol = posCol;
     }
 

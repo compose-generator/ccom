@@ -198,36 +198,43 @@ public class Lexer {
      * Consumes arbitrary chars, e.g. program code (e.g. Java) or data (e.g. JSON).
      *
      * @return a Token of type ARBITRARY and the char sequence as value of that Token
+     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
-    private Token consumeArbitrary() {
-        StringBuilder value = new StringBuilder();
-        while (!isLookAheadCommentLineIdentifier() && !isLookAheadCommentBlockOpenIdentifier() && !isEOF()) {
-            value.append(reader.lookAhead());
-            reader.advance();
-        }
-        currentContext = Context.SECTION;
-        return constructTokenAtCurrentPosition(TokenType.ARBITRARY, value.toString());
+    private Token consumeArbitrary() throws UnexpectedCharException {
+        return constructToken(TokenType.ARBITRARY, () -> {
+            StringBuilder value = new StringBuilder();
+            while (!isLookAheadCommentLineIdentifier() && !isLookAheadCommentBlockOpenIdentifier() && !isEOF()) {
+                value.append(reader.lookAhead());
+                reader.advance();
+            }
+            currentContext = Context.SECTION;
+            return value.toString();
+        });
     }
 
     /**
      * Consumes the payload that might get uncommented if the respective conditional comment evaluates to true.
      *
      * @return a Token of type ARBITRARY and the char sequence that might get uncommented as value of that Token
+     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
-    private Token consumePayload() {
-        StringBuilder value = new StringBuilder();
-        while (!isLookAheadCommentLineIdentifier() && !isLookAheadCommentBlockCloseIdentifierWithBrace() && !isEOF()) {
-            if (isLookAheadCommentPayloadIdentifier()) {
-                // Ignore payload comment identifiers
-                for (int i = 0; i < commentPayloadIdentifier.length(); i++) {
-                    reader.advance();
+    private Token consumePayload() throws UnexpectedCharException {
+        return constructToken(TokenType.ARBITRARY, () -> {
+            StringBuilder value = new StringBuilder();
+            while (!isLookAheadCommentLineIdentifier() && !isLookAheadCommentBlockCloseIdentifierWithBrace() && !isEOF()) {
+                if (isLookAheadCommentPayloadIdentifier()) {
+                    // Ignore payload comment identifiers
+                    for (int i = 0; i < commentPayloadIdentifier.length(); i++) {
+                        reader.advance();
+                    }
                 }
+
+                value.append(reader.lookAhead());
+                reader.advance();
             }
-            value.append(reader.lookAhead());
-            reader.advance();
-        }
-        currentContext = Context.SECTION;
-        return constructTokenAtCurrentPosition(TokenType.ARBITRARY, value.toString());
+            currentContext = Context.SECTION;
+            return value.toString();
+        });
     }
 
     /**
@@ -332,8 +339,10 @@ public class Lexer {
      *
      * @return a Token representing EOF
      */
-    private Token consumeEOF() {
-        return constructTokenAtCurrentPosition(TokenType.EOF);
+    private Token consumeEOF() throws UnexpectedCharException {
+        return constructToken(TokenType.EOF, () -> {
+            // Nothing to do here
+        });
     }
 
     /**
@@ -341,14 +350,14 @@ public class Lexer {
      * This will switch to the SECTION context.
      *
      * @return a Token representing that line comment identifier
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeCommentLineIdentifier() throws UnexpectedCharException {
-        for (char c : commentLineIdentifier.toCharArray()) {
-            reader.expect(c);
-        }
-        currentContext = Context.SECTION;
-        return constructTokenAtCurrentPosition(TokenType.COMMENT_LINE_IDENTIFIER);
+        return constructToken(TokenType.COMMENT_LINE_IDENTIFIER, () -> {
+            for (char c : commentLineIdentifier.toCharArray()) {
+                reader.expect(c);
+            }
+            currentContext = Context.SECTION;
+        });
     }
 
     /**
@@ -359,11 +368,12 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeCommentBlockOpenIdentifier() throws UnexpectedCharException {
-        for (char c : commentBlockOpenIdentifier.toCharArray()) {
-            reader.expect(c);
-        }
-        currentContext = Context.SECTION;
-        return constructTokenAtCurrentPosition(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER);
+        return constructToken(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER, () -> {
+            for (char c : commentBlockOpenIdentifier.toCharArray()) {
+                reader.expect(c);
+            }
+            currentContext = Context.SECTION;
+        });
     }
 
     /**
@@ -374,11 +384,12 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeCommentBlockCloseIdentifier() throws UnexpectedCharException {
-        for (char c : commentBlockCloseIdentifier.toCharArray()) {
-            reader.expect(c);
-        }
-        currentContext = Context.SECTION;
-        return constructTokenAtCurrentPosition(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER);
+        return constructToken(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, () -> {
+            for (char c : commentBlockCloseIdentifier.toCharArray()) {
+                reader.expect(c);
+            }
+            currentContext = Context.SECTION;
+        });
     }
 
     /**
@@ -389,11 +400,12 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeCommentPayloadIdentifier() throws UnexpectedCharException {
-        for (char c : commentPayloadIdentifier.toCharArray()) {
-            reader.expect(c);
-        }
-        currentContext = Context.SECTION;
-        return constructTokenAtCurrentPosition(TokenType.COMMENT_PAYLOAD_IDENTIFIER);
+        return constructToken(TokenType.COMMENT_PAYLOAD_IDENTIFIER, () -> {
+            for (char c : commentPayloadIdentifier.toCharArray()) {
+                reader.expect(c);
+            }
+            currentContext = Context.SECTION;
+        });
     }
 
     /**
@@ -403,8 +415,9 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeOr() throws UnexpectedCharException {
-        reader.expect('|');
-        return constructTokenAtCurrentPosition(TokenType.OR);
+        return constructToken(TokenType.OR, () -> {
+            reader.expect('|');
+        });
     }
 
     /**
@@ -414,9 +427,10 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeEquals() throws UnexpectedCharException {
-        reader.expect('=');
-        reader.expect('=');
-        return constructTokenAtCurrentPosition(TokenType.EQUALS);
+        return constructToken(TokenType.EQUALS, () -> {
+            reader.expect('=');
+            reader.expect('=');
+        });
     }
 
     /**
@@ -426,9 +440,10 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeNotEquals() throws UnexpectedCharException {
-        reader.expect('!');
-        reader.expect('=');
-        return constructTokenAtCurrentPosition(TokenType.NOT_EQUALS);
+        return constructToken(TokenType.NOT_EQUALS, () -> {
+            reader.expect('!');
+            reader.expect('=');
+        });
     }
 
     /**
@@ -440,12 +455,14 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeLessThanOrLessEqualThan() throws UnexpectedCharException {
+        int posLine = reader.getPosLine();
+        int posCol = reader.getPosCol();
         reader.expect('<');
         if (reader.lookAhead() == '=') { // <=
             reader.expect('=');
-            return constructTokenAtCurrentPosition(TokenType.LESS_EQUAL);
+            return new Token(TokenType.LESS_EQUAL, posLine, posCol);
         }
-        return constructTokenAtCurrentPosition(TokenType.LESS);
+        return new Token(TokenType.LESS, posLine, posCol);
     }
 
     /**
@@ -457,12 +474,14 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeGreaterThanOrGreaterEqualThan() throws UnexpectedCharException {
+        int posLine = reader.getPosLine();
+        int posCol = reader.getPosCol();
         reader.expect('>');
         if (reader.lookAhead() == '=') { // >=
             reader.expect('=');
-            return constructTokenAtCurrentPosition(TokenType.GREATER_EQUAL);
+            return new Token(TokenType.GREATER_EQUAL, posLine, posCol);
         }
-        return constructTokenAtCurrentPosition(TokenType.GREATER);
+        return new Token(TokenType.GREATER, posLine, posCol);
     }
 
     /**
@@ -472,8 +491,9 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeDot() throws UnexpectedCharException {
-        reader.expect('.');
-        return constructTokenAtCurrentPosition(TokenType.DOT);
+        return constructToken(TokenType.DOT, () -> {
+            reader.expect('.');
+        });
     }
 
     /**
@@ -484,9 +504,10 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeBraceOpen() throws UnexpectedCharException {
-        reader.expect('{');
-        currentContext = Context.PAYLOAD;
-        return constructTokenAtCurrentPosition(TokenType.BRACE_OPEN);
+        return constructToken(TokenType.BRACE_OPEN, () -> {
+            reader.expect('{');
+            currentContext = Context.PAYLOAD;
+        });
     }
 
     /**
@@ -497,9 +518,10 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeBraceClose() throws UnexpectedCharException {
-        reader.expect('{');
-        currentContext = Context.ARBITRARY;
-        return constructTokenAtCurrentPosition(TokenType.BRACE_CLOSE);
+        return constructToken(TokenType.BRACE_CLOSE, () -> {
+            reader.expect('{');
+            currentContext = Context.ARBITRARY;
+        });
     }
 
     /**
@@ -509,25 +531,30 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeIndex() throws UnexpectedCharException {
-        reader.expect('[');
-        Token numberToken = consumeNumber();
-        reader.expect(']');
-        return constructTokenAtCurrentPosition(TokenType.INDEX, numberToken.getValue());
+        return constructToken(TokenType.INDEX, () -> {
+            reader.expect('[');
+            Token numberToken = consumeNumber();
+            reader.expect(']');
+            return numberToken.getValue();
+        });
     }
 
     /**
      * Consumes a number, e.g. "3141592".
      *
      * @return a Token representing that number (including its value as String)
+     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
-    private Token consumeNumber() {
-        StringBuilder value = new StringBuilder();
-        do {
-            value.append(reader.lookAhead());
-            reader.advance();
-        } while (Character.isDigit(reader.lookAhead()));
+    private Token consumeNumber() throws UnexpectedCharException {
+        return constructToken(TokenType.NUMBER, () -> {
+            StringBuilder value = new StringBuilder();
+            do {
+                value.append(reader.lookAhead());
+                reader.advance();
+            } while (Character.isDigit(reader.lookAhead()));
 
-        return constructTokenAtCurrentPosition(TokenType.NUMBER, value.toString());
+            return value.toString();
+        });
     }
 
     /**
@@ -538,19 +565,26 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeString() throws UnexpectedCharException {
-        reader.expect('"');
-        StringBuilder value = new StringBuilder();
-        while (reader.lookAhead() != '"' && reader.lookAhead() != (char) -1) {
-            // Consider escaped characters
-            // e.g "This is \"quote\"" or "This is a \\n line break in a string literal"
-            if (reader.lookAhead() == '\\') {
-                reader.advance(); // one extra advance
+        return constructToken(TokenType.STRING, () -> {
+            reader.expect('"');
+
+            StringBuilder value = new StringBuilder();
+            while (reader.lookAhead() != '"' && reader.lookAhead() != (char) -1) {
+
+                // Consider escaped characters
+                // e.g "This is \"quote\"" or "This is a \\n line break in a string literal"
+                if (reader.lookAhead() == '\\') {
+                    reader.advance(); // one extra advance
+                }
+
+                value.append(reader.lookAhead());
+                reader.advance();
             }
-            value.append(reader.lookAhead());
-            reader.advance();
-        }
-        reader.expect('"');
-        return constructTokenAtCurrentPosition(TokenType.STRING, value.toString());
+
+            reader.expect('"');
+
+            return value.toString();
+        });
     }
 
     /**
@@ -559,6 +593,9 @@ public class Lexer {
      * @return a Token representing the identifier (and its name stored as value in the Token) or a keyword.
      */
     private Token consumeIdentifierOrKeyword() {
+        int posLine = reader.getPosLine();
+        int posCol = reader.getPosCol();
+
         StringBuilder value = new StringBuilder(String.valueOf(reader.lookAhead()));
         reader.advance();
         while (Character.isLetterOrDigit(reader.lookAhead())) { // [a-zA-Z0-9]*
@@ -568,37 +605,62 @@ public class Lexer {
 
         // Is keyword?
         String identifier = value.toString();
-        if (identifier.equals("if")) return constructTokenAtCurrentPosition(TokenType.IF);
-        if (identifier.equals("has")) return constructTokenAtCurrentPosition(TokenType.HAS);
-        if (identifier.equals("not")) return constructTokenAtCurrentPosition(TokenType.NOT);
-        if (identifier.equals("true")) return constructTokenAtCurrentPosition(TokenType.TRUE);
-        if (identifier.equals("false")) return constructTokenAtCurrentPosition(TokenType.FALSE);
+        if (identifier.equals("if")) return new Token(TokenType.IF, posLine, posCol);
+        if (identifier.equals("has")) return new Token(TokenType.HAS, posLine, posCol);
+        if (identifier.equals("not")) return new Token(TokenType.NOT, posLine, posCol);
+        if (identifier.equals("true")) return new Token(TokenType.TRUE, posLine, posCol);
+        if (identifier.equals("false")) return new Token(TokenType.FALSE, posLine, posCol);
 
-        return constructTokenAtCurrentPosition(TokenType.IDENTIFIER, identifier);
+        return new Token(TokenType.IDENTIFIER, identifier, posLine, posCol);
     }
 
 
     // ------------------------------------------ Util -----------------------------------------------------------------
 
-    /**
-     * Constructs a Token based on the current position.
-     *
-     * @param type type of the token
-     * @return a new Token
-     */
-    private Token constructTokenAtCurrentPosition(TokenType type) {
-        return new Token(type, reader.getPosLine(), reader.getPosCol());
+//    /**
+//     * Constructs a Token based on the current position.
+//     *
+//     * @param type type of the token
+//     * @return a new Token
+//     */
+//    private Token constructTokenAtCurrentPosition(TokenType type) {
+//        return new Token(type, reader.getPosLine(), reader.getPosCol());
+//    }
+//
+//    /**
+//     * Constructs a Token based on the current position.
+//     *
+//     * @param type  type of the token
+//     * @param value the String that the Token is supposed to store
+//     * @return a new Token
+//     */
+//    private Token constructTokenAtCurrentPosition(TokenType type, String value) {
+//        return new Token(type, value, reader.getPosLine(), reader.getPosCol());
+//    }
+
+
+    // ----------------------------------- Construct Token with FileReader Util ----------------------------------------
+
+    interface ConstructTokenCallbackWithoutValue {
+        void doDuringConstruction() throws UnexpectedCharException;
     }
 
-    /**
-     * Constructs a Token based on the current position.
-     *
-     * @param type  type of the token
-     * @param value the String that the Token is supposed to store
-     * @return a new Token
-     */
-    private Token constructTokenAtCurrentPosition(TokenType type, String value) {
-        return new Token(type, value, reader.getPosLine(), reader.getPosCol());
+    private Token constructToken(TokenType type, ConstructTokenCallbackWithoutValue callback) throws UnexpectedCharException {
+        int posLine = reader.getPosLine();
+        int posCol = reader.getPosCol();
+        callback.doDuringConstruction();
+        return new Token(type, posLine, posCol);
+    }
+
+    interface ConstructTokenCallbackWithValue {
+        String doDuringConstruction() throws UnexpectedCharException;
+    }
+
+    private Token constructToken(TokenType type, ConstructTokenCallbackWithValue callback) throws UnexpectedCharException {
+        int posLine = reader.getPosLine();
+        int posCol = reader.getPosCol();
+        String value = callback.doDuringConstruction();
+        return new Token(type, value, posLine, posCol);
     }
 
 }
