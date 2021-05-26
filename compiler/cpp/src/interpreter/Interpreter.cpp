@@ -154,4 +154,5 @@ template<typename T> bool Interpreter::evaluateCondition(T leftValue, T rightVal
         case OP_GREATER_EQUAL: return leftValue >= rightValue;
         case OP_LESS_EQUAL: return leftValue <= rightValue;
     }
+    return false;
 }

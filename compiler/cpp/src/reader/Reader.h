@@ -8,6 +8,7 @@
 #include <utility>
 #include <iostream>
 #include "../exception/UnexpectedCharException.h"
+#include "../exception/MaxLookaheadException.h"
 
 class Reader {
 private:

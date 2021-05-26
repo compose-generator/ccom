@@ -7,6 +7,8 @@
 
 Reader::Reader(std::string fileInput, unsigned int maxLookahead):
     fileInput(std::move(fileInput)), maxLookahead(maxLookahead) {
+    if (maxLookahead < 1) throw MaxLookaheadException(maxLookahead);
+
     advance(); // Load first char into buffer
 }
 
