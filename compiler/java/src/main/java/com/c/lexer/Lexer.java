@@ -223,7 +223,7 @@ public class Lexer {
      *
      * @return a Token of type ARBITRARY and the char sequence that might get uncommented as value of that Token
      */
-    private Token consumePayload() {
+    private Token consumePayload() throws UnexpectedCharException {
         StringBuilder value = new StringBuilder();
         while (!isLookAheadCommentLineIdentifier()
                 && !isLookAheadCommentBlockCloseIdentifierWithBrace()
@@ -231,9 +231,7 @@ public class Lexer {
 
             // Ignore payload comment identifiers
             if (isLookAheadCommentPayloadIdentifier()) {
-                for (int i = 0; i < commentPayloadIdentifier.length(); i++) {
-                    reader.advance();
-                }
+                consumeCommentPayloadIdentifier();
             }
 
             // TODO: also allow for any chars after '}' and before '-->' (HTML)
