@@ -33,8 +33,8 @@ In general, you call the cli like so: <br>
 ### CLI options
 | Option                      	| Shortcut 	| Description                                                                           	| Default 	|
 |-----------------------------	|----------	|---------------------------------------------------------------------------------------	|---------	|
-| --benchmark                  	| -b <n>       	| Execute compiler benchmarks. <n> is the number of benchmark runs	                	| 0      	|
-| --compiler                  	| -c <name>    	| Can be used to switch the compiler backend. Valid inputs are `cpp` and `java`	               	| cpp      	|
+| --benchmark                  	| -b n       	| Execute compiler benchmarks. <n> is the number of benchmark runs	                	| 0      	|
+| --compiler                  	| -c name    	| Can be used to switch the compiler backend. Valid inputs are `cpp` and `java`	               	| cpp      	|
 | --data                      	| -d       	| JSON string or path to JSON file, which holds the evaluation work data                	| {}      	|
 | --lang                      	| -l       	| File format / programming language (e.g. yaml, java, html, ...)                       	| yaml    	|
 | --mode-single               	| -m       	| Set input mode to single statement list                                               	| -       	|
