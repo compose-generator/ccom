@@ -515,7 +515,7 @@ public class Lexer {
      */
     private Token consumeBraceClose() throws UnexpectedCharException {
         reader.expect('}');
-        currentContext = isLookAheadCommentBlockCloseIdentifier() ? Context.SECTION : Context.ARBITRARY;
+        if (!isLookAheadCommentBlockCloseIdentifier()) currentContext = Context.ARBITRARY;
         return constructToken(TokenType.BRACE_CLOSE);
     }
 
