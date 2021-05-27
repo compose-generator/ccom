@@ -616,8 +616,7 @@ public class Lexer {
      * @return a new Token
      */
     private Token constructToken(TokenType type) {
-        Token token = new Token(type, tokenStartPosLine, tokenStartPosCol);
-        return token;
+        return new Token(type, tokenStartPosLine, tokenStartPosCol);
     }
 
     /**
@@ -628,8 +627,7 @@ public class Lexer {
      * @return a new Token
      */
     private Token constructToken(TokenType type, String value) {
-        Token token = new Token(type, value, tokenStartPosLine, tokenStartPosCol);
-        return token;
+        return new Token(type, value, tokenStartPosLine, tokenStartPosCol);
     }
 
 }
