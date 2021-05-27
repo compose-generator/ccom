@@ -1,4 +1,4 @@
-package com.c.filereader;
+package com.c.reader;
 
 import java.util.LinkedList;
 

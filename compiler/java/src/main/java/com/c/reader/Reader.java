@@ -1,9 +1,13 @@
-package com.c.filereader;
+package com.c.reader;
 
+import com.c.Constants;
+
+import java.util.ArrayList;
 import java.util.PrimitiveIterator;
+import java.util.stream.Collectors;
 
 /**
- * FileReader that is capable of looking ahead one char.
+ * Reader that is capable of looking ahead one char.
  * Only operates on strings, not actual files.<br><br>
  * <p>
  * This file reader might have a look ahead great than 1. This is why we keep track of two positions:
@@ -16,38 +20,54 @@ import java.util.PrimitiveIterator;
  * We need to fill up the buffer, so the HEAD position is pointing to character 4 while the "normal" position still
  * points to 0 as a user of this FileReader wants to start with the first character (and not the fifth).
  */
-public class FileReader {
+public class Reader {
 
     // --------------------------------------- Member variables --------------------------------------------------------
 
-    // Input data as stream
+    // File
+
+    /**
+     * The input file as a char stream.
+     */
     private final PrimitiveIterator.OfInt file;
 
+
     // Buffer
+
     /**
      * A buffer for the next n characters where n is equal to maxLookAhead (as passed to the constructor)
      */
     private final LimitedQueue<Character> nextChars;
 
-    private final LimitedQueue<String> nextLines;
+    /**
+     * A buffer for the next n lines where n is at least equal to maxLookAhead (as passed to the constructor).
+     * <p>
+     * "At least" since there might be lots of new lines read in by the HEAD while we are still on one line
+     * with the "normal" position.
+     */
+    private final ArrayList<String> nextLines;
+
 
     // Position in file
+
     /**
-     * The current line we are looking at in the file.
+     * The current line we are looking at in the file. Counted from 1 onwards.
      */
     private int posLine = 1; // first line is line 1
 
     /**
-     * The current column we are looking at in the file.
+     * The current column we are looking at in the file. Counted from 1 onwards.
      */
     private int posCol = 1; // line starts at column 1
 
     /**
-     * The current column we are looking at in the file with the head of our buffer.
+     * The current column we are looking at in the file with the head of our buffer. Counted from 1 onwards.
      */
-    private int posHeadCol = 0; // line starts at column 1
+    private int posHeadCol = 1; // line starts at column 1
+
 
     // EOF flag
+
     /**
      * Flag for whether the HEAD has reached EOF (end of file) or not.
      */
@@ -62,21 +82,21 @@ public class FileReader {
     // --------------------------------------- Constructor -------------------------------------------------------------
 
     /**
-     * Constructs a file reader operating on a file given as a string.
+     * Constructs a FileReader operating on a file given as String.
      * <p>
      * Note that it would be easy to modify this constructor to be able to pass in a stream instead of a string.
      * The FileReader converts the file that is given as a string (in the current implementation) to a stream anyway.
      *
-     * @param file the input file as a string
+     * @param file the input file as String
+     * @throws MaxLookAheadException if the max look ahead is less than 1
      */
-    public FileReader(String file, int maxLookAhead) throws MaxLookAheadException {
+    public Reader(String file, int maxLookAhead) throws MaxLookAheadException {
         if (maxLookAhead < 1)
             throw new MaxLookAheadException(maxLookAhead);
-
         this.file = file.chars().iterator();
+
         this.nextChars = new LimitedQueue<>(maxLookAhead);
-        // we take the worst case length here (if every line contained only a single character)
-        this.nextLines = new LimitedQueue<>(maxLookAhead);
+        this.nextLines = new ArrayList<>();
 
         // Advance to load first characters into buffer
         readNextLine();
@@ -108,8 +128,8 @@ public class FileReader {
      *
      * @return next chars as a character list
      */
-    public Character[] lookAheads() {
-        return nextChars.toArray(new Character[0]);
+    public String lookAheads() {
+        return nextChars.stream().map(Object::toString).collect(Collectors.joining());
     }
 
 
@@ -129,18 +149,23 @@ public class FileReader {
     private void advanceHead() {
         // Check for EOF
         if (hasHeadReachedEof) {
-            nextChars.add((char) -1);
+            nextChars.add(Constants.EOF);
             return; // nothing to do anymore after having reached EOF
         }
 
+        // we explicitly don't check if nextLines is empty here as it should never be (!)
+        // that's why we make a call to readNextLine() in the constructor before advanceHead()
+        String lastLine = nextLines.get(nextLines.size() - 1);
+
         // HEAD: Need to read next line into buffer?
-        if (posHeadCol == nextLines.getLast().length()) {
+        if (posHeadCol == lastLine.length() + 1) {
             readNextLine();
+            lastLine = nextLines.get(nextLines.size() - 1);
         }
 
         // Advance
+        nextChars.add(lastLine.charAt(posHeadCol - 1));
         posHeadCol++;
-        nextChars.add(nextLines.getLast().charAt(posHeadCol - 1));
     }
 
     /**
@@ -151,17 +176,17 @@ public class FileReader {
         if (hasReachedEof) return;
 
         // Need to jump to next line with current position?
-        if (posCol == nextLines.getFirst().length()) {
+        if (posCol == nextLines.get(0).length()) {
             posCol = 0;
             posLine++;
-            nextLines.removeFirst(); // advance to the next line
+            nextLines.remove(0); // advance to the next line
         }
 
-        // Advance with "normal" position and HEAD
+        // Advance with "normal" position
         posCol++;
 
         // Check for EOF for next call to advanceNormal()
-        if (nextChars.getFirst().equals((char) -1)) {
+        if (nextChars.getFirst().equals(Constants.EOF)) {
             hasReachedEof = true;
         }
     }
@@ -180,7 +205,7 @@ public class FileReader {
             if (!file.hasNext()) {
                 hasHeadReachedEof = true;
                 // construct a dummy currentLine for advance() to read from once at the end
-                newLine.append((char) -1);
+                newLine.append(Constants.EOF);
                 break;
             }
 
@@ -199,11 +224,11 @@ public class FileReader {
         }
 
         nextLines.add(newLine.toString());
-        posHeadCol = 0;
+        posHeadCol = 1; // line start with col 1
     }
 
 
-    // --------------------------------------- Expect  -----------------------------------------------------------------
+    // --------------------------------------- Expect ------------------------------------------------------------------
 
     /**
      * Checks if the next char is the expected character. Advances one character after a successful check.
@@ -217,13 +242,26 @@ public class FileReader {
         advance();
     }
 
+    /**
+     * Checks if the next chars are equal to the given String. Advances n character after a successful check
+     * where n is the length of the String.
+     *
+     * @param expected expected chars as string (to compare the next chars against)
+     * @throws UnexpectedCharException if one of the next chars is not the expected character (in the given String)
+     */
+    public void expectMultiple(String expected) throws UnexpectedCharException {
+        for (char c : expected.toCharArray()) {
+            expect(c);
+        }
+    }
+
 
     // ------------------------------------ Current position -----------------------------------------------------------
 
     /**
      * @return formatted line number and column
      */
-    private String toPosString() {
+    public String toPosString() {
         return "@" + posLine + ":" + posCol;
     }
 
@@ -235,11 +273,11 @@ public class FileReader {
      * @return the current line with a caret at the current position
      */
     public String toPosStringWithCaret() {
-        String currentLine = nextLines.isEmpty() ? String.valueOf((char) -1) : nextLines.getFirst();
+        String currentLine = nextLines.isEmpty() ? String.valueOf(Constants.EOF) : nextLines.get(0);
 
         // Strip last EOF for print out if no EOF yet
         if (!hasReachedEof) {
-            if (currentLine.endsWith(String.valueOf((char) -1)))
+            if (currentLine.endsWith(String.valueOf(Constants.EOF)))
                 currentLine = currentLine.substring(0, currentLine.length() - 1);
         }
 
@@ -253,6 +291,14 @@ public class FileReader {
         posMsg.append("^");
 
         return posMsg.toString();
+    }
+
+    public int getPosLine() {
+        return posLine;
+    }
+
+    public int getPosCol() {
+        return posCol;
     }
 
 }
