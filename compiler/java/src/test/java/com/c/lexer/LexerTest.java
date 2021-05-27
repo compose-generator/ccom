@@ -297,18 +297,20 @@ public class LexerTest {
         Lexer lexer = constructLexer("Advanced", languages.get("Html"));
 
         // Arbitrary begin
-        String arbitraryBegin = "<html>\n" +
-                "<head>\n" +
-                "\n" +
-                "</head>\n" +
-                "\n" +
-                "<body>\n" +
-                "<p>This is a <strong>Test</strong>.\n" +
-                "<p>\n" +
-                "<div>\n" +
-                "    <p>asdfjklö ASDFJKLÖ #+-'test' \"Test\" [2].3 4<5<6>=1>0 { test } }--</p>\n" +
-                "    <!-- This is a standard comment, NO payload-->\n" +
-                "</div>\n";
+        String arbitraryBegin = """
+                <html>
+                <head>
+
+                </head>
+
+                <body>
+                <p>This is a <strong>Test</strong>.
+                <p>
+                <div>
+                    <p>asdfjklö ASDFJKLÖ #+-'test' "Test" [2].3 4<5<6>=1>0 { test } }--</p>
+                    <!-- This is a standard comment, NO payload-->
+                </div>
+                """;
         checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryBegin, 1, 1));
 
         // Start CCom section
@@ -336,11 +338,14 @@ public class LexerTest {
 
         // Payload
         checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 14, 82));
-        String payload = "<div>\n" +
-                "    <p>This is my payload (including div)</p>\n" +
-                "</div>\n" +
-                "{\n" +
-                "}\n\n";
+        String payload = """
+                <div>
+                    <p>This is my payload (including div)</p>
+                </div>
+                {
+                }
+
+                """;
         checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payload, 15, 1));
         checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 21, 1));
 
@@ -348,11 +353,13 @@ public class LexerTest {
         checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 21, 2));
 
         // Arbitrary
-        String arbitraryMiddle = "\n\n" +
-                "</body>\n" +
-                "\n" +
-                "<footer>\n" +
-                "    <p>Test</p>";
+        String arbitraryMiddle = """
+
+
+                </body>
+
+                <footer>
+                    <p>Test</p>""";
         checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryMiddle, 21, 5));
 
         // Start CCom section
@@ -363,9 +370,10 @@ public class LexerTest {
 
         // Payload
         checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 26, 33));
-        String payload2 = "<div>\n" +
-                "        <p>This is even more payload</>p>\n" +
-                "    </div>";
+        String payload2 = """
+                <div>
+                        <p>This is even more payload</>p>
+                    </div>""";
         checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payload2, 26, 34));
         checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 28, 11));
 
@@ -373,9 +381,12 @@ public class LexerTest {
         checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 28, 12));
 
         // Arbitrary ending
-        String arbitraryEnd = "\n</footer>\n" +
-                "\n" +
-                "</html>\n";
+        String arbitraryEnd = """
+
+                </footer>
+
+                </html>
+                """;
         checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryEnd, 28, 15));
     }
 
@@ -385,16 +396,17 @@ public class LexerTest {
         Lexer lexer = constructLexer("AdvancedJavaTest", languages.get("Java"));
 
         // Arbitrary begin
-        String arbitraryBegin = "package com.c.lexer;\n" +
-                "\n" +
-                "class AdvancedJavaTest {\n" +
-                "\n" +
-                "    private void dummy() {\n" +
-                "        int a = 5;\n" +
-                "        int b = 6;\n" +
-                "        int c = a + b;\n" +
-                "        StringBuilder str = new StringBuilder(\"asdfjklö ASDFJKLÖ #+-'test' \\\"Test\\\" [2].3 4<5<6>=1>0 { test } // /* */ }*/\");\n" +
-                "        ";
+        String arbitraryBegin = """
+                package com.c.lexer;
+
+                class AdvancedJavaTest {
+
+                    private void dummy() {
+                        int a = 5;
+                        int b = 6;
+                        int c = a + b;
+                        StringBuilder str = new StringBuilder("asdfjklö ASDFJKLÖ #+-'test' \\"Test\\" [2].3 4<5<6>=1>0 { test } // /* */ }*/");
+                       \s""";
         checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryBegin, 1, 1));
 
         // Start CCom section
@@ -425,9 +437,11 @@ public class LexerTest {
 
         // Payload
         checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 13, 93));
-        String payload = "String strValue = str.toString();\n" +
-                "         strValue += \"\";\n" + // note that "//" inside the string got replaced by "" here
-                "        ";
+        // note that "//" inside the string got replaced by "" here
+        String payload = """
+                String strValue = str.toString();
+                         strValue += "";
+                       \s""";
         checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payload, 14, 9));
 
         // Close conditional comment
@@ -501,14 +515,17 @@ public class LexerTest {
         checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 33, 12));
         checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 33, 13));
 
-        String arbitraryEnd = "\n" +
-                "    }\n" +
-                "\n" +
-                "    private String rest() {\n" +
-                "        return \"This is the rest // /* */ // { }\";\n" + // "//" not replaced (!)
-                "    }\n" +
-                "\n" +
-                "}\n";
+        // "//" not replaced (!)
+        String arbitraryEnd = """
+
+                    }
+
+                    private String rest() {
+                        return "This is the rest // /* */ // { }";
+                    }
+
+                }
+                """;
         checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryEnd, 33, 15));
     }
 
