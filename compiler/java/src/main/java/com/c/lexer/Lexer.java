@@ -264,7 +264,9 @@ public class Lexer {
         if (isLookAheadCommentBlockCloseIdentifier()) return consumeCommentBlockCloseIdentifier();
         if (isLookAheadCommentPayloadIdentifier()) return consumeCommentPayloadIdentifier();
 
-        switch (reader.lookAhead()) {
+        char nextChar = reader.lookAhead();
+
+        switch (nextChar) {
             case '|': // |
                 return consumeOr();
             case '=': // ==
@@ -287,10 +289,10 @@ public class Lexer {
                 return consumeIndex();
         }
 
-        if (Character.isAlphabetic(reader.lookAhead())) return consumeIdentifierOrKeyword();
-        if (Character.isDigit(reader.lookAhead())) return consumeNumber();
+        if (Character.isAlphabetic(nextChar)) return consumeIdentifierOrKeyword();
+        if (Character.isDigit(nextChar)) return consumeNumber();
 
-        throw new UnknownCharException(reader.lookAhead());
+        throw new UnknownCharException(nextChar);
     }
 
 
