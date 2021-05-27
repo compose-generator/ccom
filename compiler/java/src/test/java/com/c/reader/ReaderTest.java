@@ -251,8 +251,8 @@ public class ReaderTest {
     }
 
     @Test
-    @DisplayName("Expect multiple")
-    public void testExpectMultiple() throws UnexpectedCharException, MaxLookAheadException {
+    @DisplayName("Expect multiple success")
+    public void testExpectMultipleSuccess() throws UnexpectedCharException, MaxLookAheadException {
         // Initialize
         int maxLookAhead = 4;
         String file = "File input";
@@ -266,6 +266,25 @@ public class ReaderTest {
         reader.expectMultiple("ut");
 
         expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
+    @DisplayName("Expect multiple failure")
+    public void testExpectMultipleFailure() throws UnexpectedCharException, MaxLookAheadException {
+        // Initialize
+        int maxLookAhead = 5;
+        String file = "File input";
+        Reader reader = new Reader(file, maxLookAhead);
+
+        reader.advance();
+        reader.expectMultiple("il");
+
+        try {
+            reader.expectMultiple("random");
+            throw new Error("Expected reader.expectMultiple() to throw an error, but it didn't");
+        } catch (UnexpectedCharException err) {
+            assertThat(err.getMessage()).isEqualTo("Expected 'r' but got 'e' @1:4");
+        }
     }
 
     @Test
@@ -368,12 +387,10 @@ public class ReaderTest {
 
         try {
             reader.expect('z');
+            throw new Error("Expected reader.expect() to throw an error, but it didn't");
         } catch (UnexpectedCharException err) {
             assertThat(err.getMessage()).isEqualTo("Expected 'z' but got 'a' @1:1");
-            return;
         }
-
-        throw new Error("Expected reader.expect() to throw an error, but it didn't");
     }
 
     @Test
@@ -391,12 +408,10 @@ public class ReaderTest {
 
         try {
             reader.expect('z');
+            throw new Error("Expected reader.expect() to throw an error, but it didn't");
         } catch (UnexpectedCharException err) {
             assertThat(err.getMessage()).isEqualTo("Expected 'z' but got 'd' @2:2");
-            return;
         }
-
-        throw new Error("Expected reader.expect() to throw an error, but it didn't");
     }
 
     @Test
@@ -417,12 +432,11 @@ public class ReaderTest {
         assertThat(reader.lookAhead()).isNotEqualTo('!');
         try {
             reader.expect('!');
+            throw new Error("Expected reader.expect() to throw an error, but it didn't");
         } catch (UnexpectedCharException err) {
             assertThat(err.getMessage()).isEqualTo("Expected '!' but got '\n' @2:4");
-            return;
         }
 
-        throw new Error("Expected reader.expect() to throw an error, but it didn't");
     }
 
 
