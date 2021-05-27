@@ -39,6 +39,6 @@ public enum TokenType {
     COMMENT_PAYLOAD_IDENTIFIER, // //
 
     // actual program code or data (in languages like JSON or yml)
-    // // that is not relevant for us since we are enriching existent languages
-    ARBITRARY
+    // that is not relevant for us since we are enriching existent languages
+    ARBITRARY // e.g. asd'!?fowen7a_=sdfkh%package class { public int main() {} }"
 }
