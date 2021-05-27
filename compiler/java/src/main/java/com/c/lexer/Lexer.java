@@ -87,7 +87,7 @@ public class Lexer {
      * Constructs a Lexer operating on a file given as String.
      * The Lexer is responsible to convert a stream of chars to a stream of Tokens.
      *
-     * @param file                        the ipnut file as String
+     * @param file                        the input file as String
      * @param commentLineIdentifier       the identifier for line comments in the original language
      *                                    (e.g. // in Java)
      * @param commentBlockOpenIdentifier  the identifier for opening block comments in the original language
@@ -569,6 +569,7 @@ public class Lexer {
             value.append(reader.lookAhead());
             reader.advance();
         }
+
         reader.expect('"');
 
         return constructToken(TokenType.STRING, value.toString());
