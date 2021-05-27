@@ -292,7 +292,7 @@ public class Lexer {
         if (Character.isAlphabetic(nextChar)) return consumeIdentifierOrKeyword();
         if (Character.isDigit(nextChar)) return consumeNumber();
 
-        throw new UnknownCharException(nextChar);
+        throw new UnknownCharException(nextChar, reader.toPosString());
     }
 
 
