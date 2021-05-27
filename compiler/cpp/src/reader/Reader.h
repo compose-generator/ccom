@@ -28,7 +28,7 @@ public:
     void expect(int);
     void expectMultiple(const std::string&);
     int getLookahead() const;
-    std::string getMaxLookahead();
+    std::string getLookaheadMultiple();
     unsigned int getLineNum() const;
     unsigned int getColNum() const;
 };
