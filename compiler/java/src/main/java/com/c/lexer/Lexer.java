@@ -1,9 +1,9 @@
 package com.c.lexer;
 
 import com.c.Constants;
-import com.c.filereader.FileReader;
-import com.c.filereader.MaxLookAheadException;
-import com.c.filereader.UnexpectedCharException;
+import com.c.reader.MaxLookAheadException;
+import com.c.reader.Reader;
+import com.c.reader.UnexpectedCharException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,7 +18,7 @@ public class Lexer {
     /**
      * A FileReader to read the file (given as String) char by char.
      */
-    private final FileReader reader;
+    private final Reader reader;
 
 
     // Buffer
@@ -133,7 +133,7 @@ public class Lexer {
         int maxLookAhead = Collections.max(commentIdentifierLengths) + 1;
 
         // Construct FileReader
-        this.reader = new FileReader(file, maxLookAhead);
+        this.reader = new Reader(file, maxLookAhead);
 
         // Set context
         currentContext = isSingleStatement || isLookAheadCommentLineIdentifier() || isLookAheadCommentBlockOpenIdentifier()

@@ -1,4 +1,4 @@
-package com.c.filereader;
+package com.c.reader;
 
 import com.c.Constants;
 import com.c.TestFileReader;
@@ -9,9 +9,9 @@ import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FileReaderTest {
+public class ReaderTest {
 
-    private final TestFileReader testFileReader = new TestFileReader("filereader");
+    private final TestFileReader testFileReader = new TestFileReader("reader");
 
 
     // ---------------------------------------- EOF  -------------------------------------------------------------------
@@ -19,7 +19,7 @@ public class FileReaderTest {
     /**
      * Checks that EOF is reached.
      */
-    private void expectEOF(FileReader reader, int maxLookAhead) throws UnexpectedCharException {
+    private void expectEOF(Reader reader, int maxLookAhead) throws UnexpectedCharException {
         assertThat(reader.lookAhead()).isEqualTo(Constants.EOF);
         reader.expect(Constants.EOF);
 
@@ -33,7 +33,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = "";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         expectEOF(reader, maxLookAhead);
 
@@ -56,13 +56,13 @@ public class FileReaderTest {
         String file = "testfile";
 
         try {
-            new FileReader(file, 0);
+            new Reader(file, 0);
         } catch (MaxLookAheadException err) {
             assertThat(err.getMessage()).isEqualTo("Max look ahead was 0 but must be at least 1");
         }
 
         try {
-            new FileReader(file, -10);
+            new Reader(file, -10);
         } catch (MaxLookAheadException err) {
             assertThat(err.getMessage()).isEqualTo("Max look ahead was -10 but must be at least 1");
         }
@@ -74,7 +74,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 1;
         String file = "{";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
         assertThat(reader.lookAheads()).isEqualTo("{");
@@ -89,7 +89,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 2;
         String file = "{";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
         assertThat(reader.lookAheads()).isEqualTo("{" + Constants.EOF);
@@ -104,7 +104,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 1;
         String file = "{a";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
         assertThat(reader.lookAheads()).isEqualTo("{");
@@ -123,7 +123,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 5;
         String file = "}\n\n\n\n\n\n\n\n";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('}');
         assertThat(reader.lookAheads()).isEqualTo("}" + "\n" + "\n" + "\n" + "\n");
@@ -189,7 +189,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = "\n";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
         assertThat(reader.lookAheads()).isEqualTo("\n" + Constants.EOF + Constants.EOF + Constants.EOF);
@@ -204,7 +204,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = "{";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
         assertThat(reader.lookAheads()).isEqualTo("{" + Constants.EOF + Constants.EOF + Constants.EOF);
@@ -219,7 +219,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = "{a";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
         assertThat(reader.lookAheads()).isEqualTo("{" + "a" + Constants.EOF + Constants.EOF);
@@ -238,7 +238,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = "/!\n";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('/');
         assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + Constants.EOF);
@@ -261,7 +261,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = "/!\r\n";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('/');
         assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + Constants.EOF);
@@ -286,7 +286,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = testFileReader.fileToString("TwoBasicLines.txt");
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('a');
         assertThat(reader.lookAheads()).isEqualTo("a" + "b" + "\n" + "c");
@@ -328,7 +328,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = testFileReader.fileToString("TwoBasicLines.txt");
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         try {
             reader.expect('z');
@@ -346,7 +346,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = testFileReader.fileToString("TwoBasicLines.txt");
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         reader.expect('a');
         reader.expect('b');
@@ -369,7 +369,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = testFileReader.fileToString("TwoBasicLines.txt");
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         reader.expect('a');
         reader.expect('b');
@@ -398,7 +398,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = "\n";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         String expect1 = "" +
                 "\n" +
@@ -418,7 +418,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = "{";
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         String expect1 = "" +
                 "{\n" +
@@ -438,7 +438,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = testFileReader.fileToString("TwoBasicLines.txt");
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         reader.expect('a');
         reader.expect('b');
@@ -469,7 +469,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = testFileReader.fileToString("TwoBasicLines.txt");
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         String expect = "" +
                 "ab\n" +
@@ -483,7 +483,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = testFileReader.fileToString("TwoBasicLines.txt");
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         reader.expect('a');
         reader.expect('b');
@@ -502,7 +502,7 @@ public class FileReaderTest {
         // Initialize
         int maxLookAhead = 4;
         String file = testFileReader.fileToString("TwoBasicLines.txt");
-        FileReader reader = new FileReader(file, maxLookAhead);
+        Reader reader = new Reader(file, maxLookAhead);
 
         reader.expect('a');
         reader.expect('b');

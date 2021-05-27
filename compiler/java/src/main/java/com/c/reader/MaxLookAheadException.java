@@ -1,4 +1,4 @@
-package com.c.filereader;
+package com.c.reader;
 
 /**
  * Exception indicating that the max look ahead is less than 1.

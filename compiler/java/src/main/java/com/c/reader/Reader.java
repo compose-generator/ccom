@@ -1,4 +1,4 @@
-package com.c.filereader;
+package com.c.reader;
 
 import com.c.Constants;
 
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  * We need to fill up the buffer, so the HEAD position is pointing to character 4 while the "normal" position still
  * points to 0 as a user of this FileReader wants to start with the first character (and not the fifth).
  */
-public class FileReader {
+public class Reader {
 
     // --------------------------------------- Member variables --------------------------------------------------------
 
@@ -90,7 +90,7 @@ public class FileReader {
      * @param file the input file as String
      * @throws MaxLookAheadException if the max look ahead is less than 1
      */
-    public FileReader(String file, int maxLookAhead) throws MaxLookAheadException {
+    public Reader(String file, int maxLookAhead) throws MaxLookAheadException {
         if (maxLookAhead < 1)
             throw new MaxLookAheadException(maxLookAhead);
         this.file = file.chars().iterator();

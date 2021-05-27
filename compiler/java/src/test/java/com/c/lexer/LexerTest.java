@@ -2,8 +2,8 @@ package com.c.lexer;
 
 import com.c.LanguageDescription;
 import com.c.TestFileReader;
-import com.c.filereader.MaxLookAheadException;
-import com.c.filereader.UnexpectedCharException;
+import com.c.reader.MaxLookAheadException;
+import com.c.reader.UnexpectedCharException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
