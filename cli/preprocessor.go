@@ -34,7 +34,7 @@ func processInput(
 		fmt.Println("done")
 	}
 
-	if benchmarkRuns <= 1 { // Normal compiler mode
+	if benchmarkRuns <= 0 { // Normal compiler mode
 		// Feed the compiler with the input
 		if !silentFlag {
 			fmt.Print("Compiling ... ")
