@@ -14,6 +14,7 @@ class AdvancedJavaTest {
         //String strValue = str.toString();
         // strValue += "//";
         //?}
+        int arbitrary = 42;
         //? == teSt if {
         // int d = 5;
         //int e = 6;

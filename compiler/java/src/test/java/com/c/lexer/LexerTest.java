@@ -448,72 +448,75 @@ public class LexerTest {
         checkExpectToken(lexer, new Token(TokenType.COMMENT_LINE_IDENTIFIER, 16, 9));
         checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 16, 12));
 
-        // Open another conditional comment in this section
-        String shortArbitrary = "\n" +
+        // Arbitrary in between
+        String arbitraryShort = "\n" +
+                "        int arbitrary = 42;\n" +
                 "        ";
-        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, shortArbitrary, 16, 13));
-        checkExpectToken(lexer, new Token(TokenType.COMMENT_LINE_IDENTIFIER, 17, 9));
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryShort, 16, 13));
 
-        checkExpectToken(lexer, new Token(TokenType.EQUALS, 17, 13));
-        checkExpectToken(lexer, new Token(TokenType.IDENTIFIER, "teSt", 17, 16));
-        checkExpectToken(lexer, new Token(TokenType.IF, 17, 21));
-        checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 17, 24));
+        // Open another conditional comment in this section
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_LINE_IDENTIFIER, 18, 9));
+
+        checkExpectToken(lexer, new Token(TokenType.EQUALS, 18, 13));
+        checkExpectToken(lexer, new Token(TokenType.IDENTIFIER, "teSt", 18, 16));
+        checkExpectToken(lexer, new Token(TokenType.IF, 18, 21));
+        checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 18, 24));
 
         String arbitraryMiddle = " int d = 5;\n" +
                 "        int e = 6;\n" +
                 "         int f = d + e;\n" +
                 "        ";
-        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryMiddle, 18, 9));
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryMiddle, 19, 9));
 
         // Close conditional comment
-        checkExpectToken(lexer, new Token(TokenType.COMMENT_LINE_IDENTIFIER, 21, 9));
-        checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 21, 12));
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_LINE_IDENTIFIER, 22, 9));
+        checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 22, 12));
 
         String arbitraryDummy2 = "\n" +
                 "    }\n" +
                 "\n" +
                 "    private void dummy2() {\n" +
                 "        ";
-        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryDummy2, 21, 13));
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryDummy2, 22, 13));
 
         // Start CCom section (now with block comments)
-        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER, 25, 9));
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER, 26, 9));
 
-        checkExpectToken(lexer, new Token(TokenType.STRING, "a", 26, 9));
-        checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 26, 13));
+        checkExpectToken(lexer, new Token(TokenType.STRING, "a", 27, 9));
+        checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 27, 13));
 
         String payloadDummy2 = "StringBuilder str = new StringBuilder(\"/* { } \");\n" + // "//" replace by ""
                 "        ";
-        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payloadDummy2, 27, 9));
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payloadDummy2, 28, 9));
 
         // Close conditional comment
-        checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 28, 9));
-        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 28, 10));
+        checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 29, 9));
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 29, 10));
 
         // Arbitrary between sections
         String arbitraryBetweenSection = "\n" +
                 "\n" +
                 "        ";
-        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryBetweenSection, 28, 12));
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryBetweenSection, 29, 12));
 
         // Start CCom section (now with block comments)
-        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER, 30, 9));
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER, 31, 9));
 
-        checkExpectToken(lexer, new Token(TokenType.STRING, "b", 30, 12));
-        checkExpectToken(lexer, new Token(TokenType.NOT_EQUALS, 30, 16));
-        checkExpectToken(lexer, new Token(TokenType.LESS, 30, 19));
-        checkExpectToken(lexer, new Token(TokenType.IDENTIFIER, "testIdentifier", 30, 21));
-        checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 30, 36));
+        checkExpectToken(lexer, new Token(TokenType.STRING, "b", 31, 12));
+        checkExpectToken(lexer, new Token(TokenType.NOT_EQUALS, 31, 16));
+        checkExpectToken(lexer, new Token(TokenType.LESS, 31, 19));
+        checkExpectToken(lexer, new Token(TokenType.IDENTIFIER, "testIdentifier", 31, 21));
+        checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 31, 36));
 
         // Payload
         String payloadLast = "StringBuilder str2 = new StringBuilder(\"/* { } \");\n" + // "//" replaced by ""
                 "        int z = 42;\n" +
                 "           ";
-        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payloadLast, 31, 9));
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payloadLast, 32, 9));
 
         // Close conditional comment
-        checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 33, 12));
-        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 33, 13));
+        checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 34, 12));
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 34, 13));
 
         // "//" not replaced (!)
         String arbitraryEnd = """
@@ -526,12 +529,16 @@ public class LexerTest {
 
                 }
                 """;
-        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryEnd, 33, 15));
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryEnd, 34, 15));
     }
 
 
     // ---------------------------------------------- Exceptions -------------------------------------------------------
     // TODO
+
+    // TODO: two conditional line comments consecutively
+
+    // TODO: two conditional block comments consecutively
 
 
     // ------------------ Single statements (file only consists of a conditional comments section ----------------------
