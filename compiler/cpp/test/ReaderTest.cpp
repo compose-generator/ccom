@@ -13,14 +13,13 @@ TEST(ReaderTests, EoF) {
 
     // Test
     EXPECT_EQ (reader.getLookahead(),  'T');
-    reader.advance();
-    reader.advance();
-    reader.advance();
+    reader.expectMultiple("Tes");
     EXPECT_EQ (reader.getLookahead(),  't');
-    reader.advance();
+    reader.expect('t');
     EXPECT_EQ (reader.getLookahead(),  EOF);
-    reader.advance();
+    reader.expect(EOF);
     EXPECT_EQ (reader.getLookahead(),  EOF);
+    reader.expect(EOF);
 }
 
 TEST(ReaderTests, EoFInEmptyFile) {
@@ -29,10 +28,11 @@ TEST(ReaderTests, EoFInEmptyFile) {
 
     // Test
     EXPECT_EQ (reader.getLookahead(),  EOF);
-    reader.advance();
+    reader.expect(EOF);
     EXPECT_EQ (reader.getLookahead(),  EOF);
-    reader.advance();
+    reader.expect(EOF);
     EXPECT_EQ (reader.getLookahead(),  EOF);
+    reader.expect(EOF);
 }
 
 // ----------------------------------------------------- Lookahead -----------------------------------------------------
@@ -43,6 +43,7 @@ TEST(ReaderTests, Lookahead) {
 
     // Test
     EXPECT_EQ (reader.getLookahead(),  'F');
+    reader.expect('F');
 }
 
 TEST(ReaderTests, LookaheadAdvance) {
@@ -67,6 +68,7 @@ TEST(ReaderTests, MaxLookahead) {
 
     // Test
     EXPECT_EQ (reader.getMaxLookahead(),  "File");
+    reader.expectMultiple("File");
 }
 
 TEST(ReaderTests, MexLookaheadAdvance) {
@@ -100,11 +102,12 @@ TEST(ReaderTests, MaxLookaheadIsOne) {
     // Test
     EXPECT_EQ (reader.getMaxLookahead(),  "F");
     EXPECT_EQ (reader.getMaxLookahead(),  std::string(1, reader.getLookahead()));
-    reader.advance();
+    reader.expect('F');
     reader.advance();
     reader.advance();
     EXPECT_EQ (reader.getMaxLookahead(),  "e");
     EXPECT_EQ (reader.getMaxLookahead(),  std::string(1, reader.getLookahead()));
+    reader.expect('e');
 }
 
 // ------------------------------------------------------- Expect ------------------------------------------------------
