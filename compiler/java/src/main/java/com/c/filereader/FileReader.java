@@ -242,6 +242,19 @@ public class FileReader {
         advance();
     }
 
+    /**
+     * Checks if the next chars are equal to the given String. Advances n character after a successful check
+     * where n is the length of the String.
+     *
+     * @param expected expected chars as string (to compare the next chars against)
+     * @throws UnexpectedCharException if one of the next chars is not the expected character (in the given String)
+     */
+    public void expectMultiple(String expected) throws UnexpectedCharException {
+        for (char c : expected.toCharArray()) {
+            expect(c);
+        }
+    }
+
 
     // ------------------------------------ Current position -----------------------------------------------------------
 

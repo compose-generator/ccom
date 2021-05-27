@@ -362,9 +362,7 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeCommentLineIdentifier() throws UnexpectedCharException {
-        for (char c : commentLineIdentifier.toCharArray()) {
-            reader.expect(c);
-        }
+        reader.expectMultiple(commentLineIdentifier);
         currentContext = Context.SECTION;
         return constructToken(TokenType.COMMENT_LINE_IDENTIFIER);
     }
@@ -377,9 +375,7 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeCommentBlockOpenIdentifier() throws UnexpectedCharException {
-        for (char c : commentBlockOpenIdentifier.toCharArray()) {
-            reader.expect(c);
-        }
+        reader.expectMultiple(commentBlockOpenIdentifier);
         currentContext = Context.SECTION;
         return constructToken(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER);
     }
@@ -392,9 +388,7 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeCommentBlockCloseIdentifier() throws UnexpectedCharException {
-        for (char c : commentBlockCloseIdentifier.toCharArray()) {
-            reader.expect(c);
-        }
+        reader.expectMultiple(commentBlockCloseIdentifier);
         currentContext = Context.ARBITRARY;
         return constructToken(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER);
     }
@@ -407,9 +401,7 @@ public class Lexer {
      * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
      */
     private Token consumeCommentPayloadIdentifier() throws UnexpectedCharException {
-        for (char c : commentPayloadIdentifier.toCharArray()) {
-            reader.expect(c);
-        }
+        reader.expectMultiple(commentPayloadIdentifier);
         return constructToken(TokenType.COMMENT_PAYLOAD_IDENTIFIER);
     }
 
