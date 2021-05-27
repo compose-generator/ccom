@@ -28,6 +28,24 @@ public class ReaderTest {
     }
 
     @Test
+    @DisplayName("EOF in basic file")
+    public void testEof() throws UnexpectedCharException, MaxLookAheadException {
+        // Initialize
+        int maxLookAhead = 2;
+        String file = "Test";
+        Reader reader = new Reader(file, maxLookAhead);
+
+        assertThat(reader.lookAhead()).isEqualTo('T');
+        reader.advance();
+        reader.advance();
+        reader.advance();
+        assertThat(reader.lookAhead()).isEqualTo('t');
+        reader.advance();
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
     @DisplayName("EOF in empty file")
     public void testEmptyFile() throws UnexpectedCharException, MaxLookAheadException {
         // Initialize
