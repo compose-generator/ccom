@@ -144,6 +144,16 @@ TEST(ReaderTests, LookaheadMultipleIsOne) {
     reader.expect('e');
 }
 
+TEST(ReaderTests, LookaheadMultipleLongerThanFile) {
+    // Initialize
+    Reader reader = Reader("{a", 4);
+
+    // Test
+    EXPECT_EQ (reader.getLookahead(),  '{');
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "{a");
+    reader.expectMultiple("{a");
+}
+
 // ------------------------------------------------------- Expect ------------------------------------------------------
 
 TEST(ReaderTests, ExpectSuccess) {
