@@ -382,7 +382,7 @@ public class LexerTest {
     @Test
     @DisplayName("Advanced Java")
     void testAdvancedJava() throws InvalidCommentsIdentifierException, UnexpectedCharException, MaxLookAheadException, UnknownCharException, IOException, UnexpectedTokenException {
-        Lexer lexer = constructLexer("Advanced", languages.get("Java"));
+        Lexer lexer = constructLexer("AdvancedJavaTest", languages.get("Java"));
 
         // Arbitrary begin
         String arbitraryBegin = "package com.c.lexer;\n" +
