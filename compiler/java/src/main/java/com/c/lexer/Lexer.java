@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Uses a Reader to operate on a char sequence and sequentially transforms this sequence into {@link Token}s.
+ * This Lexer provides an API to advance() with the current position and to expect() a specific Token or TokenType.
+ */
 public class Lexer {
 
     // --------------------------------------- Member variables --------------------------------------------------------

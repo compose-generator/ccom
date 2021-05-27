@@ -1,5 +1,8 @@
 package com.c.lexer;
 
+/**
+ * Describes the possible types of a Token, e.g. EOF, IF, EQUALS, NUMBER etc.
+ */
 public enum TokenType {
     // End of file
     EOF,
