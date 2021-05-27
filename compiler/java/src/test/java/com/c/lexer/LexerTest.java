@@ -246,7 +246,7 @@ public class LexerTest {
     @Test
     @DisplayName("Test Token STRING")
     public void testTokenString() throws MaxLookAheadException, InvalidCommentsIdentifierException, UnexpectedCharException, UnknownCharException, IOException, UnexpectedTokenException {
-        testForEveryLanguage("String", (lexer, language) -> {
+        testForEveryLanguage("StringTest", (lexer, language) -> {
             int posCol = checkCommentStart(lexer, language);
             checkExpectToken(lexer, new Token(TokenType.STRING, "TestString", 1, posCol));
         });
