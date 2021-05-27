@@ -24,7 +24,7 @@ TEST(ReaderTests, EoF) {
 
 TEST(ReaderTests, EoFInEmptyFile) {
     // Initialize
-    Reader reader = Reader("", 5);
+    Reader reader = Reader("", 2);
 
     // Test
     EXPECT_EQ (reader.getLookahead(),  EOF);
@@ -58,6 +58,18 @@ TEST(ReaderTests, LookaheadAdvance) {
     EXPECT_EQ (reader.getLookahead(),  'l');
     reader.advance();
     EXPECT_EQ (reader.getLookahead(),  'e');
+    reader.advance();
+    EXPECT_EQ (reader.getLookahead(),  ' ');
+    reader.advance();
+    EXPECT_EQ (reader.getLookahead(),  'i');
+    reader.advance();
+    EXPECT_EQ (reader.getLookahead(),  'n');
+    reader.advance();
+    EXPECT_EQ (reader.getLookahead(),  'p');
+    reader.advance();
+    EXPECT_EQ (reader.getLookahead(),  'u');
+    reader.advance();
+    EXPECT_EQ (reader.getLookahead(),  't');
 }
 
 // --------------------------------------------------- Max lookahead ---------------------------------------------------
@@ -83,6 +95,9 @@ TEST(ReaderTests, MexLookaheadAdvance) {
     EXPECT_EQ (reader.getMaxLookahead(),  "le ");
     reader.advance();
     EXPECT_EQ (reader.getMaxLookahead(),  "e i");
+    reader.advance();
+    reader.advance();
+    EXPECT_EQ (reader.getMaxLookahead(),  "input");
 }
 
 TEST(ReaderTests, MaxLookaheadInvalid) {
@@ -127,7 +142,6 @@ TEST(ReaderTests, ExpectSuccess) {
         reader.expect('n');
         reader.advance();
         reader.expect('u');
-        SUCCEED();
     } catch (UnexpectedCharException const & err) {
         FAIL() << "Expected UnexpectedCharException got thrown";
     }
@@ -165,7 +179,6 @@ TEST(ReaderTests, ExpectMultipleSuccess) {
         reader.expectMultiple("in");
         reader.advance();
         reader.expectMultiple("ut");
-        SUCCEED();
     } catch (UnexpectedCharException const & err) {
         FAIL() << "Expected UnexpectedCharException got thrown";
     }
