@@ -409,7 +409,6 @@ public class Lexer {
         for (char c : commentPayloadIdentifier.toCharArray()) {
             reader.expect(c);
         }
-        currentContext = Context.SECTION;
         return constructToken(TokenType.COMMENT_PAYLOAD_IDENTIFIER);
     }
 
