@@ -251,6 +251,24 @@ public class ReaderTest {
     }
 
     @Test
+    @DisplayName("Expect multiple")
+    public void testExpectMultiple() throws UnexpectedCharException, MaxLookAheadException {
+        // Initialize
+        int maxLookAhead = 4;
+        String file = "File input";
+        Reader reader = new Reader(file, maxLookAhead);
+
+        reader.advance();
+        reader.expectMultiple("ile");
+        reader.advance();
+        reader.expectMultiple("in");
+        reader.advance();
+        reader.expectMultiple("ut");
+
+        expectEOF(reader, maxLookAhead);
+    }
+
+    @Test
     @DisplayName("Look ahead and expect with two characters and simple line break")
     public void testLookAheadTwoCharsWithSimpleLineBreak() throws UnexpectedCharException, MaxLookAheadException {
         // Initialize
