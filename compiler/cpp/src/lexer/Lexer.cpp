@@ -28,7 +28,7 @@ Lexer::Lexer(bool isSingleStatement, const std::string &fileInput, const std::st
 
 void Lexer::advance() {
     // Skip any whitespaces
-    while (isspace(reader.getLookahead())) reader.advance();
+    while (currentContext != ARBITRARY && isspace(reader.getLookahead())) reader.advance();
     updateTokenStartPosition();
 
     // Avoid empty arbitrary at EOF
