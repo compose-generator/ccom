@@ -1,5 +1,6 @@
 package com.c.filereader;
 
+import com.c.Constants;
 import com.c.TestFileReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,10 @@ public class FileReaderTest {
      * Checks that EOF is reached.
      */
     private void expectEOF(FileReader reader, int maxLookAhead) throws UnexpectedCharException {
-        assertThat(reader.lookAhead()).isEqualTo((char) -1);
-        reader.expect((char) -1);
+        assertThat(reader.lookAhead()).isEqualTo(Constants.EOF);
+        reader.expect(Constants.EOF);
 
-        String bufferExpect = String.valueOf((char) -1).repeat(maxLookAhead);
+        String bufferExpect = String.valueOf(Constants.EOF).repeat(maxLookAhead);
         assertThat(reader.lookAheads()).isEqualTo(bufferExpect);
     }
 
@@ -91,7 +92,7 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo("{" + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("{" + Constants.EOF);
         reader.expect('{');
 
         expectEOF(reader, maxLookAhead);
@@ -155,25 +156,25 @@ public class FileReaderTest {
         reader.expect('\n');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + "\n" + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + "\n" + Constants.EOF);
         assertThat(reader.getPosLine()).isEqualTo(5);
         assertThat(reader.getPosCol()).isEqualTo(1);
         reader.expect('\n');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + "\n" + Constants.EOF + Constants.EOF);
         assertThat(reader.getPosLine()).isEqualTo(6);
         assertThat(reader.getPosCol()).isEqualTo(1);
         reader.expect('\n');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + "\n" + Constants.EOF + Constants.EOF + Constants.EOF);
         assertThat(reader.getPosLine()).isEqualTo(7);
         assertThat(reader.getPosCol()).isEqualTo(1);
         reader.expect('\n');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + Constants.EOF + Constants.EOF + Constants.EOF + Constants.EOF);
         assertThat(reader.getPosLine()).isEqualTo(8);
         assertThat(reader.getPosCol()).isEqualTo(1);
         reader.expect('\n');
@@ -191,7 +192,7 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + Constants.EOF + Constants.EOF + Constants.EOF);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -206,7 +207,7 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo("{" + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("{" + Constants.EOF + Constants.EOF + Constants.EOF);
         reader.expect('{');
 
         expectEOF(reader, maxLookAhead);
@@ -221,11 +222,11 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('{');
-        assertThat(reader.lookAheads()).isEqualTo("{" + "a" + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("{" + "a" + Constants.EOF + Constants.EOF);
         reader.expect('{');
 
         assertThat(reader.lookAhead()).isEqualTo('a');
-        assertThat(reader.lookAheads()).isEqualTo("a" + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("a" + Constants.EOF + Constants.EOF + Constants.EOF);
         reader.expect('a');
 
         expectEOF(reader, maxLookAhead);
@@ -240,15 +241,15 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('/');
-        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + Constants.EOF);
         reader.expect('/');
 
         assertThat(reader.lookAhead()).isEqualTo('!');
-        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + Constants.EOF + Constants.EOF);
         reader.expect('!');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + Constants.EOF + Constants.EOF + Constants.EOF);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -263,17 +264,17 @@ public class FileReaderTest {
         FileReader reader = new FileReader(file, maxLookAhead);
 
         assertThat(reader.lookAhead()).isEqualTo('/');
-        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("/" + "!" + "\n" + Constants.EOF);
         reader.expect('/');
 
         assertThat(reader.lookAhead()).isEqualTo('!');
-        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("!" + "\n" + Constants.EOF + Constants.EOF);
         reader.expect('!');
 
         // Carriage return is omitted
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + Constants.EOF + Constants.EOF + Constants.EOF);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -304,15 +305,15 @@ public class FileReaderTest {
         reader.expect('c');
 
         assertThat(reader.lookAhead()).isEqualTo('d');
-        assertThat(reader.lookAheads()).isEqualTo("d" + "e" + "\n" + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("d" + "e" + "\n" + Constants.EOF);
         reader.expect('d');
 
         assertThat(reader.lookAhead()).isEqualTo('e');
-        assertThat(reader.lookAheads()).isEqualTo("e" + "\n" + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("e" + "\n" + Constants.EOF + Constants.EOF);
         reader.expect('e');
 
         assertThat(reader.lookAhead()).isEqualTo('\n');
-        assertThat(reader.lookAheads()).isEqualTo("\n" + (char) -1 + (char) -1 + (char) -1);
+        assertThat(reader.lookAheads()).isEqualTo("\n" + Constants.EOF + Constants.EOF + Constants.EOF);
         reader.expect('\n');
 
         expectEOF(reader, maxLookAhead);
@@ -406,7 +407,7 @@ public class FileReaderTest {
 
         reader.expect('\n');
         String expect2 = "" +
-                (char) -1 + "\n" +
+                Constants.EOF + "\n" +
                 "^";
         assertThat(reader.toPosStringWithCaret()).isEqualTo(expect2);
     }
@@ -426,7 +427,7 @@ public class FileReaderTest {
 
         reader.expect('{');
         String expect2 = "" +
-                "{" + (char) -1 + "\n" +
+                "{" + Constants.EOF + "\n" +
                 " ^";
         assertThat(reader.toPosStringWithCaret()).isEqualTo(expect2);
     }
@@ -447,7 +448,7 @@ public class FileReaderTest {
         reader.expect('e');
         reader.expect('\n');
         String expect = "" +
-                (char) -1 + "\n" +
+                Constants.EOF + "\n" +
                 "^";
         assertThat(reader.toPosStringWithCaret()).isEqualTo(expect);
 
@@ -516,7 +517,7 @@ public class FileReaderTest {
 
         reader.expect('\n');
         String expect2 = "" +
-                (char) -1 + "\n" +
+                Constants.EOF + "\n" +
                 "^";
         assertThat(reader.toPosStringWithCaret()).isEqualTo(expect2);
     }

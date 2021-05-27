@@ -1,5 +1,6 @@
 package com.c.lexer;
 
+import com.c.Constants;
 import com.c.filereader.FileReader;
 import com.c.filereader.MaxLookAheadException;
 import com.c.filereader.UnexpectedCharException;
@@ -302,7 +303,7 @@ public class Lexer {
      * @return ture iff the next char is EOF (end of file)
      */
     private boolean isEOF() {
-        return reader.lookAhead() == (char) -1;
+        return reader.lookAhead() == Constants.EOF;
     }
 
     /**
@@ -557,7 +558,7 @@ public class Lexer {
         reader.expect('"');
 
         StringBuilder value = new StringBuilder();
-        while (reader.lookAhead() != '"' && reader.lookAhead() != (char) -1) {
+        while (reader.lookAhead() != '"' && reader.lookAhead() != Constants.EOF) {
 
             // Consider escaped characters
             // e.g "This is \"quote\"" or "This is a \\n line break in a string literal"

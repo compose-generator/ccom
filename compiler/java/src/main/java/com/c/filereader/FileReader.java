@@ -1,5 +1,7 @@
 package com.c.filereader;
 
+import com.c.Constants;
+
 import java.util.ArrayList;
 import java.util.PrimitiveIterator;
 import java.util.stream.Collectors;
@@ -147,7 +149,7 @@ public class FileReader {
     private void advanceHead() {
         // Check for EOF
         if (hasHeadReachedEof) {
-            nextChars.add((char) -1);
+            nextChars.add(Constants.EOF);
             return; // nothing to do anymore after having reached EOF
         }
 
@@ -184,7 +186,7 @@ public class FileReader {
         posCol++;
 
         // Check for EOF for next call to advanceNormal()
-        if (nextChars.getFirst().equals((char) -1)) {
+        if (nextChars.getFirst().equals(Constants.EOF)) {
             hasReachedEof = true;
         }
     }
@@ -203,7 +205,7 @@ public class FileReader {
             if (!file.hasNext()) {
                 hasHeadReachedEof = true;
                 // construct a dummy currentLine for advance() to read from once at the end
-                newLine.append((char) -1);
+                newLine.append(Constants.EOF);
                 break;
             }
 
@@ -258,11 +260,11 @@ public class FileReader {
      * @return the current line with a caret at the current position
      */
     public String toPosStringWithCaret() {
-        String currentLine = nextLines.isEmpty() ? String.valueOf((char) -1) : nextLines.get(0);
+        String currentLine = nextLines.isEmpty() ? String.valueOf(Constants.EOF) : nextLines.get(0);
 
         // Strip last EOF for print out if no EOF yet
         if (!hasReachedEof) {
-            if (currentLine.endsWith(String.valueOf((char) -1)))
+            if (currentLine.endsWith(String.valueOf(Constants.EOF)))
                 currentLine = currentLine.substring(0, currentLine.length() - 1);
         }
 
