@@ -72,6 +72,22 @@ TEST(ReaderTests, LookaheadAdvance) {
     EXPECT_EQ (reader.getLookahead(),  't');
 }
 
+TEST(ReaderTests, LookaheadWithLinebreaks) {
+    // Initialize
+    Reader reader = Reader("\n\nFile\n\n\n\ninput\n", 2);
+
+    // Test#
+    reader.expect('\n');
+    reader.expect('\n');
+    EXPECT_EQ (reader.getLookahead(),  'F');
+    reader.expectMultiple("File");
+    reader.expectMultiple("\n\n\n\n");
+    EXPECT_EQ (reader.getLookahead(),  'i');
+    reader.expectMultiple("input");
+    EXPECT_EQ (reader.getLookahead(),  '\n');
+    reader.expect('\n');
+}
+
 // --------------------------------------------------- Max lookahead ---------------------------------------------------
 
 TEST(ReaderTests, LookaheadMultiple) {
