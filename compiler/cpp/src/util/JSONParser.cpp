@@ -23,7 +23,7 @@ json JSONParser::getJSONValueFromKey(const std::unique_ptr<KeyExprAST>& key) {
     return dataTmp;
 }
 
-bool JSONParser::getExistenceOfJSONKey(const std::unique_ptr<KeyExprAST> &key) {
+bool JSONParser::jsonKeyExists(const std::unique_ptr<KeyExprAST> &key) {
     json dataTmp = data;
     for (const std::unique_ptr<IdentifierExprAST>& identifier : key->getIdentifiers()) {
         std::string identifierName = identifier->getName();

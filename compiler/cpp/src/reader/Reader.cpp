@@ -42,7 +42,7 @@ int Reader::getLookahead() const {
     return curChar;
 }
 
-std::string Reader::getMaxLookahead() {
+std::string Reader::getLookaheadMultiple() {
     int length = std::min((int) fileInput.length() - inputStringPos, (int) maxLookahead);
     return fileInput.substr(inputStringPos -1, length);
 }

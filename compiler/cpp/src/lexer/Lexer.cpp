@@ -28,7 +28,8 @@ Lexer::Lexer(bool isSingleStatement, const std::string &fileInput, const std::st
 
 void Lexer::advance() {
     // Skip any whitespaces
-    while (isspace(reader.getLookahead())) reader.advance();
+    while (currentContext != ARBITRARY && isspace(reader.getLookahead()))
+        reader.advance();
     updateTokenStartPosition();
 
     // Avoid empty arbitrary at EOF
@@ -85,8 +86,6 @@ Token Lexer::consumePayload() {
 
 Token Lexer::consumeSection() {
     char curChar = (char) reader.getLookahead();
-
-    if (isEOF()) return consumeEOF();
 
     if (isLookAheadCommentLineIdentifier()) return consumeCommentLineIdentifier();
     if (isLookAheadCommentBlockOpenIdentifier()) return consumeCommentBlockOpenIdentifier();
@@ -246,23 +245,24 @@ bool Lexer::isEOF() {
 }
 
 bool Lexer::isLookAheadCommentLineIdentifier() {
-    return !commentLineIdentifier.empty() && reader.getMaxLookahead().find(commentLineIdentifier) == 0;
+    return !commentLineIdentifier.empty() && reader.getLookaheadMultiple().find(commentLineIdentifier) == 0;
 }
 
 bool Lexer::isLookAheadCommentBlockOpenIdentifier() {
-    return !commentBlockOpenIdentifier.empty() && reader.getMaxLookahead().find(commentBlockOpenIdentifier) == 0;
+    return !commentBlockOpenIdentifier.empty() && reader.getLookaheadMultiple().find(commentBlockOpenIdentifier) == 0;
 }
 
 bool Lexer::isLookAheadCommentBlockCloseIdentifier() {
-    return !commentBlockCloseIdentifier.empty() && reader.getMaxLookahead().find(commentBlockCloseIdentifier) == 0;
+    return !commentBlockCloseIdentifier.empty() && reader.getLookaheadMultiple().find(commentBlockCloseIdentifier) == 0;
 }
 
 bool Lexer::isLookAheadCommentPayloadIdentifier() {
-    return !commentPayloadIdentifier.empty() && reader.getMaxLookahead().find(commentPayloadIdentifier) == 0;
+    return !commentPayloadIdentifier.empty() && reader.getLookaheadMultiple().find(commentPayloadIdentifier) == 0;
 }
 
 bool Lexer::isLookAheadCommentBlockCloseIdentifierWithBrace() {
-    return !commentBlockCloseIdentifier.empty() && reader.getMaxLookahead().find("}" + commentBlockCloseIdentifier) == 0;
+    return !commentBlockCloseIdentifier.empty() &&
+            reader.getLookaheadMultiple().find("}" + commentBlockCloseIdentifier) == 0;
 }
 
 Token Lexer::constructToken(TokenType type) {
