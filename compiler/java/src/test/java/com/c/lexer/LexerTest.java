@@ -8,21 +8,21 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LexerTest {
 
     private final TestFileReader testFileReader = new TestFileReader("lexer");
-    private static final ArrayList<LanguageDescription> languages = new ArrayList<>();
+    private static final HashMap<String, LanguageDescription> languages = new HashMap<>();
 
     public LexerTest() {
         // Comment identifiers for different languages
-        languages.add(new LanguageDescription(".java", "//", "/*", "*/"));
-        languages.add(new LanguageDescription(".yml", "#", "", ""));
-        languages.add(new LanguageDescription(".html", "", "<!--", "-->"));
-        languages.add(new LanguageDescription(".py", "#", "'''", "'''"));
+        languages.put("Java", new LanguageDescription(".java", "//", "/*", "*/"));
+        languages.put("Yaml", new LanguageDescription(".yml", "#", "", ""));
+        languages.put("Html", new LanguageDescription(".html", "", "<!--", "-->"));
+        languages.put("Python", new LanguageDescription(".py", "#", "'''", "'''"));
     }
 
 
@@ -34,17 +34,21 @@ public class LexerTest {
 
     private void testForEveryLanguage(String filename, LanguageCommentCallback callback)
             throws InvalidCommentsIdentifierException, UnexpectedCharException, MaxLookAheadException, UnknownCharException, IOException, UnexpectedTokenException {
-        for (LanguageDescription language : languages) {
-            String file = testFileReader.fileToString(filename + language.getFileExtension());
-            Lexer lexer = new Lexer(
-                    file,
-                    language.getCommentLineIdentifier(),
-                    language.getCommentBlockOpenIdentifier(),
-                    language.getCommentBlockCloseIdentifier(),
-                    false
-            );
+        for (LanguageDescription language : languages.values()) {
+            Lexer lexer = constructLexer(filename, language);
             callback.doTestsWithLexer(lexer, language);
         }
+    }
+
+    private Lexer constructLexer(String filename, LanguageDescription language) throws InvalidCommentsIdentifierException, UnexpectedCharException, MaxLookAheadException, UnknownCharException, IOException {
+        String file = testFileReader.fileToString(filename + language.getFileExtension());
+        return new Lexer(
+                file,
+                language.getCommentLineIdentifier(),
+                language.getCommentBlockOpenIdentifier(),
+                language.getCommentBlockCloseIdentifier(),
+                false
+        );
     }
 
 
@@ -282,6 +286,97 @@ public class LexerTest {
             int posCol = checkCommentStart(lexer, language);
             checkExpectToken(lexer, new Token(TokenType.INDEX, "42", 1, posCol));
         });
+    }
+
+
+    // ------------------------------ Context switches + whitespaces + multiple Tokens ---------------------------------
+
+    @Test
+    @DisplayName("Advanced HTML")
+    void testAdvancedHtml() throws InvalidCommentsIdentifierException, UnexpectedCharException, MaxLookAheadException, UnknownCharException, IOException, UnexpectedTokenException {
+        Lexer lexer = constructLexer("Advanced", languages.get("Html"));
+
+        // Arbitrary begin
+        String arbitraryBegin = "<html>\n" +
+                "<head>\n" +
+                "\n" +
+                "</head>\n" +
+                "\n" +
+                "<body>\n" +
+                "<p>This is a <strong>Test</strong>.\n" +
+                "<p>\n" +
+                "<div>\n" +
+                "    <p>asdfjklö ASDFJKLÖ #+-'test' \"Test\" [2].3 4<5<6>=1>0 { test } }--</p>\n" +
+                "    <!-- This is a standard comment, NO payload-->\n" +
+                "</div>\n";
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryBegin, 1, 1));
+
+        // Start CCom section
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER, 13, 1));
+
+        checkExpectToken(lexer, new Token(TokenType.IF, 14, 1));
+        checkExpectToken(lexer, new Token(TokenType.HAS, 14, 4));
+        checkExpectToken(lexer, new Token(TokenType.NOT, 14, 8));
+        checkExpectToken(lexer, new Token(TokenType.TRUE, 14, 12));
+        checkExpectToken(lexer, new Token(TokenType.FALSE, 14, 17));
+        checkExpectToken(lexer, new Token(TokenType.OR, 14, 23));
+        checkExpectToken(lexer, new Token(TokenType.EQUALS, 14, 25));
+        checkExpectToken(lexer, new Token(TokenType.NOT_EQUALS, 14, 28));
+        checkExpectToken(lexer, new Token(TokenType.LESS, 14, 31));
+        checkExpectToken(lexer, new Token(TokenType.LESS_EQUAL, 14, 32));
+        checkExpectToken(lexer, new Token(TokenType.NUMBER, "36", 14, 35));
+        checkExpectToken(lexer, new Token(TokenType.GREATER, 14, 37));
+        checkExpectToken(lexer, new Token(TokenType.GREATER_EQUAL, 14, 39));
+        checkExpectToken(lexer, new Token(TokenType.IDENTIFIER, "testIdentifier", 14, 42));
+        checkExpectToken(lexer, new Token(TokenType.NUMBER, "42", 14, 57));
+        checkExpectToken(lexer, new Token(TokenType.STRING, "TestString", 14, 60));
+        checkExpectToken(lexer, new Token(TokenType.NUMBER, "73", 14, 73));
+        checkExpectToken(lexer, new Token(TokenType.DOT, 14, 75));
+        checkExpectToken(lexer, new Token(TokenType.INDEX, "124", 14, 77));
+
+        // Payload
+        checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 14, 82));
+        String payload = "<div>\n" +
+                "    <p>This is my payload (including div)</p>\n" +
+                "</div>\n" +
+                "{\n" +
+                "}\n\n";
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payload, 15, 1));
+        checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 21, 1));
+
+        // End CCom section
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 21, 2));
+
+        // Arbitrary
+        String arbitraryMiddle = "\n\n" +
+                "</body>\n" +
+                "\n" +
+                "<footer>\n" +
+                "    <p>Test</p>";
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryMiddle, 21, 5));
+
+        // Start CCom section
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_OPEN_IDENTIFIER, 26, 16));
+
+        checkExpectToken(lexer, new Token(TokenType.IDENTIFIER, "nice", 26, 21));
+        checkExpectToken(lexer, new Token(TokenType.STRING, "string", 26, 25));
+
+        // Payload
+        checkExpectToken(lexer, new Token(TokenType.BRACE_OPEN, 26, 33));
+        String payload2 = "<div>\n" +
+                "        <p>This is even more payload</>p>\n" +
+                "    </div>";
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, payload2, 26, 34));
+        checkExpectToken(lexer, new Token(TokenType.BRACE_CLOSE, 28, 11));
+
+        // End CCom section
+        checkExpectToken(lexer, new Token(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER, 28, 12));
+
+        // Arbitrary ending
+        String arbitraryEnd = "\n</footer>\n" +
+                "\n" +
+                "</html>\n";
+        checkExpectToken(lexer, new Token(TokenType.ARBITRARY, arbitraryEnd, 28, 15));
     }
 
 

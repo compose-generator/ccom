@@ -181,12 +181,9 @@ public class Lexer {
      * @throws UnknownCharException    if a char cannot be processed to a valid Token
      */
     public Token advance() throws UnknownCharException, UnexpectedCharException {
-        char nextChar = reader.lookAhead();
-
         // Skip whitespaces
-        while (Character.isWhitespace(nextChar)) {
+        while (currentContext != Context.ARBITRARY && Character.isWhitespace(reader.lookAhead())) {
             reader.advance();
-            nextChar = reader.lookAhead();
         }
         updateTokenStartPosition();
 
@@ -228,17 +225,24 @@ public class Lexer {
      */
     private Token consumePayload() {
         StringBuilder value = new StringBuilder();
-        while (!isLookAheadCommentLineIdentifier() && !isLookAheadCommentBlockCloseIdentifierWithBrace() && !isEOF()) {
+        while (!isLookAheadCommentLineIdentifier()
+                && !isLookAheadCommentBlockCloseIdentifierWithBrace()
+                && !isEOF()) {
+
+            // Ignore payload comment identifiers
             if (isLookAheadCommentPayloadIdentifier()) {
-                // Ignore payload comment identifiers
                 for (int i = 0; i < commentPayloadIdentifier.length(); i++) {
                     reader.advance();
                 }
             }
 
+            // TODO: also allow for any chars after '}' and before '-->' (HTML)
+            // However, upon first evaluation, this would long for an infinite look ahead
+
             value.append(reader.lookAhead());
             reader.advance();
         }
+
         currentContext = Context.SECTION;
         return constructToken(TokenType.ARBITRARY, value.toString());
     }
@@ -390,7 +394,7 @@ public class Lexer {
         for (char c : commentBlockCloseIdentifier.toCharArray()) {
             reader.expect(c);
         }
-        currentContext = Context.SECTION;
+        currentContext = Context.ARBITRARY;
         return constructToken(TokenType.COMMENT_BLOCK_CLOSE_IDENTIFIER);
     }
 
@@ -511,7 +515,7 @@ public class Lexer {
      */
     private Token consumeBraceClose() throws UnexpectedCharException {
         reader.expect('}');
-        currentContext = Context.ARBITRARY;
+        currentContext = isLookAheadCommentBlockCloseIdentifier() ? Context.SECTION : Context.ARBITRARY;
         return constructToken(TokenType.BRACE_CLOSE);
     }
 
