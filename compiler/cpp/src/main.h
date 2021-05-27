@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <vector>
+#include <chrono>
 #include "interpreter/interpreter.h"
 
 int main(int, char**);

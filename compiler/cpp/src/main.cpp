@@ -8,6 +8,9 @@
 
 // CLI call: ./ccom <single-stmt> <file-input> <data-input> <line-com-chars> <block-com-open-chars> <block-com-close-chars>
 int main(int argc, char** argv) {
+    //using timeUnit = std::chrono::duration<long long, std::nano>;
+    //auto t0 = std::chrono::steady_clock::now();
+
     // Parse cli args
     std::vector<std::string> args;
     for (size_t iArg = 0; iArg < argc; ++iArg)
@@ -27,6 +30,10 @@ int main(int argc, char** argv) {
 
     // Print output
     std::cout << output;
+
+    //auto t1 = std::chrono::steady_clock::now();
+    //auto d = timeUnit{t1 - t0};
+    //std::cout << "Compile time: " << d.count() << " ns" << std::endl;
 
     // Return with positive result code
     return 0;
