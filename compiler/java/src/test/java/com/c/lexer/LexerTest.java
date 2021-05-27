@@ -541,7 +541,7 @@ public class LexerTest {
     // TODO: two conditional block comments consecutively
 
 
-    // ------------------ Single statements (file only consists of a conditional comments section ----------------------
+    // ------------------ Single statements (file only consists of a single statement list -----------------------------
     // TODO
 
 }
