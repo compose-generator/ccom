@@ -74,33 +74,36 @@ TEST(ReaderTests, LookaheadAdvance) {
 
 // --------------------------------------------------- Max lookahead ---------------------------------------------------
 
-TEST(ReaderTests, MaxLookahead) {
+TEST(ReaderTests, LookaheadMultiple) {
     // Initialize
     Reader reader = Reader("File input", 4);
 
     // Test
-    EXPECT_EQ (reader.getMaxLookahead(),  "File");
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "File");
     reader.expectMultiple("File");
 }
 
-TEST(ReaderTests, MexLookaheadAdvance) {
+TEST(ReaderTests, LookaheadMultipleAdvance) {
     // Initialize
     Reader reader = Reader("File input", 3);
 
     // Test
-    EXPECT_EQ (reader.getMaxLookahead(),  "Fil");
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "Fil");
     reader.advance();
-    EXPECT_EQ (reader.getMaxLookahead(),  "ile");
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "ile");
     reader.advance();
-    EXPECT_EQ (reader.getMaxLookahead(),  "le ");
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "le ");
     reader.advance();
-    EXPECT_EQ (reader.getMaxLookahead(),  "e i");
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "e i");
     reader.advance();
     reader.advance();
-    EXPECT_EQ (reader.getMaxLookahead(),  "input");
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "inp");
+    reader.advance();
+    reader.advance();
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "put");
 }
 
-TEST(ReaderTests, MaxLookaheadInvalid) {
+TEST(ReaderTests, LookaheadMultipleInvalid) {
     // Initialize & test
     try {
         Reader reader = Reader("Test", 0);
@@ -110,18 +113,18 @@ TEST(ReaderTests, MaxLookaheadInvalid) {
     }
 }
 
-TEST(ReaderTests, MaxLookaheadIsOne) {
+TEST(ReaderTests, LookaheadMultipleIsOne) {
     // Initialize
     Reader reader = Reader("File input", 1);
 
     // Test
-    EXPECT_EQ (reader.getMaxLookahead(),  "F");
-    EXPECT_EQ (reader.getMaxLookahead(),  std::string(1, reader.getLookahead()));
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "F");
+    EXPECT_EQ (reader.getLookaheadMultiple(),  std::string(1, reader.getLookahead()));
     reader.expect('F');
     reader.advance();
     reader.advance();
-    EXPECT_EQ (reader.getMaxLookahead(),  "e");
-    EXPECT_EQ (reader.getMaxLookahead(),  std::string(1, reader.getLookahead()));
+    EXPECT_EQ (reader.getLookaheadMultiple(),  "e");
+    EXPECT_EQ (reader.getLookaheadMultiple(),  std::string(1, reader.getLookahead()));
     reader.expect('e');
 }
 
@@ -241,10 +244,10 @@ TEST(ReaderTests, CodePosEmptyFile) {
 
     // Test
     EXPECT_EQ(reader.getLineNum(), 1);
-    EXPECT_EQ(reader.getColNum(), 0);
+    EXPECT_EQ(reader.getColNum(), 1);
     reader.advance();
     reader.advance();
     reader.advance();
     EXPECT_EQ(reader.getLineNum(), 1);
-    EXPECT_EQ(reader.getColNum(), 0);
+    EXPECT_EQ(reader.getColNum(), 1);
 }
