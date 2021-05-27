@@ -20,7 +20,7 @@ public class Lexer {
     // File
 
     /**
-     * A FileReader to read the file (given as String) char by char.
+     * A Reader to read the file (given as String) char by char.
      */
     private final Reader reader;
 
@@ -104,7 +104,7 @@ public class Lexer {
      * @throws InvalidCommentsIdentifierException if the comment identifiers are invalid
      *                                            (e.g. an identifier was provided for opening block comments but not for closing them)
      * @throws MaxLookAheadException              if the max look ahead is less than 1
-     * @throws UnexpectedCharException            if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException            if a char - read by the Reader - was not the expected one
      * @throws UnknownCharException               if a char cannot be processed to a valid Token
      */
     public Lexer(String file,
@@ -136,7 +136,7 @@ public class Lexer {
         // We need one character more than the max for the method isLookAheadCommentBlockCloseIdentifierWithBrace()
         int maxLookAhead = Collections.max(commentIdentifierLengths) + 1;
 
-        // Construct FileReader
+        // Construct Reader
         this.reader = new Reader(file, maxLookAhead);
 
         // Set context
@@ -166,7 +166,7 @@ public class Lexer {
      *
      * @param t expected Token (to compare the next Token against)
      * @throws UnexpectedTokenException if the next Token ís not equal to the expected Token
-     * @throws UnexpectedCharException  if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException  if a char - read by the Reader - was not the expected one
      * @throws UnknownCharException     if a char cannot be processed to a valid Token
      */
     public void expect(Token t) throws UnexpectedTokenException, UnexpectedCharException, UnknownCharException {
@@ -182,7 +182,7 @@ public class Lexer {
      * Consumes current Token and advances to next Token.
      *
      * @return the next token
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      * @throws UnknownCharException    if a char cannot be processed to a valid Token
      */
     public Token advance() throws UnknownCharException, UnexpectedCharException {
@@ -259,7 +259,7 @@ public class Lexer {
      * this method). It constructs exactly one new token with every call to this method.
      *
      * @return a Token describing part of the conditional comments section, e.g. an "if" identifier
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      * @throws UnknownCharException    if a char cannot be processed to a valid Token
      */
     private Token consumeSection() throws UnexpectedCharException, UnknownCharException {
@@ -363,7 +363,7 @@ public class Lexer {
      * This will switch to the SECTION context.
      *
      * @return a Token representing that line comment identifier
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeCommentLineIdentifier() throws UnexpectedCharException {
         reader.expectMultiple(commentLineIdentifier);
@@ -376,7 +376,7 @@ public class Lexer {
      * This will switch to the SECTION context.
      *
      * @return a Token representing that open block comment identifier
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeCommentBlockOpenIdentifier() throws UnexpectedCharException {
         reader.expectMultiple(commentBlockOpenIdentifier);
@@ -389,7 +389,7 @@ public class Lexer {
      * This will switch to the SECTION context.
      *
      * @return a Token representing that close block comment identifier
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeCommentBlockCloseIdentifier() throws UnexpectedCharException {
         reader.expectMultiple(commentBlockCloseIdentifier);
@@ -402,7 +402,7 @@ public class Lexer {
      * This will switch to the SECTION context.
      *
      * @return a Token representing that payload comment identifier
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeCommentPayloadIdentifier() throws UnexpectedCharException {
         reader.expectMultiple(commentPayloadIdentifier);
@@ -413,7 +413,7 @@ public class Lexer {
      * Consumes a "|" operator in a condition, e.g. "if a | b" (spoken: "if a or b").
      *
      * @return a Token representing that "|" operator
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeOr() throws UnexpectedCharException {
         reader.expect('|');
@@ -424,7 +424,7 @@ public class Lexer {
      * Consumes a "=" operator in a condition, e.g. "if a == b" (spoken: "if a equals b").
      *
      * @return a Token representing that "=" operator
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeEquals() throws UnexpectedCharException {
         reader.expect('=');
@@ -436,7 +436,7 @@ public class Lexer {
      * Consumes a "!=" operator in a condition, e.g. "if a != b" (spoken: "if a does not equal b").
      *
      * @return a Token representing that "!=" operator
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeNotEquals() throws UnexpectedCharException {
         reader.expect('!');
@@ -450,7 +450,7 @@ public class Lexer {
      * or "if a <= b" (spoken: "if a is less or equal b").
      *
      * @return a Token representing that "<" or "<=" operator
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeLessThanOrLessEqualThan() throws UnexpectedCharException {
         reader.expect('<');
@@ -467,7 +467,7 @@ public class Lexer {
      * or "if a >= b" (spoken: "if a is greater or equal b").
      *
      * @return a Token representing that ">" or ">=" operator
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeGreaterThanOrGreaterEqualThan() throws UnexpectedCharException {
         reader.expect('>');
@@ -482,7 +482,7 @@ public class Lexer {
      * Consumes a "." separator in an identifier, e.g. "a.b[1].c".
      *
      * @return a Token representing that "." separator
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeDot() throws UnexpectedCharException {
         reader.expect('.');
@@ -494,7 +494,7 @@ public class Lexer {
      * This will switch to the PAYLOAD context.
      *
      * @return a Token representing that "{" char
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeBraceOpen() throws UnexpectedCharException {
         reader.expect('{');
@@ -507,7 +507,7 @@ public class Lexer {
      * This will switch to the ARBITRARY context.
      *
      * @return a Token representing that "}" char
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeBraceClose() throws UnexpectedCharException {
         reader.expect('}');
@@ -519,7 +519,7 @@ public class Lexer {
      * Consumes an index, e.g. in "a.b[42].c" ("[42]" is the index)
      *
      * @return a Token representing the index (including the value of the index as String)
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeIndex() throws UnexpectedCharException {
         reader.expect('[');
@@ -532,7 +532,7 @@ public class Lexer {
      * Consumes a number, e.g. "3141592".
      *
      * @return a Token representing that number (including its value as String)
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeNumber() throws UnexpectedCharException {
         StringBuilder value = new StringBuilder();
@@ -548,7 +548,7 @@ public class Lexer {
      * (note that these are "real" double quotes now that appear as such in the data).
      *
      * @return a Token representing that String literal (including its value)
-     * @throws UnexpectedCharException if a char - read by the FileReader - was not the expected one
+     * @throws UnexpectedCharException if a char - read by the Reader - was not the expected one
      */
     private Token consumeString() throws UnexpectedCharException {
         reader.expect('"');

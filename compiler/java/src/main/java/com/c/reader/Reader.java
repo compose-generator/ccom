@@ -7,7 +7,7 @@ import java.util.PrimitiveIterator;
 import java.util.stream.Collectors;
 
 /**
- * FileReader that is capable of looking ahead one char.
+ * Reader that is capable of looking ahead one char.
  * Only operates on strings, not actual files.<br><br>
  * <p>
  * This file reader might have a look ahead great than 1. This is why we keep track of two positions:
