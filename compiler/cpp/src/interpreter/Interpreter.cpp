@@ -109,7 +109,7 @@ bool Interpreter::evaluateStmtList(StmtLstExprAST* stmtList) {
 }
 
 bool Interpreter::evaluateHasStatement(HasStmtExprAST* hasStmt) {
-    bool isKeyExisting = jsonParser.getExistenceOfJSONKey(hasStmt->getKey());
+    bool isKeyExisting = jsonParser.jsonKeyExists(hasStmt->getKey());
     if (hasStmt->getInverted()) return !isKeyExisting;
     return isKeyExisting;
 }

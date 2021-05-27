@@ -17,5 +17,5 @@ public:
     JSONParser(json data): data(std::move(data)) {}
     JSONParser(std::string dataString): data(json::parse(dataString)) {}
     json getJSONValueFromKey(const std::unique_ptr<KeyExprAST>&);
-    bool getExistenceOfJSONKey(const std::unique_ptr<KeyExprAST>&);
+    bool jsonKeyExists(const std::unique_ptr<KeyExprAST>&);
 };
