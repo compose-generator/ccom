@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -95,7 +96,7 @@ func analyze(
 		*compiler = "cpp"
 	}
 	if lang != "" {
-		*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang)
+		*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang, *fileInput)
 	}
 	// Ensure value of comment char
 	if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
@@ -144,20 +145,29 @@ func runCompilerExecutable(
 	return util.ExecuteAndWaitWithOutput(executableName, strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
 }
 
-func getCommentIdenFromLang(lang string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
+func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
+	if lang == "auto" {
+		if !util.FileExists(fileInput) {
+			log.Fatal("Please use lang 'auto' only in combination of valid file paths as file input")
+		}
+		lang = filepath.Ext(fileInput)[1:]
+	}
+
 	switch lang {
-	case "yaml", "yml", "python", "docker", "dockerfile":
+	case "yaml", "yml", "python", "py", "docker", "dockerfile":
 		lineCommentIden = "#"
 		blockCommentIdenOpen = ""
 		blockCommentIdenClose = ""
-	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust":
+	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust", "rs":
 		lineCommentIden = "//"
 		blockCommentIdenOpen = "/*"
 		blockCommentIdenClose = "*/"
-	case "html", "xml":
+	case "html", "htm", "xml":
 		lineCommentIden = ""
 		blockCommentIdenOpen = "<!--"
 		blockCommentIdenClose = "-->"
+	default:
+		log.Fatal("Unknown lang")
 	}
 	return
 }
