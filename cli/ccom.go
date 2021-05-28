@@ -62,7 +62,7 @@ func main() {
 			&cli.StringFlag{
 				Name:        "lang",
 				Aliases:     []string{"l"},
-				DefaultText: "yaml",
+				DefaultText: "auto",
 				Usage:       "File format / programming language (e.g.: yaml, java, html, ...)",
 			},
 			&cli.StringFlag{

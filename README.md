@@ -36,7 +36,7 @@ In general, you call the cli like so: <br>
 | --benchmark                  	| -b n      | Execute compiler benchmarks. n is the number of benchmark runs	                		| 0      	|
 | --compiler                  	| -c name   | Can be used to switch the compiler backend. Valid inputs are `cpp` and `java`	            | cpp      	|
 | --data                      	| -d       	| JSON string or path to JSON file, which holds the evaluation work data                	| {}      	|
-| --lang                      	| -l       	| File format / programming language (e.g. yaml, java, html, ...)                       	| yaml    	|
+| --lang                      	| -l       	| File format / programming language (e.g. yaml, java, html, ...)                       	| auto*    	|
 | --mode-single               	| -m       	| Set input mode to single statement list                                               	| -       	|
 | --out-file                  	| -o       	| Path to output file. If you omit this flag, the output will be printed to the console 	| -       	|
 | --silent                    	| -s       	| Only print raw compiler output and no debug output                                    	| -       	|
@@ -44,6 +44,8 @@ In general, you call the cli like so: <br>
 | --line-comment-iden         	| -lci     	| Specifies the line comment char(s) of your data format                                	| #       	|
 | --block-comment-iden-open  	| -bcio    	| Specifies the opening block comment char(s) of your data format                       	| -       	|
 | --block-comment-iden-close 	| -bcic    	| Specifies the closing block comment char(s) of your data format                       	| -       	|
+
+*) Lang "auto" determines the language based on the file extension of the input file.
 
 ## Work process
 The first thing CCom does, is to analyze the input and determine, whether it is a single condition or a source file. This depends on how you call the CCom CLI. To switch to a single statement, you can call it with the flag `--mode-single`
