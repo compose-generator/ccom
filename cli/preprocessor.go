@@ -82,9 +82,9 @@ func analyze(
 	dataInput *string,
 	compiler *string,
 	lang string,
-	lineCommentChars *string,
-	blockCommentCharsOpen *string,
-	blockCommentCharsClose *string,
+	lineCommentIden *string,
+	blockCommentIdenOpen *string,
+	blockCommentIdenClose *string,
 	modeSingle bool,
 ) {
 	// Ensure value of input data
@@ -95,13 +95,16 @@ func analyze(
 		*compiler = "cpp"
 	}
 	if lang != "" {
-		*lineCommentChars, *blockCommentCharsOpen, *blockCommentCharsClose = getCommentCharsFromLang(lang)
+		*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang)
 	}
 	// Ensure value of comment char
-	if *lineCommentChars == "" && *blockCommentCharsOpen == "" && *blockCommentCharsClose == "" {
-		*lineCommentChars = "#"
-		*blockCommentCharsOpen = ""
-		*blockCommentCharsClose = ""
+	if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
+		*lineCommentIden = "#"
+		*blockCommentIdenOpen = ""
+		*blockCommentIdenClose = ""
+	}
+	if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
+		log.Fatal("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.")
 	}
 	// Get raw data strings
 	if !modeSingle {
@@ -119,35 +122,35 @@ func runCompilerExecutable(
 	modeSingle bool,
 	fileInput string,
 	dataInput string,
-	lineCommentChars string,
-	blockCommentCharsOpen string,
-	blockCommentCharsClose string,
+	lineCommentIden string,
+	blockCommentIdenOpen string,
+	blockCommentIdenClose string,
 ) (result string) {
 	switch compiler {
 	case "cpp", "c++":
-		result = util.ExecuteAndWaitWithOutput("./ccomc", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+		result = util.ExecuteAndWaitWithOutput("./ccomc", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
 	case "java":
-		result = util.ExecuteAndWaitWithOutput("./ccomc-java.jar", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+		result = util.ExecuteAndWaitWithOutput("./ccomc-java.jar", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
 	default:
 		log.Fatal("Invalid compiler name. Only 'cpp' and 'java' are allowed values.")
 	}
 	return
 }
 
-func getCommentCharsFromLang(lang string) (lineCommentChars string, blockCommentCharsOpen string, blockCommentCharsClose string) {
+func getCommentIdenFromLang(lang string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
 	switch lang {
 	case "yaml", "yml", "python", "docker", "dockerfile":
-		lineCommentChars = "#"
-		blockCommentCharsOpen = ""
-		blockCommentCharsClose = ""
+		lineCommentIden = "#"
+		blockCommentIdenOpen = ""
+		blockCommentIdenClose = ""
 	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust":
-		lineCommentChars = "//"
-		blockCommentCharsOpen = "/*"
-		blockCommentCharsClose = "*/"
+		lineCommentIden = "//"
+		blockCommentIdenOpen = "/*"
+		blockCommentIdenClose = "*/"
 	case "html", "xml":
-		lineCommentChars = ""
-		blockCommentCharsOpen = "<!--"
-		blockCommentCharsClose = "-->"
+		lineCommentIden = ""
+		blockCommentIdenOpen = "<!--"
+		blockCommentIdenClose = "-->"
 	}
 	return
 }
