@@ -8,6 +8,7 @@
 #include <utility>
 #include <iostream>
 #include "../exception/UnexpectedCharException.h"
+#include "../exception/MaxLookaheadException.h"
 
 class Reader {
 private:
@@ -17,7 +18,7 @@ private:
 
     // Working variables
     int curChar = 0;
-    int inputStringPos = 0;
+    int inputStringPos = 0; // Represents the position to which we have read to. e.g.: "Test", inputStringPos: 2, we have read "Te"
     unsigned int lineNum = 1;
     unsigned int colNum = 0;
 public:

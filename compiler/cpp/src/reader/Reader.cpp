@@ -4,9 +4,17 @@
 
 #include "Reader.h"
 
+
 Reader::Reader(std::string fileInput, unsigned int maxLookahead):
     fileInput(std::move(fileInput)), maxLookahead(maxLookahead) {
-    advance(); // Load first char into buffer
+    // Check maxLookahead validity
+    if (maxLookahead < 1) throw MaxLookaheadException(maxLookahead);
+
+    // Load first char into buffer
+    advance();
+
+    // Set colNum to 1, if the advance was not successful due to an empty fileInput
+    if (colNum == 0) colNum = 1;
 }
 
 void Reader::advance() {
@@ -27,7 +35,8 @@ void Reader::advance() {
 }
 
 void Reader::expect(int input) {
-    if (curChar != input) throw UnexpectedCharException((char) input, (char) curChar, lineNum, colNum);
+    if (curChar != input)
+        throw UnexpectedCharException((char) input, (char) curChar, lineNum, colNum);
     advance();
 }
 
@@ -40,7 +49,8 @@ int Reader::getLookahead() const {
 }
 
 std::string Reader::getLookaheadMultiple() {
-    int length = std::min((int) fileInput.length() - inputStringPos, (int) maxLookahead);
+    // inputStringPos represents the position to which we have read to. e.g.: "Test", inputStringPos: 2, we have read "Te"
+    int length = std::min((int) fileInput.length() - inputStringPos + 1, (int) maxLookahead);
     return fileInput.substr(inputStringPos -1, length);
 }
 

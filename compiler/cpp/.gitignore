@@ -3,3 +3,6 @@
 
 # Cmake debug
 cmake-build-debug/*
+
+# Libs
+lib/*

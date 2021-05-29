@@ -7,6 +7,7 @@
 #include "main.h"
 
 // CLI call: ./ccom <single-stmt> <file-input> <data-input> <com-line-iden> <com-block-open-iden> <com-block-close-iden>
+// WARNING: Please make sure you include all cli args correctly, because if not, the cli crashes with bad_alloc error
 int main(int argc, char** argv) {
     // Parse cli args
     std::vector<std::string> args;
@@ -24,10 +25,6 @@ int main(int argc, char** argv) {
     //fileInput = "property1:= value\n//? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\n// test payload}\n// - another test payload\n//? }\nattribute2: value2";
     //fileInput = "property1:= value\n/*? if has frontend | test.Test == 90133 | var.FlaskPort == \"8\\\"080\\\"\" {\ntest payload\n- }another test payload\n}*/\nattribute2: value2";
     //fileInput = "//? if not has test.marc | test.marc.dominic.24 != \"Test\" { Test payload //? }";
-
-    //comLineIden = "";
-    //comBlockOpenIden = "<!--";
-    //comBlockCloseIden = "-->";
 
     // Start compiler pipeline
     Interpreter interpreter = Interpreter(singleStatementMode, fileInput, dataInput,

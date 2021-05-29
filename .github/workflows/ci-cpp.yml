@@ -12,17 +12,26 @@ jobs:
     runs-on: ubuntu-latest
         
     steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Prepare environment
-      run: |
-        shopt -s extglob
-        rm -rf !("compiler")
-        cp -fR ./compiler/cpp/* .
-        rm -rf ./compiler
-    - name: Build project
-      uses: nicledomaS/cmake_build_action@v1.4
-      with:
-        submodule_update: ON
-        run_tests: ON
-        unit_test_build: -Dtest=ON
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Prepare environment
+        run: |
+          shopt -s extglob
+          rm -rf !("compiler")
+          cp -fR ./compiler/cpp/* .
+          rm -rf ./compiler
+
+      - name: Download Libs
+        run: |
+          mkdir -p ./lib/json
+          cd lib
+          git clone https://github.com/google/googletest.git
+          curl -sSL "https://github.com/nlohmann/json/releases/download/v3.9.1/json.hpp" --output json/json.hpp
+
+      - name: Build project
+        uses: nicledomaS/cmake_build_action@v1.4
+        with:
+          submodule_update: ON
+          run_tests: ON
+          unit_test_build: -Dtest=ON
