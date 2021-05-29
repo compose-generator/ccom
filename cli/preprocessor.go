@@ -97,15 +97,13 @@ func analyze(
 	}
 	if lang != "" {
 		*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang, *fileInput)
-	}
-	// Ensure value of comment char
-	if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
-		*lineCommentIden = "#"
-		*blockCommentIdenOpen = ""
-		*blockCommentIdenClose = ""
-	}
-	if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
-		log.Fatal("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.")
+	} else {
+		// Ensure value of comment char
+		if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
+			log.Fatal("You must provide at least one of line comment or block comments identifiers.")
+		} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
+			log.Fatal("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.")
+		}
 	}
 	// Get raw data strings
 	if !modeSingle {
