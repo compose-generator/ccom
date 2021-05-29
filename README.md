@@ -73,7 +73,7 @@ $ sudo yum install ccom
 </p>
 </details>
 
-<details><summary><b>Windows</b></summary>
+<details><summary><b>Install on Windows</b></summary>
 <p>
 
 CCom gets distributed for Windows via the new Windows package manager called [winget](https://github.com/microsoft/winget-cli). In the future, winget will be available for download in the Microsoft Store. Currently, the easiest way to install winget is, to download it manually from GitHub. Visit the [installation instruction](https://github.com/microsoft/winget-cli#installing-the-client) from Microsoft. <br>
