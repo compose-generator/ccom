@@ -9,20 +9,20 @@
 CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or XML, but can also be used for a variety of programming languages with support for comments.
 
 ## Supported data formats
-|            | Line comment chars | Block comment chars open | Block comment chars close |
-|------------|--------------------|--------------------------|---------------------------|
-| YAML       | #                  | -                        | -                         |
-| Java       | //                 | /*                       | */                        |
-| Go         | //                 | /*                       | */                        |
-| C          | //                 | /*                       | */                        |
-| C++        | //                 | /*                       | */                        |
-| JavaScript | //                 | /*                       | */                        |
-| TypeScript | //                 | /*                       | */                        |
-| Dockerfile | #                  | -                        | -                         |
-| HTML       | -                  | <!--                     | -->                       |
-| XML        | -                  | <!--                     | -->                       |
-| Rust       | //                 | /*                       | */                        |
-| Assembler  | ;                  | -                        | -                         |
+|            | Line comment iden | Block comment iden open | Block comment iden close |
+|------------|-------------------|-------------------------|--------------------------|
+| YAML       | #                 | -                       | -                        |
+| Java       | //                | /*                      | */                       |
+| Go         | //                | /*                      | */                       |
+| C          | //                | /*                      | */                       |
+| C++        | //                | /*                      | */                       |
+| JavaScript | //                | /*                      | */                       |
+| TypeScript | //                | /*                      | */                       |
+| Dockerfile | #                 | -                       | -                        |
+| HTML       | -                 | <!--                    | -->                      |
+| XML        | -                 | <!--                    | -->                      |
+| Rust       | //                | /*                      | */                       |
+| Assembler  | ;                 | -                       | -                        |
 
 *Note: Formats like JSON, where no comments are supported can also work with CCom, however then the file input is not valid before pre-processing it with CCom.*
 
@@ -33,17 +33,19 @@ In general, you call the cli like so: <br>
 ### CLI options
 | Option                      	| Shortcut 	| Description                                                                           	| Default 	|
 |-----------------------------	|----------	|---------------------------------------------------------------------------------------	|---------	|
-| --benchmark                  	| -b n       	| Execute compiler benchmarks. n is the number of benchmark runs	                	| 0      	|
-| --compiler                  	| -c name    	| Can be used to switch the compiler backend. Valid inputs are `cpp` and `java`	               	| cpp      	|
+| --benchmark                  	| -b n      | Execute compiler benchmarks. n is the number of benchmark runs	                		| 0      	|
+| --compiler                  	| -c name   | Can be used to switch the compiler backend. Valid inputs are `cpp` and `java`	            | cpp      	|
 | --data                      	| -d       	| JSON string or path to JSON file, which holds the evaluation work data                	| {}      	|
-| --lang                      	| -l       	| File format / programming language (e.g. yaml, java, html, ...)                       	| yaml    	|
+| --lang                      	| -l       	| File format / programming language (e.g. yaml, java, html, ...)                       	| auto*    	|
 | --mode-single               	| -m       	| Set input mode to single statement list                                               	| -       	|
 | --out-file                  	| -o       	| Path to output file. If you omit this flag, the output will be printed to the console 	| -       	|
 | --silent                    	| -s       	| Only print raw compiler output and no debug output                                    	| -       	|
 | --force                     	| -f       	| Ignore safety checks. Warning: This could cause demage                                	| -       	|
-| --line-comment-char         	| -lcc     	| Specifies the line comment char(s) of your data format                                	| #       	|
-| --block-comment-chars-open  	| -bcco    	| Specifies the opening block comment char(s) of your data format                       	| -       	|
-| --block-comment-chars-close 	| -bccc    	| Specifies the closing block comment char(s) of your data format                       	| -       	|
+| --line-comment-iden         	| -lci     	| Specifies the line comment char(s) of your data format                                	| #       	|
+| --block-comment-iden-open  	| -bcio    	| Specifies the opening block comment char(s) of your data format                       	| -       	|
+| --block-comment-iden-close 	| -bcic    	| Specifies the closing block comment char(s) of your data format                       	| -       	|
+
+*) Lang "auto" determines the language based on the file extension of the input file.
 
 ## Work process
 The first thing CCom does, is to analyze the input and determine, whether it is a single condition or a source file. This depends on how you call the CCom CLI. To switch to a single statement, you can call it with the flag `--mode-single`
@@ -140,7 +142,7 @@ To access `0.7.0`, you can use the key `version`. To access `./spring-maven`, yo
 
 
 ## Grammar
-*Note a grammar is dependent on the line comment chars and the block comment chars. In this particular case the line comment char is `//`, the block comment char open is `/*` and the block comment char close is `*/`*
+*Note a grammar is dependent on the line comment identifiers and the block comment identifiers. In this particular case the line comment char is `//`, the block comment char open is `/*` and the block comment char close is `*/`*
 
 Start symbol: `CONTENT`.
 

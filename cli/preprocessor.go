@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
@@ -82,9 +83,9 @@ func analyze(
 	dataInput *string,
 	compiler *string,
 	lang string,
-	lineCommentChars *string,
-	blockCommentCharsOpen *string,
-	blockCommentCharsClose *string,
+	lineCommentIden *string,
+	blockCommentIdenOpen *string,
+	blockCommentIdenClose *string,
 	modeSingle bool,
 ) {
 	// Ensure value of input data
@@ -95,13 +96,14 @@ func analyze(
 		*compiler = "cpp"
 	}
 	if lang != "" {
-		*lineCommentChars, *blockCommentCharsOpen, *blockCommentCharsClose = getCommentCharsFromLang(lang)
-	}
-	// Ensure value of comment char
-	if *lineCommentChars == "" && *blockCommentCharsOpen == "" && *blockCommentCharsClose == "" {
-		*lineCommentChars = "#"
-		*blockCommentCharsOpen = ""
-		*blockCommentCharsClose = ""
+		*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang, *fileInput)
+	} else {
+		// Ensure value of comment char
+		if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
+			log.Fatal("You must provide at least one of line comment or block comments identifiers.")
+		} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
+			log.Fatal("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.")
+		}
 	}
 	// Get raw data strings
 	if !modeSingle {
@@ -119,35 +121,51 @@ func runCompilerExecutable(
 	modeSingle bool,
 	fileInput string,
 	dataInput string,
-	lineCommentChars string,
-	blockCommentCharsOpen string,
-	blockCommentCharsClose string,
-) (result string) {
+	lineCommentIden string,
+	blockCommentIdenOpen string,
+	blockCommentIdenClose string,
+) string {
+	// Determine executeable name by name of compiler
+	executableName := "./ccomc"
 	switch compiler {
 	case "cpp", "c++":
-		result = util.ExecuteAndWaitWithOutput("./ccomc", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+		executableName = "./ccomc"
 	case "java":
-		result = util.ExecuteAndWaitWithOutput("./ccomc-java.jar", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+		executableName = "./ccomc-java.jar"
 	default:
 		log.Fatal("Invalid compiler name. Only 'cpp' and 'java' are allowed values.")
 	}
-	return
+	// Check if executable exists
+	if !util.CommandExists(executableName) {
+		log.Fatal("Compiler executable not found. Please check your installation")
+	}
+	// Execute compiler with user inputs
+	return util.ExecuteAndWaitWithOutput(executableName, strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
 }
 
-func getCommentCharsFromLang(lang string) (lineCommentChars string, blockCommentCharsOpen string, blockCommentCharsClose string) {
+func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
+	if lang == "auto" {
+		if !util.FileExists(fileInput) {
+			log.Fatal("Please use lang 'auto' only in combination of valid file paths as file input")
+		}
+		lang = filepath.Ext(fileInput)[1:]
+	}
+
 	switch lang {
-	case "yaml", "yml", "python", "docker", "dockerfile":
-		lineCommentChars = "#"
-		blockCommentCharsOpen = ""
-		blockCommentCharsClose = ""
-	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust":
-		lineCommentChars = "//"
-		blockCommentCharsOpen = "/*"
-		blockCommentCharsClose = "*/"
-	case "html", "xml":
-		lineCommentChars = ""
-		blockCommentCharsOpen = "<!--"
-		blockCommentCharsClose = "-->"
+	case "yaml", "yml", "python", "py", "docker", "dockerfile":
+		lineCommentIden = "#"
+		blockCommentIdenOpen = ""
+		blockCommentIdenClose = ""
+	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust", "rs":
+		lineCommentIden = "//"
+		blockCommentIdenOpen = "/*"
+		blockCommentIdenClose = "*/"
+	case "html", "htm", "xml":
+		lineCommentIden = ""
+		blockCommentIdenOpen = "<!--"
+		blockCommentIdenClose = "-->"
+	default:
+		log.Fatal("Unknown lang")
 	}
 	return
 }

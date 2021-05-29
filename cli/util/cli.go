@@ -8,6 +8,7 @@ import (
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
+	"github.com/cli/safeexec"
 )
 
 // ExecuteAndWaitWithOutput executes a command and return the command output as string
@@ -15,6 +16,12 @@ func ExecuteAndWaitWithOutput(c ...string) string {
 	cmd := exec.Command(c[0], c[1:]...)
 	output, _ := cmd.CombinedOutput()
 	return strings.TrimRight(string(output), "\r\n")
+}
+
+// CommandExists checks if the stated command exists on the host system
+func CommandExists(cmd string) bool {
+	_, err := safeexec.LookPath(cmd)
+	return err == nil
 }
 
 // YesNoQuestion prints simple yes/no question with default value
