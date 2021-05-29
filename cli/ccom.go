@@ -35,12 +35,12 @@ func main() {
 			&cli.StringFlag{
 				Name:    "block-comment-iden-open",
 				Aliases: []string{"bcio"},
-				Usage:   "Specifies the opening block comment character(s) of your data format",
+				Usage:   "Specifies the opening block comment identifier(s) of your data format",
 			},
 			&cli.StringFlag{
 				Name:    "block-comment-iden-close",
 				Aliases: []string{"bcic"},
-				Usage:   "Specifies the closing block comment character(s) of your data format",
+				Usage:   "Specifies the closing block comment identifier(s) of your data format",
 			},
 			&cli.StringFlag{
 				Name:        "compiler",
@@ -68,7 +68,7 @@ func main() {
 			&cli.StringFlag{
 				Name:    "line-comment-iden",
 				Aliases: []string{"lci"},
-				Usage:   "Specifies the line comment character(s) of your data format",
+				Usage:   "Specifies the line comment identifier(s) of your data format",
 			},
 			&cli.BoolFlag{
 				Name:    "mode-single",
