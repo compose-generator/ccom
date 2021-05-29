@@ -161,19 +161,15 @@ TEST(ReaderTests, ExpectSuccess) {
     Reader reader = Reader("File input", 4);
 
     // Test
-    try {
-        reader.advance();
-        reader.expect('i');
-        reader.expect('l');
-        reader.expect('e');
-        reader.advance();
-        reader.advance();
-        reader.expect('n');
-        reader.advance();
-        reader.expect('u');
-    } catch (UnexpectedCharException const & err) {
-        FAIL() << "Expected UnexpectedCharException got thrown";
-    }
+    reader.advance();
+    reader.expect('i');
+    reader.expect('l');
+    reader.expect('e');
+    reader.advance();
+    reader.advance();
+    reader.expect('n');
+    reader.advance();
+    reader.expect('u');
 }
 
 TEST(ReaderTests, ExpectFailure) {
@@ -201,16 +197,12 @@ TEST(ReaderTests, ExpectMultipleSuccess) {
     Reader reader = Reader("File input", 5);
 
     // Test
-    try {
-        reader.advance();
-        reader.expectMultiple("ile");
-        reader.advance();
-        reader.expectMultiple("in");
-        reader.advance();
-        reader.expectMultiple("ut");
-    } catch (UnexpectedCharException const & err) {
-        FAIL() << "Expected UnexpectedCharException got thrown";
-    }
+    reader.advance();
+    reader.expectMultiple("ile");
+    reader.advance();
+    reader.expectMultiple("in");
+    reader.advance();
+    reader.expectMultiple("ut");
 }
 
 TEST(ReaderTests, ExpectMultipleFailure) {
