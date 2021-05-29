@@ -21,21 +21,26 @@ jobs:
         working-directory: ./cli
 
     steps:
-    - name: Install Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: ${{ matrix.go-version }}
-    - name: Checkout code
-      uses: actions/checkout@v2
-    - name: Prepare environment
-      run: |
-        go version
-        go get -u golang.org/x/lint/golint
-    - name: Run build
-      run: go build -x
-    - name: Run vet & lint
-      run: |
-        go vet .
-        golint .
-    - name: Run tests
-      run: go test
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Prepare environment
+        run: |
+          go version
+          go get -u golang.org/x/lint/golint
+
+      - name: Run build
+        run: go build -x
+
+      - name: Run vet & lint
+        run: |
+          go vet .
+          golint .
+          
+      - name: Run tests
+        run: go test

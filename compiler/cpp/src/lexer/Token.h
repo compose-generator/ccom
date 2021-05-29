@@ -10,7 +10,7 @@
 
 class Token {
 private:
-    int type = 0;
+    int type = -1;
     std::string value;
     unsigned int lineNum = 0;
     unsigned int colNum = 0;
@@ -24,9 +24,6 @@ public:
 };
 
 enum TokenType {
-    // Unknown token type
-    TOK_UNKNOWN,
-
     // End of file
     TOK_EOF,
 
@@ -56,6 +53,8 @@ enum TokenType {
     TOK_BRACE_OPEN, // {
     TOK_BRACE_CLOSE, // }
     TOK_INDEX, // [123]
+
+    // The following examples refer to Java
     TOK_COM_IDEN_PAYLOAD, // //
     TOK_COM_LINE_IDEN, // //?
     TOK_COM_BLOCK_IDEN_OPEN, // /*?
