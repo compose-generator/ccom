@@ -8,11 +8,13 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func processInput(
 	fileInput string,
 	compiler string,
+	benchmarkRuns int,
 	blockCommentCharsOpen string,
 	blockCommentCharsClose string,
 	dataInput string,
@@ -32,41 +34,46 @@ func processInput(
 		fmt.Println("done")
 	}
 
-	// Feed the compiler with the input
-	if !silentFlag {
-		fmt.Print("Compiling ... ")
-	}
-
-	var result string
-	switch compiler {
-	case "cpp", "c++":
-		result = util.ExecuteAndWaitWithOutput("./ccomc", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
-	case "java":
-		result = util.ExecuteAndWaitWithOutput("./ccomc-java.jar", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
-	default:
-		log.Fatal("Invalid compiler name. Only 'cpp' and 'java' are allowed values.")
-	}
-
-	if !silentFlag {
-		fmt.Println("done")
-	}
-
-	// Write output
-	if outFile != "" { // To file
-		// Check if output file exists
-		if util.FileExists(outFile) && !force {
-			// Ask user if he wants to overwrite the output file
-			if !util.YesNoQuestion("The output file already exists. Do you want to overwrite it?", false) {
-				return
-			}
-		}
-		// Write output to file
-		ioutil.WriteFile(outFile, []byte(result), 0777)
-	} else { // Print to console
+	if benchmarkRuns <= 0 { // Normal compiler mode
+		// Feed the compiler with the input
 		if !silentFlag {
-			fmt.Println()
+			fmt.Print("Compiling ... ")
 		}
-		fmt.Println(result)
+
+		result := runCompilerExecutable(compiler, modeSingle, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+
+		if !silentFlag {
+			fmt.Println("done")
+		}
+
+		// Write output
+		if outFile != "" { // To file
+			// Check if output file exists
+			if util.FileExists(outFile) && !force {
+				// Ask user if he wants to overwrite the output file
+				if !util.YesNoQuestion("The output file already exists. Do you want to overwrite it?", false) {
+					return
+				}
+			}
+			// Write output to file
+			ioutil.WriteFile(outFile, []byte(result), 0777)
+		} else { // Print to console
+			if !silentFlag {
+				fmt.Println()
+			}
+			fmt.Println(result)
+		}
+	} else { // Benchmarking mode
+		overallRuntime := 0
+		for i := 1; i <= benchmarkRuns; i++ {
+			start := time.Now()
+			runCompilerExecutable(compiler, modeSingle, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+			duration := time.Since(start).Milliseconds()
+			overallRuntime += int(duration)
+			fmt.Println(strconv.Itoa(i) + ". run: " + strconv.Itoa(int(duration)) + " ms")
+		}
+		fmt.Println()
+		fmt.Println("Overall runtime: " + strconv.Itoa(overallRuntime) + " ms")
 	}
 }
 
@@ -105,6 +112,26 @@ func analyze(
 	// Replace any Windows line breaks with Linux line breaks
 	*fileInput = strings.ReplaceAll(*fileInput, "\r\n", "\n")
 	*dataInput = strings.ReplaceAll(*dataInput, "\r\n", "\n")
+}
+
+func runCompilerExecutable(
+	compiler string,
+	modeSingle bool,
+	fileInput string,
+	dataInput string,
+	lineCommentChars string,
+	blockCommentCharsOpen string,
+	blockCommentCharsClose string,
+) (result string) {
+	switch compiler {
+	case "cpp", "c++":
+		result = util.ExecuteAndWaitWithOutput("./ccomc", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+	case "java":
+		result = util.ExecuteAndWaitWithOutput("./ccomc-java.jar", strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
+	default:
+		log.Fatal("Invalid compiler name. Only 'cpp' and 'java' are allowed values.")
+	}
+	return
 }
 
 func getCommentCharsFromLang(lang string) (lineCommentChars string, blockCommentCharsOpen string, blockCommentCharsClose string) {

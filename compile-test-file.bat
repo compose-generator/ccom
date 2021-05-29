@@ -1,4 +1,4 @@
 @echo off
 cd bin
-ccom.exe --data="../media/test-data.json" --lang="yaml" ../media/test-file.yml
+ccom.exe -d ../media/test-data.json -l yaml -o output.yml ../media/test-file.yml
 pause

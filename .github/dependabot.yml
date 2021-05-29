@@ -1,0 +1,28 @@
+version: 2
+updates:
+  # CLI dependency updates
+  - package-ecosystem: gomod
+    directory: /cli
+    schedule:
+      interval: daily
+      time: "04:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 15
+    target-branch: main
+    reviewers:
+      - compose-generator/compiler-team
+    assignees:
+      - compose-generator/compiler-team
+
+  # Java compiler dependency updates
+  - package-ecosystem: maven
+    directory: /compiler/java
+    schedule:
+      interval: daily
+      time: "04:00"
+    open-pull-requests-limit: 15
+    target-branch: develop
+    reviewers:
+      - compose-generator/compiler-team
+    assignees:
+      - compose-generator/compiler-team

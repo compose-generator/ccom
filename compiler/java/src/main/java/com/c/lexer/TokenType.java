@@ -1,5 +1,8 @@
 package com.c.lexer;
 
+/**
+ * Describes the possible types of a Token, e.g. EOF, IF, EQUALS, NUMBER etc.
+ */
 public enum TokenType {
     // End of file
     EOF,
@@ -17,9 +20,10 @@ public enum TokenType {
     OR, // |
     EQUALS, // ==
     NOT_EQUALS, // !=
+    LESS, // <
+    LESS_EQUAL, // <=
     GREATER, // >
     GREATER_EQUAL, // >=
-    LESS_EQUAL, // <=
 
     // Data types
     IDENTIFIER, // e.g. myIdentifier
@@ -32,12 +36,12 @@ public enum TokenType {
     BRACE_CLOSE, // }
     INDEX, // [42]
     // The following examples refer to Java
-    COMMENT_PAYLOAD_IDENTIFIER, // //
     COMMENT_LINE_IDENTIFIER, // //?
-    COMMENT_BLOCK_IDENTIFIER_OPEN, // /*?
-    COMMENT_BLOCK_IDENTIFIER_CLOSE, // */
+    COMMENT_BLOCK_OPEN_IDENTIFIER, // /*?
+    COMMENT_BLOCK_CLOSE_IDENTIFIER, // */
+    COMMENT_PAYLOAD_IDENTIFIER, // //
 
     // actual program code or data (in languages like JSON or yml)
-    // // that is not relevant for us since we are enriching existent languages
-    ARBITRARY
+    // that is not relevant for us since we are enriching existent languages
+    ARBITRARY // e.g. asd'!?fowen7a_=sdfkh%package class { public int main() {} }"
 }

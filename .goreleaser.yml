@@ -1,0 +1,39 @@
+project_name: ccom
+builds:
+  - dir: cli
+    goos:
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
+      - 386
+    goarm:
+      - 5
+      #- 6 # Waiting for third party fix
+      - 7
+archives:
+  - files:
+      - LICENSE
+      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/* # Waiting for implementation: https://github.com/goreleaser/goreleaser/issues/1638
+    format_overrides:
+      - goos: windows
+        format: zip
+nfpms:
+  - id: publish
+    maintainer: Marc Auberer <marc.auberer@chillibits.com>
+    description: Compiler for the CCom (Conditional Comments) language.
+    homepage: https://github.com/compose-generator/ccom
+    license: MIT
+    bindir: /usr/bin
+    formats:
+      - apk
+      - deb
+      - rpm
+    contents:
+      - src: bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
+        dst: /usr/bin/ # ToDo: Move compiler binaries to /usr/lib/ccom instead of the /usr/bin directory, which should only be used for main binaries.
+release:
+  name_template: v{{ .Tag }}
+  prerelease: auto
