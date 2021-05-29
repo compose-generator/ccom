@@ -26,6 +26,73 @@ CCom is a language for pre-processing source files. It's primary purpose is to e
 
 *Note: Formats like JSON, where no comments are supported can also work with CCom, however then the file input is not valid before pre-processing it with CCom.*
 
+## Install
+<details><summary><b>Install on Debian / Ubuntu / Raspbian</b></summary>
+<p>
+
+```sh
+$ curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
+$ sudo add-apt-repository "deb https://admin.repo.chillibits.com/repository/$(lsb_release -is) \
+    $(lsb_release -cs) main"
+$ sudo sudo apt-get update
+$ sudo apt-get install ccom
+```
+
+</p>
+</details>
+
+<details><summary><b>Install on Fedora</b></summary>
+<p>
+
+```sh
+$ sudo dnf -y install dnf-plugins-core
+$ sudo dnf config-manager --add-repo https://server.chillibits.com/files/repo/fedora.repo
+$ sudo dnf install ccom
+```
+
+</p>
+</details>
+
+<details><summary><b>Install on CentOS</b></summary>
+<p>
+
+```sh
+$ sudo yum install -y yum-utils
+$ sudo yum-config-manager --add-repo https://server.chillibits.com/files/repo/centos.repo
+$ sudo yum install ccom
+```
+
+</p>
+</details>
+
+<details><summary><b>Install on Alpine</b></summary>
+<p>
+
+<i>CCom will be published for Alpine soon ...</i>
+
+</p>
+</details>
+
+<details><summary><b>Windows</b></summary>
+<p>
+
+CCom gets distributed for Windows via the new Windows package manager called [winget](https://github.com/microsoft/winget-cli). In the future, winget will be available for download in the Microsoft Store. Currently, the easiest way to install winget is, to download it manually from GitHub. Visit the [installation instruction](https://github.com/microsoft/winget-cli#installing-the-client) from Microsoft. <br>
+As soon as the Windows package manager is installed on your Windows machine, you can open powershell and execute this installation command: <br>
+```sh
+$ winget install ChilliBits.CCom
+```
+    
+</p>
+</details>
+
+<details><summary><b>Use with Docker</b></summary>
+<p>
+
+<i>CCom will be published as a Docker image soon ...</i>
+
+</p>
+</details>
+
 ## Usage
 In general, you call the cli like so: <br>
 `ccom [options] <input>`
