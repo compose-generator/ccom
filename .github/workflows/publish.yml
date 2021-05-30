@@ -198,7 +198,7 @@ jobs:
         id: get_version
         uses: battila7/get-version-action@v2
 
-      - name: Download gh.exe
+      - name: Download executables
         id: download_exe
         shell: bash
         run: | # Remove the last command as soon as this is implemented: https://github.com/goreleaser/goreleaser/issues/1638

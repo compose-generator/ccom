@@ -4,7 +4,10 @@ file(GLOB_RECURSE TEST_SOURCES LIST_DIRECTORIES false *.h *.cpp)
 
 add_executable(${BINARY}
         main.cpp
-        ReaderTest.cpp)
+        reader/ReaderTest.cpp
+        lexer/LexerTest.cpp
+        util/LanguageDescription.cpp
+        util/LanguageDescription.h)
 
 add_test(NAME ${BINARY} COMMAND ${BINARY})
 
