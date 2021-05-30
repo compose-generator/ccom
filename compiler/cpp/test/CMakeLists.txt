@@ -7,7 +7,9 @@ add_executable(${BINARY}
         reader/ReaderTest.cpp
         lexer/LexerTest.cpp
         util/LanguageDescription.cpp
-        util/LanguageDescription.h)
+        util/LanguageDescription.h
+        util/FileReader.cpp
+        util/FileReader.h)
 
 add_test(NAME ${BINARY} COMMAND ${BINARY})
 
