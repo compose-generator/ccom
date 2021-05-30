@@ -3,8 +3,10 @@
 //
 
 #include <gtest/gtest.h>
+#include "lexer/LexerTest.cpp"
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
+    ::testing::AddGlobalTestEnvironment(new LexerTestEnvironment);
     return RUN_ALL_TESTS();
 }

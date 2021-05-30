@@ -11,9 +11,9 @@
 
 class FileReader {
 private:
-    const std::string dirPath;
+    std::string dirPath;
 public:
-    explicit FileReader(): dirPath("../fest-files/") {}
+    FileReader(): dirPath("../fest-files/") {}
     explicit FileReader(std::string folderPath): dirPath(std::move(folderPath)) {}
     std::string fileToString(const std::string& subDir, const std::string& fileName);
 };

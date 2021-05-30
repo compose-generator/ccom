@@ -5,7 +5,7 @@
 #include "FileReader.h"
 
 std::string FileReader::fileToString(const std::string& subDir, const std::string& fileName) {
-    std::ifstream file(dirPath + fileName);
+    std::ifstream file(dirPath + "/" + subDir + "/" + fileName);
     std::string content;
     if (file) {
         std::ostringstream stringStream;

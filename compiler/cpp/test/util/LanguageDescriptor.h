@@ -7,14 +7,14 @@
 #include <string>
 #include <utility>
 
-class LanguageDescription {
+class LanguageDescriptor {
 private:
     const std::string fileExtension;
     const std::string comLineIden;
     const std::string comBlockIdenOpen;
     const std::string comBlockIdenClose;
 public:
-    explicit LanguageDescription(std::string fileExtension, std::string comLineIden, std::string comBlockIdenOpen,
+    explicit LanguageDescriptor(std::string fileExtension, std::string comLineIden, std::string comBlockIdenOpen,
                                  std::string comBlockIdenClose): fileExtension(std::move(fileExtension)),
                                  comLineIden(std::move(comLineIden)), comBlockIdenOpen(std::move(comBlockIdenOpen)),
                                  comBlockIdenClose(std::move(comBlockIdenClose)) {}
