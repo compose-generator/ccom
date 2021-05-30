@@ -5,6 +5,7 @@
 #pragma once
 
 #include <string>
+#include <stdexcept>
 #include "../../lib/json/json.hpp"
 #include "../parser/Parser.h"
 #include "../util/JSONParser.h"

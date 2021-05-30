@@ -3,10 +3,11 @@ project(CCom)
 
 set(CMAKE_CXX_STANDARD 20)
 
-enable_testing()
-
 include_directories(src)
 
 add_subdirectory(src)
-add_subdirectory(test)
-add_subdirectory(lib/googletest)
+IF(${WITH_TESTS})
+    enable_testing()
+    add_subdirectory(test)
+    add_subdirectory(lib/googletest)
+endif()

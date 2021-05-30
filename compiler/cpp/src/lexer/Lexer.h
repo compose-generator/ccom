@@ -8,6 +8,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iostream>
+#include <stdexcept>
 #include "Token.h"
 #include "../reader/Reader.h"
 

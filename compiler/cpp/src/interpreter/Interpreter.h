@@ -5,6 +5,7 @@
 #pragma once
 
 #include "../analyzer/Analyzer.h"
+#include <stdexcept>
 
 class Interpreter {
 private:

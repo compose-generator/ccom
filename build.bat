@@ -10,6 +10,6 @@ cd ../bin
 cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" ../compiler/cpp
 mingw32-make
 
-move compiler.exe ccomc.exe
+move src\CCom_run.exe ccomc.exe
 
 cd ..

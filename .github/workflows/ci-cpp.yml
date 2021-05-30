@@ -34,4 +34,5 @@ jobs:
         with:
           submodule_update: ON
           run_tests: ON
+          cmake_args: -DWITH_TESTS=ON
           unit_test_build: -Dtest=ON

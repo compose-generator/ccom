@@ -5,6 +5,7 @@
 # pragma once
 
 #include <memory>
+#include <stdexcept>
 #include "../lexer/Lexer.h"
 #include "ast/TopLevelExprAST.h"
 #include "ast/ArbitraryExprAST.h"
