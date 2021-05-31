@@ -14,3 +14,5 @@ add_executable(${BINARY}
 add_test(NAME ${BINARY} COMMAND ${BINARY})
 
 target_link_libraries(${BINARY} PUBLIC ${CMAKE_PROJECT_NAME}_lib gtest)
+
+file(COPY test-files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})

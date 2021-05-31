@@ -2,7 +2,7 @@ build: ${{SPRING_MAVEN_SOURCE_DIRECTORY}}
 container_name: ${{PROJECT_NAME_CONTAINER}}-backend-spring-maven
 restart: always
 networks:
-#? if service.frontend[1].preselected != false {
+#? if service.frontend[1].preselected == false {
 #  - frontend-backend
 #? }
 #? if has service.database {
