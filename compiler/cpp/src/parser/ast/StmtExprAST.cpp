@@ -6,6 +6,6 @@
 
 #include "StmtExprAST.h"
 
-StmtExprAST::Type StmtExprAST::getType() {
+StmtExprType StmtExprAST::getType() {
     return type;
 }

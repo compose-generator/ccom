@@ -9,9 +9,13 @@
 #include <string>
 
 class PayloadExprAST {
-private:
-    std::string value;
 public:
+    // Constructors
     explicit PayloadExprAST(std::string val): value(std::move(val)) {}
+
+    // Public methods
     std::string getValue() const;
+private:
+    // Members
+    std::string value;
 };

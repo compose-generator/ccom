@@ -4,6 +4,6 @@
 
 #include "TopLevelExprAST.h"
 
-TopLevelExprAST::Type TopLevelExprAST::getType() {
+TopLevelExprType TopLevelExprAST::getType() {
     return type;
 }

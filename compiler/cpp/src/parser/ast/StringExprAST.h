@@ -11,9 +11,13 @@
 #include "ValueExprAST.h"
 
 class StringExprAST : public ValueExprAST {
-private:
-    std::string value;
 public:
-    explicit StringExprAST(std::string val): ValueExprAST(ValueExprAST::Type::STRING_EXPR), value(std::move(val)) {}
+    // Constructors
+    explicit StringExprAST(std::string val): ValueExprAST(ValueExprType::STRING_EXPR), value(std::move(val)) {}
+
+    // Public methods
     std::string getValue() const;
+private:
+    // Members
+    std::string value;
 };

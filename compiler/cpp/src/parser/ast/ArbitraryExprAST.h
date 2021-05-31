@@ -11,9 +11,15 @@
 #include "ContentBlockExprAST.h"
 
 class ArbitraryExprAST : public ContentBlockExprAST {
-private:
-    std::string value;
 public:
-    explicit ArbitraryExprAST(std::string value): ContentBlockExprAST(ContentBlockExprAST::Type::ARBITRARY_EXPR), value(std::move(value)) {}
+    // Constructors
+    explicit ArbitraryExprAST(std::string value): ContentBlockExprAST(ContentBlockExprType::ARBITRARY_EXPR),
+        value(std::move(value)) {}
+
+    // Public methods
     std::string getValue() const;
+
+private:
+    // Members
+    std::string value;
 };

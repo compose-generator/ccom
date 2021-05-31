@@ -4,6 +4,6 @@
 
 #include "ContentBlockExprAST.h"
 
-ContentBlockExprAST::Type ContentBlockExprAST::getType() {
+ContentBlockExprType ContentBlockExprAST::getType() {
     return type;
 }

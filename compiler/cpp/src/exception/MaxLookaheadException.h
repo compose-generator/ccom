@@ -7,12 +7,15 @@
 #include <string>
 
 class MaxLookaheadException : public std::exception {
-private:
-    std::string errorMessage {};
 public:
+    // Constructors
     explicit MaxLookaheadException(unsigned int maxLookahead) {
         errorMessage = "Invalid maximum lookahead '" + std::to_string(maxLookahead) + "' specified. Must be >= 1";
     }
 
+    // Public methods
     const char * what() const noexcept override;
+private:
+    // Members
+    std::string errorMessage {};
 };

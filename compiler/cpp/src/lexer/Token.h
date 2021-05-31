@@ -9,18 +9,22 @@
 #include <string>
 
 class Token {
+public:
+    // Constructors
+    Token();
+    Token(int, unsigned int, unsigned int);
+    Token(int, std::string, unsigned int, unsigned int);
+
+    // Public methods
+    int getType() const;
+    std::string getValue();
+    std::string getCodePos();
 private:
+    // Members
     int type = -1;
     std::string value;
     unsigned int lineNum = 0;
     unsigned int colNum = 0;
-public:
-    Token();
-    Token(int, unsigned int, unsigned int);
-    Token(int, std::string, unsigned int, unsigned int);
-    int getType() const;
-    std::string getValue();
-    std::string getCodePos();
 };
 
 enum TokenType {

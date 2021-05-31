@@ -10,12 +10,16 @@
 #include <utility>
 
 class IdentifierExprAST {
-private:
-    std::string name;
-    int index = -1;
 public:
+    // Constructors
     explicit IdentifierExprAST(std::string Name): name(std::move(Name)) {}
     IdentifierExprAST(std::string name, int index): name(std::move(name)), index(index) {}
+
+    // Public methods
     std::string getName() const;
     int getIndex() const;
+private:
+    // Members
+    std::string name;
+    int index = -1;
 };

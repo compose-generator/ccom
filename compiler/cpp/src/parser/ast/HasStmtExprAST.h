@@ -11,12 +11,16 @@
 #include "StmtExprAST.h"
 
 class HasStmtExprAST : public StmtExprAST {
-private:
-    std::unique_ptr<KeyExprAST> key;
-    bool isInverted;
 public:
+    // Constructors
     explicit HasStmtExprAST(std::unique_ptr<KeyExprAST> key, bool inverted):
-        StmtExprAST(StmtExprAST::Type::HAS_STMT_EXPR), key(std::move(key)), isInverted(inverted) {}
+        StmtExprAST(StmtExprType::HAS_STMT_EXPR), key(std::move(key)), isInverted(inverted) {}
+
+    // Public methods
     const std::unique_ptr<KeyExprAST> &getKey();
     bool getInverted() const;
+private:
+    // Members
+    std::unique_ptr<KeyExprAST> key;
+    bool isInverted;
 };

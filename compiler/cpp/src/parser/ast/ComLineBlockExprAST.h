@@ -12,13 +12,17 @@
 #include "ComBlockExprAST.h"
 
 class ComLineBlockExprAST : public ComBlockExprAST {
-private:
-    std::unique_ptr<StmtLstExprAST> stmtList;
-    std::unique_ptr<PayloadExprAST> payload;
 public:
+    // Constructors
     explicit ComLineBlockExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
-            ComBlockExprAST(ComLineBlockExprAST::Type::COM_LINE_BLOCK_EXPR),
+            ComBlockExprAST(ComBlockExprType::COM_LINE_BLOCK_EXPR),
             stmtList(std::move(stmtList)), payload(std::move(payload)) {}
+
+    // Public methods
     const std::unique_ptr<StmtLstExprAST> &getStmtList();
     const std::unique_ptr<PayloadExprAST> &getPayload();
+private:
+    // Members
+    std::unique_ptr<StmtLstExprAST> stmtList;
+    std::unique_ptr<PayloadExprAST> payload;
 };

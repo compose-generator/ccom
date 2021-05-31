@@ -8,14 +8,23 @@
 
 #include <vector>
 
+enum StmtExprType {
+    STMT_EXPR,
+    HAS_STMT_EXPR,
+    COMP_STMT_EXPR
+};
+
 class StmtExprAST {
 public:
-    enum Type { STMT_EXPR, HAS_STMT_EXPR, COMP_STMT_EXPR };
-
+    // Constructors
     explicit StmtExprAST(): type(STMT_EXPR) {}
-    Type getType();
+
+    // Public methods
+    StmtExprType getType();
 protected:
-    explicit StmtExprAST(Type t): type(t) {}
+    // Protected constructors
+    explicit StmtExprAST(StmtExprType t): type(t) {}
 private:
-    Type type;
+    // Members
+    StmtExprType type;
 };

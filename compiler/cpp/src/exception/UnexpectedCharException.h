@@ -8,9 +8,8 @@
 #include <string>
 
 class UnexpectedCharException : public std::exception {
-private:
-    std::string errorMessage {};
 public:
+    // Constructors
     UnexpectedCharException(const char unexpectedChar, const unsigned int lineNum, const unsigned int colNum) {
         errorMessage = "Unexpected character '" + std::string(1, unexpectedChar) + "' at L"+
                 std::to_string(lineNum) + " C" + std::to_string(colNum);
@@ -23,5 +22,9 @@ public:
                 std::to_string(colNum);
     }
 
+    // Public methods
     const char * what() const noexcept override;
+private:
+    // Members
+    std::string errorMessage {};
 };

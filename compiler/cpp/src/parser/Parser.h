@@ -26,14 +26,15 @@
 #include "ast/ContentExprAST.h"
 
 class Parser {
+public:
+    // Constructors
+    explicit Parser() {}
+    Parser(bool, const std::string&, const std::string&, const std::string&, const std::string&);
+
+    // Public methods
+    TopLevelExprAST* parseAST();
 private:
-    // Constant inputs
-    bool isSingleStatement;
-
-    // Working variables
-    Lexer lexer;
-
-    // Private functions
+    // Private methods
     std::unique_ptr<ContentExprAST> parseContent();
     std::unique_ptr<ArbitraryExprAST> parseArbitrary();
     std::unique_ptr<PayloadExprAST> parsePayload();
@@ -51,8 +52,8 @@ private:
     std::unique_ptr<StringExprAST> parseString();
     std::unique_ptr<BooleanExprAST> parseBoolean();
     std::unique_ptr<NumberExprAST> parseNumber();
-public:
-    explicit Parser() {}
-    Parser(bool, const std::string&, const std::string&, const std::string&, const std::string&);
-    TopLevelExprAST* parseAST();
+
+    // Members
+    bool isSingleStatement;
+    Lexer lexer;
 };
