@@ -31,6 +31,6 @@ private:
     // Members
     Parser parser;
     JSONParser jsonParser;
-    TopLevelExprAST* ast{};
+    TopLevelExprAST* ast = nullptr;
     bool isSingleStatement = false;
 };
