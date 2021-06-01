@@ -2,17 +2,16 @@ package util
 
 import (
 	"io/ioutil"
-	"log"
 	"os"
 )
 
 // GetFileContents reads a file and returns its content as a string
-func GetFileContents(path string) string {
+func GetFileContents(path string) (string, error) {
 	b, err := ioutil.ReadFile(path)
 	if err != nil {
-		log.Fatal("Could not read file " + path)
+		return "", err
 	}
-	return string(b)
+	return string(b), nil
 }
 
 // FileExists checks if a file exists

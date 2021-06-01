@@ -173,14 +173,22 @@ func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden stri
 func ensureFileInputString(text *string) {
 	// Is it a path to a file
 	if util.FileExists(*text) && !util.IsDir(*text) {
-		*text = util.GetFileContents(*text)
+		result, err := util.GetFileContents(*text)
+		if err != nil {
+			log.Fatal("Could not read input file")
+		}
+		*text = result
 	}
 }
 
 func ensureDataInputString(text *string) {
 	// Is it a path to a file
 	if util.FileExists(*text) && !util.IsDir(*text) {
-		*text = util.GetFileContents(*text)
+		result, err := util.GetFileContents(*text)
+		if err != nil {
+			log.Fatal("Could not read data file")
+		}
+		*text = result
 	}
 	// If it is json
 	if util.IsJson(*text) {
