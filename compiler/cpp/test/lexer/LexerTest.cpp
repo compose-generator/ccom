@@ -251,6 +251,102 @@ TEST_P(LexerTests, TestLexerWithExpectToken) {
     }
 }
 
+//TEST(LexerTests, TestLexerAdvancedCpp) {
+//    FileReader reader = FileReader("test-files");
+//    std::string advancedInput = reader.fileToString("advanced", "advanced.cpp");
+//    Lexer lexer = Lexer(false, advancedInput, "//", "/*", "*/");
+//
+//}
+
+TEST(LexerTests, TestLexerAdvancedHTML) {
+    FileReader reader = FileReader("test-files");
+    std::string advancedInput = reader.fileToString("advanced", "advanced.html");
+    Lexer lexer = Lexer(false, advancedInput, "", "<!--", "-->");
+
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_BLOCK_IDEN_OPEN);
+    lexer.expect(TOK_IF);
+    lexer.expect(TOK_HAS);
+    lexer.expect(TOK_NOT);
+    lexer.expect(TOK_TRUE);
+    lexer.expect(TOK_FALSE);
+    lexer.expect(TOK_OR);
+    lexer.expect(TOK_EQUALS);
+    lexer.expect(TOK_NOT_EQUALS);
+    lexer.expect(TOK_LESS);
+    lexer.expect(TOK_LESS_EQUAL);
+    lexer.expect(TOK_NUMBER);
+    lexer.expect(TOK_GREATER);
+    lexer.expect(TOK_GREATER_EQUAL);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_NUMBER);
+    lexer.expect(TOK_STRING);
+    lexer.expect(TOK_NUMBER);
+    lexer.expect(TOK_DOT);
+    lexer.expect(TOK_INDEX);
+    lexer.expect(TOK_BRACE_OPEN);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_BRACE_CLOSE);
+    lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_BLOCK_IDEN_OPEN);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_STRING);
+    lexer.expect(TOK_BRACE_OPEN);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_BRACE_CLOSE);
+    lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE);
+    lexer.expect(TOK_ARBITRARY);
+}
+
+TEST(LexerTests, TestLexerAdvancedYAML) {
+    FileReader reader = FileReader("test-files");
+    std::string advancedInput = reader.fileToString("advanced", "advanced.yml");
+    Lexer lexer = Lexer(false, advancedInput, "#", "", "");
+
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_LINE_IDEN);
+    lexer.expect(TOK_IF);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_DOT);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_INDEX);
+    lexer.expect(TOK_DOT);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_EQUALS);
+    lexer.expect(TOK_FALSE);
+    lexer.expect(TOK_BRACE_OPEN);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_LINE_IDEN);
+    lexer.expect(TOK_BRACE_CLOSE);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_LINE_IDEN);
+    lexer.expect(TOK_IF);
+    lexer.expect(TOK_HAS);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_DOT);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_BRACE_OPEN);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_LINE_IDEN);
+    lexer.expect(TOK_BRACE_CLOSE);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_LINE_IDEN);
+    lexer.expect(TOK_IF);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_DOT);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_INDEX);
+    lexer.expect(TOK_DOT);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_NOT_EQUALS);
+    lexer.expect(TOK_STRING);
+    lexer.expect(TOK_BRACE_OPEN);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_LINE_IDEN);
+    lexer.expect(TOK_BRACE_CLOSE);
+}
+
 INSTANTIATE_TEST_SUITE_P(
         LexerTests,
         LexerTests,

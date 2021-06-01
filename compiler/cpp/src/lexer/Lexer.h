@@ -11,6 +11,7 @@
 #include <stdexcept>
 #include "Token.h"
 #include "../reader/Reader.h"
+#include "../exception/UnexpectedTokenException.h"
 
 enum Context {
     ARBITRARY, // Before / after conditional section
