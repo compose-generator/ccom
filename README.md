@@ -1,7 +1,7 @@
 <p align="center">
   <img alt="CCom Logo" src="./docs/docs/static/avatar.png" height="220" />
-  <h3 align="center">CCom (Conditional Comments) language</h3>
-  <p align="center">Easy to use cli to generate Docker Compose YAML configuration files.</p>
+  <h3 align="center">CCom language</h3>
+  <p align="center">Compiler for the CCom (Conditional Comments) language.</p>
   <p align="center">
     <a target="_blank" href="https://github.com/compose-generator/compose-generator/releases/latest"><img src="https://img.shields.io/github/v/release/compose-generator/ccom?include_prereleases"></a>
     <a target="_blank" href="https://hub.docker.com/r/chillibits/ccom"><img src="https://img.shields.io/docker/pulls/chillibits/ccom"></a>
