@@ -1,4 +1,4 @@
-package com.c.reader;
+package com.chillibits.ccom.reader;
 
 import java.util.LinkedList;
 

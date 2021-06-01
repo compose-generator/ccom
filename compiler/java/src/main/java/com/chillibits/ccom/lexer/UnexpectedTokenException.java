@@ -1,4 +1,4 @@
-package com.c.lexer;
+package com.chillibits.ccom.lexer;
 
 /**
  * Exception indicating that the next Token did not equal the expected Token.

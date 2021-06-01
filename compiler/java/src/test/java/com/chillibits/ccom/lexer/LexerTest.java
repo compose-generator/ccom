@@ -1,9 +1,9 @@
-package com.c.lexer;
+package com.chillibits.ccom.lexer;
 
-import com.c.LanguageDescription;
-import com.c.TestFileReader;
-import com.c.reader.MaxLookAheadException;
-import com.c.reader.UnexpectedCharException;
+import com.chillibits.ccom.LanguageDescription;
+import com.chillibits.ccom.TestFileReader;
+import com.chillibits.ccom.reader.MaxLookAheadException;
+import com.chillibits.ccom.reader.UnexpectedCharException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -397,7 +397,7 @@ public class LexerTest {
 
         // Arbitrary begin
         String arbitraryBegin = """
-                package com.c.lexer;
+                package com.chillibits.ccom.lexer;
 
                 class AdvancedJavaTest {
 

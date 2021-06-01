@@ -1,9 +1,9 @@
-package com.c.lexer;
+package com.chillibits.ccom.lexer;
 
-import com.c.Constants;
-import com.c.reader.MaxLookAheadException;
-import com.c.reader.Reader;
-import com.c.reader.UnexpectedCharException;
+import com.chillibits.ccom.Constants;
+import com.chillibits.ccom.reader.MaxLookAheadException;
+import com.chillibits.ccom.reader.Reader;
+import com.chillibits.ccom.reader.UnexpectedCharException;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package com.c.lexer;
+package com.chillibits.ccom.lexer;
 
 class AdvancedJavaTest {
 

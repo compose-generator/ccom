@@ -1,4 +1,4 @@
-package com.c;
+package com.chillibits.ccom;
 
 public class LanguageDescription {
     private final String fileExtension;

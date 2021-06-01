@@ -1,4 +1,4 @@
-package com.c.lexer;
+package com.chillibits.ccom.lexer;
 
 /**
  * Describes the possible types of a Token, e.g. EOF, IF, EQUALS, NUMBER etc.

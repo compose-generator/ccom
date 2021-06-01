@@ -1,4 +1,4 @@
-package com.c;
+package com.chillibits.ccom;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,7 +6,7 @@ import java.nio.file.Path;
 
 public class TestFileReader {
 
-    private String folderPath = "./src/test/java/com/c/";
+    private String folderPath = "./src/test/java/com/chillibits/ccom/";
 
     public TestFileReader(String testPackageName) {
         this.folderPath = this.folderPath + testPackageName + "/";
