@@ -10,6 +10,7 @@ on:
       - 'feature/**'
     paths:
       - 'docs/**'
+  workflow_dispatch:
 
 jobs:
   docs-deploy:
