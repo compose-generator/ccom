@@ -89,7 +89,7 @@ const LexerParams LEXER_TEST_PARAMETERS[] = {
             }
     },
     {
-            "greater-equals",
+            "greater-equal",
             {
                     TokenType::TOK_COM_LINE_IDEN,
                     TokenType::TOK_GREATER_EQUAL
@@ -155,7 +155,7 @@ const LexerParams LEXER_TEST_PARAMETERS[] = {
             }
     },
     {
-            "less-equals",
+            "less-equal",
             {
                     TokenType::TOK_COM_LINE_IDEN,
                     TokenType::TOK_LESS_EQUAL
