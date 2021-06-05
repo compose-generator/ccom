@@ -1,4 +1,4 @@
-package com.c.reader;
+package com.chillibits.ccom.reader;
 
 /**
  * Exception indicating that the next char in the file did not equal the expected char.

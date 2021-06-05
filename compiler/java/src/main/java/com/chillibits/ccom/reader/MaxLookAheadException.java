@@ -1,4 +1,4 @@
-package com.c.reader;
+package com.chillibits.ccom.reader;
 
 /**
  * Exception indicating that the max look ahead is less than 1.

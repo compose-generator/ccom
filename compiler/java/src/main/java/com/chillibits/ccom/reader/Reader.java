@@ -1,6 +1,6 @@
-package com.c.reader;
+package com.chillibits.ccom.reader;
 
-import com.c.Constants;
+import com.chillibits.ccom.Constants;
 
 import java.util.ArrayList;
 import java.util.PrimitiveIterator;

@@ -1,7 +1,7 @@
-package com.c.reader;
+package com.chillibits.ccom.reader;
 
-import com.c.Constants;
-import com.c.TestFileReader;
+import com.chillibits.ccom.Constants;
+import com.chillibits.ccom.TestFileReader;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

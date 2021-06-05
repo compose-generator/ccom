@@ -1,4 +1,4 @@
-package com.c.lexer;
+package com.chillibits.ccom.lexer;
 
 /**
  * Exception indicating that the values for the comments identifier of the original language (e.g. Java) are invalid.
