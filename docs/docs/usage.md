@@ -2,4 +2,4 @@
 title: Usage
 ---
 
-*To be extended ...*
+*Coming soon...*

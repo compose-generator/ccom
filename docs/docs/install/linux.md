@@ -35,7 +35,7 @@ title: Install on Linux
     *CCom will be published for Alpine soon ...*
 
 ### Install from package file
-You also can install CCom from a Debian package (`.deb`). You can download the package [here](https://github.com/compose-generator/ccom/releases/latest).
+You can also install CCom from a Debian package (`.deb`). Simply download the package [here](https://github.com/compose-generator/ccom/releases/latest).
 
 === "Debian/Ubuntu/Raspbian"
     To install it, execute the following command:

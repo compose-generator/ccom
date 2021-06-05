@@ -3,8 +3,8 @@ title: Build or install from source
 ---
 
 ### Setup
-Before being able to compile the source code you first have to download it from GitHub and install Golang (if you don't have it already).
-Depending on which compiler executable you want to use, you also have to either install Java JDK15 or a common C++ compiler and CMake
+Before being able to compile the source code, you first have to download it from GitHub and install Golang (if you don't have it already).
+Depending on which compiler executable you want to use, you also have to either install Java JDK15 or a common C++ compiler and CMake.
 
 #### Clone from GitHub
 ```sh
@@ -13,7 +13,7 @@ cd ccom
 ```
 
 #### Install Go
-For compiling Compose Generator from source you need to have Go 1.16 or higher installed on your system. Please refer to the [official guide](https://golang.org/doc/install) on how to install Go.
+For compiling Compose Generator from source, you need to have Go 1.16 or higher installed on your system. Please refer to the [official guide](https://golang.org/doc/install) on how to install Go.
 
 ### Build from source
 If you want to build the executable, you can use the `build.sh` for Linux or the `build.bat` file for Windows:

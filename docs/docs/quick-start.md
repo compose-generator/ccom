@@ -1,3 +1,5 @@
-# Quick Start
+---
+title: Quick Start
+---
 
-*To be extended ...*
+*Coming soon...*
