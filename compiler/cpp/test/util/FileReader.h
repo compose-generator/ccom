@@ -13,7 +13,7 @@ class FileReader {
 private:
     std::string dirPath;
 public:
-    FileReader(): dirPath("../fest-files/") {}
+    FileReader(): dirPath("../test-files/") {}
     explicit FileReader(std::string folderPath): dirPath(std::move(folderPath)) {}
     std::string fileToString(const std::string& subDir, const std::string& fileName);
 };
