@@ -38,4 +38,10 @@ std::string Token::getCodePos() {
      23492873 "string" iden not == has false {
      return "Line " + std::to_string(lineNum) + ", Col " + std::to_string(colNum);
      }*/
+    /*?
+     123 "string" iden != has true
+     {
+     return "Line " + std::to_string(lineNum) +
+            ", Col " + std::to_string(colNum);
+     }*/
 }

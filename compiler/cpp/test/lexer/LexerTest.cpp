@@ -297,6 +297,18 @@ TEST(LexerTests, TestLexerAdvancedCpp) {
     lexer.expect(TOK_BRACE_CLOSE);
     lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE);
     lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_COM_BLOCK_IDEN_OPEN);
+    lexer.expect(TOK_NUMBER);
+    lexer.expect(TOK_STRING);
+    lexer.expect(TOK_IDENTIFIER);
+    lexer.expect(TOK_NOT_EQUALS);
+    lexer.expect(TOK_HAS);
+    lexer.expect(TOK_TRUE);
+    lexer.expect(TOK_BRACE_OPEN);
+    lexer.expect(TOK_ARBITRARY);
+    lexer.expect(TOK_BRACE_CLOSE);
+    lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE);
+    lexer.expect(TOK_ARBITRARY);
 }
 
 TEST(LexerTests, TestLexerAdvancedPython) {
