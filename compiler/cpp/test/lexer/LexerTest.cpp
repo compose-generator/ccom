@@ -18,7 +18,7 @@ const std::vector<LanguageDescriptor> LANGUAGES {
     LanguageDescriptor("yml", "#", "", ""),
     LanguageDescriptor("cpp", "//", "/*", "*/"),
     LanguageDescriptor("html", "", "<!--", "-->"),
-    LanguageDescriptor("py", "#", "", "")
+    LanguageDescriptor("py", "#", R"(""")", R"(""")")
 };
 
 const LexerParams LEXER_TEST_PARAMETERS[] = {
