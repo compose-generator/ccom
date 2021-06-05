@@ -10,214 +10,642 @@
 
 struct LexerParams {
     const std::string fileName;
-    std::vector<TokenType> expectedTokensLineComment;
-    std::vector<TokenType> expectedTokensBlockComment;
+    std::map<std::string, std::vector<Token>> expectedTokensMap;
 };
 
 const std::vector<LanguageDescriptor> LANGUAGES {
-    LanguageDescriptor("yml", "#", "", ""),
     LanguageDescriptor("cpp", "//", "/*", "*/"),
     LanguageDescriptor("html", "", "<!--", "-->"),
-    LanguageDescriptor("py", "#", R"(""")", R"(""")")
+    LanguageDescriptor("py", "#", R"(""")", R"(""")"),
+    LanguageDescriptor("yml", "#", "", "")
 };
 
 const LexerParams LEXER_TEST_PARAMETERS[] = {
     {
             "brace-close",
             {
-                TokenType::TOK_COM_LINE_IDEN,
-                TokenType::TOK_BRACE_CLOSE
-            },
-            {
-                TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                TokenType::TOK_BRACE_CLOSE
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_BRACE_CLOSE, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_BRACE_CLOSE, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_BRACE_CLOSE, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_BRACE_CLOSE, 1, 4)
+                            }
+                    }
             }
     },
     {
             "brace-open",
             {
-                TokenType::TOK_COM_LINE_IDEN,
-                TokenType::TOK_BRACE_OPEN
-            },
-            {
-                TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                TokenType::TOK_BRACE_OPEN
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_BRACE_OPEN, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_BRACE_OPEN, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_BRACE_OPEN, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_BRACE_OPEN, 1, 4)
+                            }
+                    }
             }
     },
     {
             "dot",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_DOT
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_DOT
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_DOT, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_DOT, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_DOT, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_DOT, 1, 4)
+                            }
+                    }
             }
     },
     {
             "equals",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_EQUALS
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_EQUALS
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_EQUALS, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_EQUALS, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_EQUALS, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_EQUALS, 1, 4)
+                            }
+                    }
             }
     },
     {
             "false",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_FALSE
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_FALSE
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_FALSE, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_FALSE, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_FALSE, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_FALSE, 1, 4)
+                            }
+                    }
             }
     },
     {
             "greater",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_GREATER
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_GREATER
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_GREATER, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_GREATER, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_GREATER, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_GREATER, 1, 4)
+                            }
+                    }
             }
     },
     {
             "greater-equal",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_GREATER_EQUAL
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_GREATER_EQUAL
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_GREATER_EQUAL, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_GREATER_EQUAL, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_GREATER_EQUAL, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_GREATER_EQUAL, 1, 4)
+                            }
+                    }
             }
     },
     {
             "has",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_HAS
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_HAS
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_HAS, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_HAS, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_HAS, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_HAS, 1, 4)
+                            }
+                    }
             }
     },
     {
             "identifier",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_IDENTIFIER
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_IDENTIFIER
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_IDENTIFIER, "testIdentifier", 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_IDENTIFIER, "testIdentifier", 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_IDENTIFIER, "testIdentifier", 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_IDENTIFIER, "testIdentifier", 1, 4)
+                            }
+                    }
             }
     },
     {
             "if",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_IF
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_IF
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_IF, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_IF, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_IF, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_IF, 1, 4)
+                            }
+                    }
             }
     },
     {
             "index",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_INDEX
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_INDEX
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_INDEX, "1234", 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_INDEX, "1234", 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_INDEX, "1234", 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_INDEX, "1234", 1, 4)
+                            }
+                    }
             }
     },
     {
             "less",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_LESS
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_LESS
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_LESS, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_LESS, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_LESS, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_LESS, 1, 4)
+                            }
+                    }
             }
     },
     {
             "less-equal",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_LESS_EQUAL
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_LESS_EQUAL
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_LESS_EQUAL, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_LESS_EQUAL, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_LESS_EQUAL, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_LESS_EQUAL, 1, 4)
+                            }
+                    }
             }
     },
     {
             "not",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_NOT
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_NOT
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NOT, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_NOT, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NOT, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NOT, 1, 4)
+                            }
+                    }
             }
     },
     {
             "not-equals",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_NOT_EQUALS
-            },
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NOT_EQUALS, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_NOT_EQUALS, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NOT_EQUALS, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NOT_EQUALS, 1, 4)
+                            }
+                    }
+            }
+    },
+    {
+            "number",
             {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_NOT_EQUALS
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NUMBER, "42", 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_NUMBER, "42", 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NUMBER, "42", 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_NUMBER, "42", 1, 4)
+                            }
+                    }
             }
     },
     {
             "or",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_OR
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_OR
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_OR, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_OR, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_OR, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_OR, 1, 4)
+                            }
+                    }
             }
     },
     {
             "string",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_STRING
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_STRING
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_STRING, "May the force be with you!", 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_STRING, "May the force be with you!", 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_STRING, "May the force be with you!", 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_STRING, "May the force be with you!", 1, 4)
+                            }
+                    }
             }
     },
     {
             "true",
             {
-                    TokenType::TOK_COM_LINE_IDEN,
-                    TokenType::TOK_TRUE
-            },
-            {
-                    TokenType::TOK_COM_BLOCK_IDEN_OPEN,
-                    TokenType::TOK_TRUE
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_TRUE, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_TRUE, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_TRUE, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_TRUE, 1, 4)
+                            }
+                    }
             }
     }
 };
@@ -228,26 +656,28 @@ TEST_P(LexerTests, TestLexerWithExpectToken) {
     LexerParams param = GetParam();
     FileReader reader = FileReader("test-files");
     // Loop through all languages
-    for (LanguageDescriptor lang : LANGUAGES) {
+    for (auto lang : LANGUAGES) {
         std::string input = reader.fileToString(param.fileName, param.fileName + "." + lang.getFileExtension());
         Lexer lexer = Lexer(false, input, lang.getComLineIden(), lang.getComBlockIdenOpen(), lang.getComBlockIdenClose());
 
-        // Check if the language does not supports block comments -> check with line, otherwise with block comments
-        if (!lang.getComLineIden().empty()) {
-            // Loop through all expected line comment tokens
-            for (TokenType expectedType : param.expectedTokensLineComment) {
-                int actualType = lexer.getLookahead().getType();
-                EXPECT_EQ(expectedType, actualType);
-                lexer.advance();
-            }
-        } else {
-            // Loop through all expected line comment tokens
-            for (TokenType expectedType : param.expectedTokensBlockComment) {
-                int actualType = lexer.getLookahead().getType();
-                EXPECT_EQ(expectedType, actualType);
+        // Check if the expected tokens vector exists
+        if (param.expectedTokensMap.find(lang.getFileExtension()) != param.expectedTokensMap.end()) {
+            std::vector<Token> expectedTokens = param.expectedTokensMap[lang.getFileExtension()];
+            for (Token expectedToken : expectedTokens) {
+                EXPECT_EQ(expectedToken.getType(), lexer.getLookahead().getType());
+                EXPECT_EQ(expectedToken.getValue(), lexer.getLookahead().getValue());
+                EXPECT_EQ(expectedToken.getCodePos(), lexer.getLookahead().getCodePos());
                 lexer.advance();
             }
         }
+    }
+}
+
+void expectToken(Lexer lexer, Token expectedToken) {
+    Token actualToken = lexer.getLookahead();
+    if (actualToken.getType() != expectedToken.getType() || actualToken.getValue() != expectedToken.getValue() ||
+        actualToken.getCodePos() != expectedToken.getCodePos()) {
+        throw std::runtime_error("Expected and actual tokens do not match at " + actualToken.getCodePos());
     }
 }
 
