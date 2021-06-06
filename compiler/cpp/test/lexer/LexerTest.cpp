@@ -688,9 +688,8 @@ TEST(LexerTests, TestLexerAdvancedCpp) {
     FileReader reader = FileReader("test-files");
     std::string advancedInput = reader.fileToString("advanced", "advanced.cpp");
     Lexer lexer = Lexer(false, advancedInput, "//", "/*", "*/");
-    std::string expectedValue;
 
-    expectedValue = "// Copyright (c) Marc Auberer 2021. All rights reserved.\n"
+    std::string expectedValue = "// Copyright (c) Marc Auberer 2021. All rights reserved.\n"
                     "\n"
                     "//\n"
                     "// Created by Marc on 02.05.2021.\n"
@@ -797,39 +796,74 @@ TEST(LexerTests, TestLexerAdvancedPython) {
     std::string advancedInput = reader.fileToString("advanced", "advanced.py");
     Lexer lexer = Lexer(false, advancedInput, "#", "", "");
 
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_IF);
-    lexer.expect(TOK_HAS);
-    lexer.expect(TOK_NOT);
-    lexer.expect(TOK_NOT_EQUALS);
-    lexer.expect(TOK_EQUALS);
-    lexer.expect(TOK_LESS);
-    lexer.expect(TOK_LESS_EQUAL);
-    lexer.expect(TOK_GREATER_EQUAL);
-    lexer.expect(TOK_GREATER);
-    lexer.expect(TOK_STRING);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_IF);
-    lexer.expect(TOK_TRUE);
-    lexer.expect(TOK_OR);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_FALSE);
-    lexer.expect(TOK_INDEX);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
+    std::string expectedValue = "from os.path import isfile, isdir, join\n"
+                                "from os import listdir\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 1, 1));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 3, 1));
+    expectToken(lexer, Token(TOK_IF, 3, 4));
+    expectToken(lexer, Token(TOK_HAS, 3, 7));
+    expectToken(lexer, Token(TOK_NOT, 3, 11));
+    expectToken(lexer, Token(TOK_NOT_EQUALS, 3, 15));
+    expectToken(lexer, Token(TOK_EQUALS, 3, 18));
+    expectToken(lexer, Token(TOK_LESS, 3, 21));
+    expectToken(lexer, Token(TOK_LESS_EQUAL, 3, 23));
+    expectToken(lexer, Token(TOK_GREATER_EQUAL, 3, 26));
+    expectToken(lexer, Token(TOK_GREATER, 3, 29));
+    expectToken(lexer, Token(TOK_STRING, "s", 3, 31));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "test", 3, 35));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 3, 40));
+    expectedValue = " from cerberus import Validator\n"
+                    " import sys\n"
+                    " import yaml\n"
+                    " import json\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 4, 1));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 8, 1));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 8, 4));
+    expectedValue = "\n"
+                    "\n"
+                    "def checkFileExistence():\n"
+                    "    print('Checking file existence ...', end='')\n"
+                    "    status = True\n"
+                    "    template_path = '../../../predefined-services'\n"
+                    "    template_types = [f for f in listdir(template_path) if isdir(join(template_path, f))]\n"
+                    "    ";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 8, 5));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 15, 5));
+    expectToken(lexer, Token(TOK_IF, 15, 8));
+    expectToken(lexer, Token(TOK_TRUE, 15, 11));
+    expectToken(lexer, Token(TOK_OR, 15, 16));
+    expectToken(lexer, Token(TOK_DOT, 15, 18));
+    expectToken(lexer, Token(TOK_FALSE, 15, 19));
+    expectToken(lexer, Token(TOK_INDEX, "756", 15, 25));
+    expectToken(lexer, Token(TOK_DOT, 15, 31));
+    expectToken(lexer, Token(TOK_DOT, 15, 32));
+    expectToken(lexer, Token(TOK_DOT, 15, 33));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 15, 35));
+    expectedValue = " for template_type in template_types:\n"
+                    "             template_type_path = template_path + '/' + template_type\n"
+                    "             services = [f for f in listdir(template_type_path) if isdir(join(template_type_path, f))]\n"
+                    "             for service in services:\n"
+                    "                 service_path = template_type_path + '/' + service\n"
+                    "                  Check if service exists\n"
+                    "                 if not isfile(service_path + '/service.yml'):\n"
+                    "                     print('service.yml is missing for following service: ' + service)\n"
+                    "                     status = False\n"
+                    "                  Check if config file exists\n"
+                    "                 if not isfile(service_path + '/config.json'):\n"
+                    "                     print('config.json is missing for following service: ' + service)\n"
+                    "                     status = False\n"
+                    "                  Check if README exists\n"
+                    "                 if not isfile(service_path + '/README.md'):\n"
+                    "                     print('README.md is missing for following service: ' + service)\n"
+                    "                     status = False\n"
+                    "    ";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 16, 5));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 33, 5));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 33, 8));
+    expectedValue = "\n"
+                    "    print(' done')\n"
+                    "    return status";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 33, 9));
 }
 
 TEST(LexerTests, TestLexerAdvancedHTML) {
