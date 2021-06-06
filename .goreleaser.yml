@@ -43,22 +43,34 @@ dockers:
     dockerfile: Dockerfile
     use_buildx: true
     extra_files:
-      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+      - bin
     build_flag_templates:
+      - --pull
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --build-arg=COMPILER_PATH=linux-amd64
       - --platform=linux/amd64
-      - --build-arg=COMPILER_PATH={{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
   - image_templates:
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v6
-      - ghcr.io/compose-generator/ccom:latest-arm32v6
-      - chillibits/ccom:{{ .Version }}-arm32v6
-      - chillibits/ccom:latest-arm32v6
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
+      - ghcr.io/compose-generator/ccom:latest-i386
+      - chillibits/ccom:{{ .Version }}-i386
+      - chillibits/ccom:latest-i386
     dockerfile: Dockerfile
     use_buildx: true
     extra_files:
-      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+      - bin
     build_flag_templates:
-      - --platform=linux/arm32/v6
-      - --build-arg=COMPILER_PATH={{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+      - --pull
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --build-arg=COMPILER_PATH=linux-386
+      - --platform=linux/i386
   - image_templates:
       - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
       - ghcr.io/compose-generator/ccom:latest-arm32v7
@@ -67,10 +79,16 @@ dockers:
     dockerfile: Dockerfile
     use_buildx: true
     extra_files:
-      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+      - bin
     build_flag_templates:
-      - --platform=linux/arm32/v7
-      - --build-arg=COMPILER_PATH={{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+      - --pull
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --build-arg=COMPILER_PATH=linux-armv7
+      - --platform=linux/arm/v7
   - image_templates:
       - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
       - ghcr.io/compose-generator/ccom:latest-arm64v8
@@ -79,17 +97,35 @@ dockers:
     dockerfile: Dockerfile
     use_buildx: true
     extra_files:
-      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+      - bin
     build_flag_templates:
+      - --build-arg=COMPILER_PATH=linux-arm64
       - --platform=linux/arm64/v8
-      - --build-arg=COMPILER_PATH={{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
 docker_manifests:
   - name_template: chillibits/ccom:{{ .Version }}
     image_templates:
       - chillibits/ccom:{{ .Version }}-amd64
-      - chillibits/ccom:{{ .Version }}-arm32v6
+      - chillibits/ccom:{{ .Version }}-i386
       - chillibits/ccom:{{ .Version }}-arm32v7
       - chillibits/ccom:{{ .Version }}-arm64v8
+  - name_template: chillibits/ccom:latest
+    image_templates:
+      - chillibits/ccom:{{ .Version }}-amd64
+      - chillibits/ccom:{{ .Version }}-i386
+      - chillibits/ccom:{{ .Version }}-arm32v7
+      - chillibits/ccom:{{ .Version }}-arm64v8
+  - name_template: ghcr.io/compose-generator/ccom:{{ .Version }}
+    image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
+  - name_template: ghcr.io/compose-generator/ccom:latest
+    image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
 release:
   name_template: v{{ .Tag }}
   prerelease: auto

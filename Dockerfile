@@ -1,12 +1,12 @@
 FROM alpine:3.13.5
 WORKDIR /ccom/out
 
-COPY ccom /ccom/ccom
-COPY bin/ccomc-${COMPILER_PATH}/* /ccom/
+ARG COMPILER_PATH=linux-amd64
 
-ENV PATH="/ccom:${PATH}"
+COPY ccom_*.apk /tmp/
+RUN apk add --allow-untrusted /tmp/ccom_*.apk
+
 ENV TERM="xterm-256color"
+ENV CCOM_DOCKERIZED=1
 
-RUN chmod +x /ccom/ccom
-RUN mkdir /lib64 && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
 ENTRYPOINT [ "ccom" ]
