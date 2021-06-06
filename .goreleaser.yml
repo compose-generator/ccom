@@ -34,6 +34,62 @@ nfpms:
     contents:
       - src: bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
         dst: /usr/bin/ # ToDo: Move compiler binaries to /usr/lib/ccom instead of the /usr/bin directory, which should only be used for main binaries.
+dockers:
+  - image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
+      - ghcr.io/compose-generator/ccom:latest-amd64
+      - chillibits/ccom:{{ .Version }}-amd64
+      - chillibits/ccom:latest-amd64
+    dockerfile: Dockerfile
+    use_buildx: true
+    extra_files:
+      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+    build_flag_templates:
+      - --platform=linux/amd64
+      - --build-arg=COMPILER_PATH={{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+  - image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v6
+      - ghcr.io/compose-generator/ccom:latest-arm32v6
+      - chillibits/ccom:{{ .Version }}-arm32v6
+      - chillibits/ccom:latest-arm32v6
+    dockerfile: Dockerfile
+    use_buildx: true
+    extra_files:
+      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+    build_flag_templates:
+      - --platform=linux/arm32/v6
+      - --build-arg=COMPILER_PATH={{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+  - image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
+      - ghcr.io/compose-generator/ccom:latest-arm32v7
+      - chillibits/ccom:{{ .Version }}-arm32v7
+      - chillibits/ccom:latest-arm32v7
+    dockerfile: Dockerfile
+    use_buildx: true
+    extra_files:
+      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+    build_flag_templates:
+      - --platform=linux/arm32/v7
+      - --build-arg=COMPILER_PATH={{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+  - image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
+      - ghcr.io/compose-generator/ccom:latest-arm64v8
+      - chillibits/ccom:{{ .Version }}-arm64v8
+      - chillibits/ccom:latest-arm64v8
+    dockerfile: Dockerfile
+    use_buildx: true
+    extra_files:
+      - bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+    build_flag_templates:
+      - --platform=linux/arm64/v8
+      - --build-arg=COMPILER_PATH={{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}
+docker_manifests:
+  - name_template: chillibits/ccom:{{ .Version }}
+    image_templates:
+      - chillibits/ccom:{{ .Version }}-amd64
+      - chillibits/ccom:{{ .Version }}-arm32v6
+      - chillibits/ccom:{{ .Version }}-arm32v7
+      - chillibits/ccom:{{ .Version }}-arm64v8
 release:
   name_template: v{{ .Tag }}
   prerelease: auto
