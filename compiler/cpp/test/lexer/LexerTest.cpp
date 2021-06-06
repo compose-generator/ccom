@@ -871,40 +871,70 @@ TEST(LexerTests, TestLexerAdvancedHTML) {
     std::string advancedInput = reader.fileToString("advanced", "advanced.html");
     Lexer lexer = Lexer(false, advancedInput, "", "<!--", "-->");
 
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_BLOCK_IDEN_OPEN);
-    lexer.expect(TOK_IF);
-    lexer.expect(TOK_HAS);
-    lexer.expect(TOK_NOT);
-    lexer.expect(TOK_TRUE);
-    lexer.expect(TOK_FALSE);
-    lexer.expect(TOK_OR);
-    lexer.expect(TOK_EQUALS);
-    lexer.expect(TOK_NOT_EQUALS);
-    lexer.expect(TOK_LESS);
-    lexer.expect(TOK_LESS_EQUAL);
-    lexer.expect(TOK_NUMBER);
-    lexer.expect(TOK_GREATER);
-    lexer.expect(TOK_GREATER_EQUAL);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_NUMBER);
-    lexer.expect(TOK_STRING);
-    lexer.expect(TOK_NUMBER);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_INDEX);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_BLOCK_IDEN_OPEN);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_STRING);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
+    std::string expectedValue = "<html>\n"
+                                "<head>\n"
+                                "\n"
+                                "</head>\n"
+                                "\n"
+                                "<body>\n"
+                                "<p>This is a <strong>Test</strong>.\n"
+                                "<p>\n"
+                                "<div>\n"
+                                "    <p>asdfjklö ASDFJKLÖ #+-'test' \"Test\" [2].3 4<5<6>=1>0 { test } }--</p>\n"
+                                "    <!-- This is a standard comment, NO payload-->\n"
+                                "</div>\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 1, 1));
+    expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_OPEN, 13, 1));
+    expectToken(lexer, Token(TOK_IF, 14, 1));
+    expectToken(lexer, Token(TOK_HAS, 14, 4));
+    expectToken(lexer, Token(TOK_NOT, 14, 8));
+    expectToken(lexer, Token(TOK_TRUE, 14, 12));
+    expectToken(lexer, Token(TOK_FALSE, 14, 17));
+    expectToken(lexer, Token(TOK_OR, 14, 23));
+    expectToken(lexer, Token(TOK_EQUALS, 14, 25));
+    expectToken(lexer, Token(TOK_NOT_EQUALS, 14, 28));
+    expectToken(lexer, Token(TOK_LESS, 14, 31));
+    expectToken(lexer, Token(TOK_LESS_EQUAL, 14, 32));
+    expectToken(lexer, Token(TOK_NUMBER, "36", 14, 35));
+    expectToken(lexer, Token(TOK_GREATER, 14, 37));
+    expectToken(lexer, Token(TOK_GREATER_EQUAL, 14, 39));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "testIdentifier", 14, 42));
+    expectToken(lexer, Token(TOK_NUMBER, "42", 14, 57));
+    expectToken(lexer, Token(TOK_STRING, "TestString", 14, 60));
+    expectToken(lexer, Token(TOK_NUMBER, "73", 14, 73));
+    expectToken(lexer, Token(TOK_DOT, 14, 75));
+    expectToken(lexer, Token(TOK_INDEX, "124", 14, 77));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 14, 82));
+    expectedValue = "<div>\n"
+                    "    <p>This is my payload (including div)</p>\n"
+                    "</div>\n"
+                    "{\n"
+                    "}\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 15, 1));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 20, 1));
+    expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_CLOSE, 20, 2));
+    expectedValue = "\n"
+                    "\n"
+                    "</body>\n"
+                    "\n"
+                    "<footer>\n"
+                    "    <p>Test</p>";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 20, 5));
+    expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_OPEN, 25, 16));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "nice", 25, 21));
+    expectToken(lexer, Token(TOK_STRING, "string", 25, 25));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 25, 33));
+    expectedValue = "<div>\n"
+                    "        <p>This is even more payload</>p>\n"
+                    "    </div>";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 25, 34));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 27, 11));
+    expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_CLOSE, 27, 12));
+    expectedValue = "\n"
+                    "</footer>\n"
+                    "\n"
+                    "</html>";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 27, 15));
 }
 
 TEST(LexerTests, TestLexerAdvancedYAML) {
