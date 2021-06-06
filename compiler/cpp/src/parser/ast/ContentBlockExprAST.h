@@ -4,14 +4,23 @@
 
 #pragma once
 
+enum ContentBlockExprType {
+    CONTENT_BLOCK_EXPR,
+    SECTION_EXPR,
+    ARBITRARY_EXPR
+};
+
 class ContentBlockExprAST {
 public:
-    enum Type { CONTENT_BLOCK_EXPR, SECTION_EXPR, ARBITRARY_EXPR };
-
+    // Constructors
     explicit ContentBlockExprAST(): type(CONTENT_BLOCK_EXPR) {}
-    Type getType();
+
+    // Public methods
+    ContentBlockExprType getType();
 protected:
-    explicit ContentBlockExprAST(Type t): type(t) {}
+    // Protected constructors
+    explicit ContentBlockExprAST(ContentBlockExprType t): type(t) {}
 private:
-    Type type;
+    // Members
+    ContentBlockExprType type;
 };

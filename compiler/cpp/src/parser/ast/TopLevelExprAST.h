@@ -4,14 +4,23 @@
 
 #pragma once
 
+enum TopLevelExprType {
+    TOP_LEVEL_EXPR,
+    CONTENT_EXPR,
+    STMT_LST_EXPR
+};
+
 class TopLevelExprAST {
 public:
-    enum Type { TOP_LEVEL_EXPR, CONTENT_EXPR, STMT_LST_EXPR };
-
+    // Constructors
     explicit TopLevelExprAST(): type(TOP_LEVEL_EXPR) {}
-    Type getType();
+
+    // Public methods
+    TopLevelExprType getType();
 protected:
-    explicit TopLevelExprAST(Type t): type(t) {}
+    // Protected constructors
+    explicit TopLevelExprAST(TopLevelExprType t): type(t) {}
 private:
-    Type type;
+    // Members
+    TopLevelExprType type;
 };

@@ -109,7 +109,7 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
-          version: v0.165.0
+          version: v0.169.0
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -198,7 +198,7 @@ jobs:
         id: get_version
         uses: battila7/get-version-action@v2
 
-      - name: Download gh.exe
+      - name: Download executables
         id: download_exe
         shell: bash
         run: | # Remove the last command as soon as this is implemented: https://github.com/goreleaser/goreleaser/issues/1638

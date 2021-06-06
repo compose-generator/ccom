@@ -13,10 +13,14 @@
 #include "TopLevelExprAST.h"
 
 class ContentExprAST : public TopLevelExprAST {
-private:
-    std::vector<std::unique_ptr<ContentBlockExprAST>> contentBlocks;
 public:
+    // Constructors
     explicit ContentExprAST(std::vector<std::unique_ptr<ContentBlockExprAST>> sections):
-        TopLevelExprAST(TopLevelExprAST::Type::CONTENT_EXPR), contentBlocks(std::move(sections)) {}
+        TopLevelExprAST(TopLevelExprType::CONTENT_EXPR), contentBlocks(std::move(sections)) {}
+
+    // Public methods
     const std::vector<std::unique_ptr<ContentBlockExprAST>> &getContentBlocks();
+private:
+    // Members
+    std::vector<std::unique_ptr<ContentBlockExprAST>> contentBlocks;
 };

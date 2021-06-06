@@ -12,10 +12,14 @@
 #include "ContentBlockExprAST.h"
 
 class SectionExprAST : public ContentBlockExprAST {
-private:
-    std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks;
 public:
+    // Constructors
     explicit SectionExprAST(std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks):
-            ContentBlockExprAST(ContentBlockExprAST::Type::SECTION_EXPR), comBlocks(std::move(comBlocks)) {}
+            ContentBlockExprAST(ContentBlockExprType::SECTION_EXPR), comBlocks(std::move(comBlocks)) {}
+
+    // Public methods
     const std::vector<std::unique_ptr<ComBlockExprAST>> &getComBlocks();
+private:
+    // Members
+    std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks;
 };

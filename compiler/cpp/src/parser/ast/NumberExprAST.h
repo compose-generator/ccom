@@ -9,9 +9,13 @@
 #include "ValueExprAST.h"
 
 class NumberExprAST : public ValueExprAST {
-private:
-    int value;
 public:
-    explicit NumberExprAST(int val): ValueExprAST(ValueExprAST::Type::NUMBER_EXPR), value(val) {}
+    // Constructors
+    explicit NumberExprAST(int val): ValueExprAST(ValueExprType::NUMBER_EXPR), value(val) {}
+
+    // Public methods
     int getValue() const;
+private:
+    // Members
+    int value;
 };

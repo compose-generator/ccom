@@ -11,12 +11,16 @@
 #include "PayloadExprAST.h"
 
 class IfBlockExprAST {
-private:
-    std::unique_ptr<StmtLstExprAST> stmtList;
-    std::unique_ptr<PayloadExprAST> payload;
 public:
+    // Constructors
     explicit IfBlockExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
         stmtList(std::move(stmtList)), payload(std::move(payload)) {}
+
+    // Public methods
     const std::unique_ptr<StmtLstExprAST> &getStmtList();
     const std::unique_ptr<PayloadExprAST> &getPayload();
+private:
+    // Members
+    std::unique_ptr<StmtLstExprAST> stmtList;
+    std::unique_ptr<PayloadExprAST> payload;
 };

@@ -8,25 +8,27 @@
 #include <stdexcept>
 
 class Interpreter {
-private:
-    // Constant inputs
-    Analyzer analyzer;
-    JSONParser jsonParser;
-    TopLevelExprAST* ast{};
-    bool isSingleStatement;
+public:
+    // Constructors
+    explicit Interpreter() {}
+    Interpreter(bool, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
 
-    // Private functions
+    // Public methods
+    std::string interpretInput();
+private:
+    // Private methods
     std::string getOutput();
     std::string getOutputOfContent(ContentExprAST*);
     std::string getOutputOfArbitrarySection(ArbitraryExprAST*);
     std::string getOutputOfRelevantSection(SectionExprAST*);
-
     bool evaluateStmtList(StmtLstExprAST*);
     bool evaluateHasStatement(HasStmtExprAST*);
     bool evaluateCompStatement(CompStmtExprAST*);
     template <typename T> bool evaluateCondition(T leftValue, T rightValue, Operator op);
-public:
-    explicit Interpreter() {}
-    Interpreter(bool, const std::string&, const std::string&, const std::string&, const std::string&, const std::string&);
-    std::string interpretInput();
+
+    // Members
+    Analyzer analyzer;
+    JSONParser jsonParser;
+    TopLevelExprAST* ast{};
+    bool isSingleStatement;
 };

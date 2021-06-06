@@ -11,10 +11,14 @@
 #include "ComBlockExprAST.h"
 
 class ComBlockBlockExprAST: public ComBlockExprAST {
-private:
-    std::unique_ptr<IfBlockExprAST> ifBlock;
 public:
+    // Constructors
     explicit ComBlockBlockExprAST(std::unique_ptr<IfBlockExprAST> ifBlock):
-        ComBlockExprAST(ComBlockBlockExprAST::Type::COM_BLOCK_BLOCK_EXPR), ifBlock(std::move(ifBlock)) {}
+        ComBlockExprAST(ComBlockExprType::COM_BLOCK_BLOCK_EXPR), ifBlock(std::move(ifBlock)) {}
+
+    // Public methods
     const std::unique_ptr<IfBlockExprAST> &getIfBlock();
+private:
+    // Members
+    std::unique_ptr<IfBlockExprAST> ifBlock;
 };

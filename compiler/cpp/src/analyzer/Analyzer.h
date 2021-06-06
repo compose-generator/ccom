@@ -13,21 +13,24 @@
 using json = nlohmann::json;
 
 class Analyzer {
-private:
-    // Constant inputs
-    Parser parser;
-    JSONParser jsonParser;
-    TopLevelExprAST* ast{};
-    bool isSingleStatement = false;
+public:
+    // Constructors
+    explicit Analyzer() {}
+    Analyzer(bool, const std::string&, JSONParser, const std::string&, const std::string&, const std::string&);
 
-    // Private functions
+    // Public methods
+    TopLevelExprAST* getAST();
+    void executeAnalysis();
+private:
+    // Private methods
     void checkDataTypeCompatibility();
     void checkDataTypeCompatibilityContent(ContentExprAST*);
     void checkDataTypeCompatibilityStmtList(StmtLstExprAST*);
     void checkDataTypeCompatibilityCompStmt(CompStmtExprAST*);
-public:
-    explicit Analyzer() {}
-    Analyzer(bool, const std::string&, JSONParser, const std::string&, const std::string&, const std::string&);
-    TopLevelExprAST* getAST();
-    void executeAnalysis();
+
+    // Members
+    Parser parser;
+    JSONParser jsonParser;
+    TopLevelExprAST* ast = nullptr;
+    bool isSingleStatement = false;
 };

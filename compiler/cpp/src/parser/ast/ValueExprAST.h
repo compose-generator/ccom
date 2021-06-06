@@ -6,14 +6,24 @@
 
 #pragma once
 
+enum ValueExprType {
+    VALUE_EXPR,
+    NUMBER_EXPR,
+    BOOLEAN_EXPR,
+    STRING_EXPR
+};
+
 class ValueExprAST {
 public:
-    enum Type { VALUE_EXPR, NUMBER_EXPR, BOOLEAN_EXPR, STRING_EXPR };
-
+    // Constructors
     explicit ValueExprAST(): type(VALUE_EXPR) {}
-    Type getType();
+
+    // Public methods
+    ValueExprType getType();
 protected:
-    explicit ValueExprAST(Type t): type(t) {}
+    // Protected constructors
+    explicit ValueExprAST(ValueExprType t): type(t) {}
 private:
-    Type type;
+    // Members
+    ValueExprType type;
 };

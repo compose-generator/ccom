@@ -6,14 +6,23 @@
 
 #pragma once
 
+enum ComBlockExprType {
+    COM_BLOCK_EXPR,
+    COM_LINE_BLOCK_EXPR,
+    COM_BLOCK_BLOCK_EXPR
+};
+
 class ComBlockExprAST {
 public:
-    enum Type { COM_BLOCK_EXPR, COM_LINE_BLOCK_EXPR, COM_BLOCK_BLOCK_EXPR };
-
+    // Constructors
     explicit ComBlockExprAST(): type(COM_BLOCK_EXPR) {}
-    Type getType();
+
+    // Public methods
+    ComBlockExprType getType();
 protected:
-    explicit ComBlockExprAST(Type t): type(t) {}
+    // Protected constructors
+    explicit ComBlockExprAST(ComBlockExprType t): type(t) {}
 private:
-    Type type;
+    // Members
+    ComBlockExprType type;
 };

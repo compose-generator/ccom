@@ -33,7 +33,7 @@ void Analyzer::executeAnalysis() {
 
 void Analyzer::checkDataTypeCompatibility() {
     if (isSingleStatement) {
-        if (ast->getType() != TopLevelExprAST::STMT_LST_EXPR)
+        if (ast->getType() != TopLevelExprType::STMT_LST_EXPR)
             throw std::runtime_error("Input was no single statement list");
         auto* stmtLst = static_cast<StmtLstExprAST*>(ast);
         checkDataTypeCompatibilityStmtList(stmtLst);
@@ -46,17 +46,17 @@ void Analyzer::checkDataTypeCompatibility() {
 void Analyzer::checkDataTypeCompatibilityContent(ContentExprAST* content) {
     // Loop through sections
     for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->getContentBlocks()) {
-        if (contentBlock->getType() == ContentBlockExprAST::SECTION_EXPR) {
+        if (contentBlock->getType() == ContentBlockExprType::SECTION_EXPR) {
             auto* relevantSection = static_cast<SectionExprAST*>(contentBlock.get());
             // Loop through comBlocks
             for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->getComBlocks()) {
                 switch (comBlock->getType()) {
-                    case ComBlockExprAST::COM_LINE_BLOCK_EXPR: {
+                    case ComBlockExprType::COM_LINE_BLOCK_EXPR: {
                         auto* lineBlockExpr = static_cast<ComLineBlockExprAST*>(comBlock.get());
                         checkDataTypeCompatibilityStmtList(lineBlockExpr->getStmtList().get());
                         continue;
                     }
-                    case ComBlockExprAST::COM_BLOCK_BLOCK_EXPR: {
+                    case ComBlockExprType::COM_BLOCK_BLOCK_EXPR: {
                         auto* blockBlockExpr = static_cast<ComBlockBlockExprAST*>(comBlock.get());
                         checkDataTypeCompatibilityStmtList(blockBlockExpr->getIfBlock()->getStmtList().get());
                         continue;
@@ -72,7 +72,7 @@ void Analyzer::checkDataTypeCompatibilityContent(ContentExprAST* content) {
 void Analyzer::checkDataTypeCompatibilityStmtList(StmtLstExprAST* stmtLst) {
     // Loop through statements
     for (const std::unique_ptr<StmtExprAST>& stmt : stmtLst->getStatements()) {
-        if (stmt->getType() == StmtExprAST::COMP_STMT_EXPR) {
+        if (stmt->getType() == StmtExprType::COMP_STMT_EXPR) {
             auto* compStmt = static_cast<CompStmtExprAST*>(stmt.get());
             checkDataTypeCompatibilityCompStmt(compStmt);
         }
@@ -84,19 +84,19 @@ void Analyzer::checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt) {
     auto jsonKeyValue = jsonParser.getJSONValueFromKey(compStmt->getKey());
 
     switch (compStmt->getValue()->getType()) {
-        case ValueExprAST::STRING_EXPR:
+        case ValueExprType::STRING_EXPR:
             if (!jsonKeyValue.is_string())
                 throw std::runtime_error(jsonKeyValue.dump() + " is not a string");
             return;
-        case ValueExprAST::BOOLEAN_EXPR:
+        case ValueExprType::BOOLEAN_EXPR:
             if (!jsonKeyValue.is_boolean())
                 throw std::runtime_error(jsonKeyValue.dump() + " is not a boolean");
             return;
-        case ValueExprAST::NUMBER_EXPR:
+        case ValueExprType::NUMBER_EXPR:
             if (!jsonKeyValue.is_number_integer())
                 throw std::runtime_error(jsonKeyValue.dump() + " is not an integer");
             return;
-        case ValueExprAST::VALUE_EXPR:
+        case ValueExprType::VALUE_EXPR:
             throw std::runtime_error(jsonKeyValue.dump() + " is an unknown data type");
     }
 }

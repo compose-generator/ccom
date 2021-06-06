@@ -53,7 +53,8 @@ void Lexer::advance() {
 }
 
 void Lexer::expect(TokenType expectedType) {
-    if (curTok.getType() != expectedType) throw std::runtime_error("");
+    if (curTok.getType() != expectedType)
+        throw UnexpectedTokenException(expectedType, curTok.getType(), tokenStartLineNum, tokenStartColNum);
     advance();
 }
 

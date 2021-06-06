@@ -10,12 +10,16 @@
 using json = nlohmann::json;
 
 class JSONParser {
-private:
-    json data;
 public:
+    // Constructors
     explicit JSONParser(): data(json::parse("{}")) {}
     JSONParser(json data): data(std::move(data)) {}
     JSONParser(std::string dataString): data(json::parse(dataString)) {}
+
+    // Public methods
     json getJSONValueFromKey(const std::unique_ptr<KeyExprAST>&);
     bool jsonKeyExists(const std::unique_ptr<KeyExprAST>&);
+private:
+    // Members
+    json data;
 };

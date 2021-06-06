@@ -11,9 +11,13 @@
 #include "IdentifierExprAST.h"
 
 class KeyExprAST {
-private:
-    std::vector<std::unique_ptr<IdentifierExprAST>> identifiers;
 public:
+    // Constructors
     explicit KeyExprAST(std::vector<std::unique_ptr<IdentifierExprAST>> stmts): identifiers(std::move(stmts)) {}
+
+    // Public methods
     const std::vector<std::unique_ptr<IdentifierExprAST>> &getIdentifiers();
+private:
+    // Members
+    std::vector<std::unique_ptr<IdentifierExprAST>> identifiers;
 };

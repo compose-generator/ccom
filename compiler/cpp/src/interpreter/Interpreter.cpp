@@ -28,7 +28,7 @@ std::string Interpreter::interpretInput() {
 
 std::string Interpreter::getOutput() {
     if (isSingleStatement) {
-        if (ast->getType() != TopLevelExprAST::STMT_LST_EXPR)
+        if (ast->getType() != TopLevelExprType::STMT_LST_EXPR)
             throw std::runtime_error("Input was no single statement list");
         auto* stmtLst = static_cast<StmtLstExprAST*>(ast);
         return evaluateStmtList(stmtLst) ? "true" : "false";
@@ -42,10 +42,10 @@ std::string Interpreter::getOutputOfContent(ContentExprAST* content) {
     std::string result;
 
     for (const std::unique_ptr<ContentBlockExprAST>& contentBlock : content->getContentBlocks()) {
-        if (contentBlock->getType() == ContentBlockExprAST::ARBITRARY_EXPR) { // Is section an arbitrary section?
+        if (contentBlock->getType() == ContentBlockExprType::ARBITRARY_EXPR) { // Is section an arbitrary section?
             auto* arbitrarySection = static_cast<ArbitraryExprAST*>(contentBlock.get());
             result += getOutputOfArbitrarySection(arbitrarySection);
-        } else if (contentBlock->getType() == ContentBlockExprAST::SECTION_EXPR) { // Is section a relevant section?
+        } else if (contentBlock->getType() == ContentBlockExprType::SECTION_EXPR) { // Is section a relevant section?
             auto* sectionExpr = static_cast<SectionExprAST*>(contentBlock.get());
             result += getOutputOfRelevantSection(sectionExpr);
         }
@@ -63,7 +63,7 @@ std::string Interpreter::getOutputOfRelevantSection(SectionExprAST* relevantSect
     // Loop through com blocks
     for (const std::unique_ptr<ComBlockExprAST>& comBlock : relevantSection->getComBlocks()) {
         switch (comBlock->getType()) {
-            case ComBlockExprAST::COM_LINE_BLOCK_EXPR: {
+            case ComBlockExprType::COM_LINE_BLOCK_EXPR: {
                 auto* lineBlockExpr = static_cast<ComLineBlockExprAST*>(comBlock.get());
                 // Evaluate condition and append payload to output string if condition was truthy
                 if (evaluateStmtList(lineBlockExpr->getStmtList().get())) {
@@ -71,7 +71,7 @@ std::string Interpreter::getOutputOfRelevantSection(SectionExprAST* relevantSect
                 }
                 break;
             }
-            case ComBlockExprAST::COM_BLOCK_BLOCK_EXPR: {
+            case ComBlockExprType::COM_BLOCK_BLOCK_EXPR: {
                 auto* blockBlockExpr = static_cast<ComBlockBlockExprAST*>(comBlock.get());
                 const std::unique_ptr<IfBlockExprAST>& ifBlock = blockBlockExpr->getIfBlock();
                 // Evaluate condition and append payload to output string if condition was truthy
@@ -91,12 +91,12 @@ bool Interpreter::evaluateStmtList(StmtLstExprAST* stmtList) {
     // Loop through statements
     for (const std::unique_ptr<StmtExprAST>& stmt : stmtList->getStatements()) {
         switch (stmt->getType()) {
-            case StmtExprAST::HAS_STMT_EXPR: {
+            case StmtExprType::HAS_STMT_EXPR: {
                 auto* hasStmt = static_cast<HasStmtExprAST*>(stmt.get());
                 if (evaluateHasStatement(hasStmt)) return true;
                 continue;
             }
-            case StmtExprAST::COMP_STMT_EXPR: {
+            case StmtExprType::COMP_STMT_EXPR: {
                 auto* compStmt = static_cast<CompStmtExprAST*>(stmt.get());
                 if (evaluateCompStatement(compStmt)) return true;
                 continue;
@@ -119,7 +119,7 @@ bool Interpreter::evaluateCompStatement(CompStmtExprAST* compStmt) {
     Operator op = compStmt->getOperator();
     if (keyValue.is_string()) {
         auto leftValue = keyValue.get<std::string>();
-        if (compStmt->getValue()->getType() == ValueExprAST::STRING_EXPR) {
+        if (compStmt->getValue()->getType() == ValueExprType::STRING_EXPR) {
             auto *rightValue = static_cast<StringExprAST*>(compStmt->getValue().get());
             return evaluateCondition(leftValue, rightValue->getValue(), op);
         }
@@ -127,7 +127,7 @@ bool Interpreter::evaluateCompStatement(CompStmtExprAST* compStmt) {
         throw std::runtime_error("Internal compiler error - left value was string and right was not");
     } else if (keyValue.is_boolean()) {
         auto leftValue = keyValue.get<bool>();
-        if (compStmt->getValue()->getType() == ValueExprAST::BOOLEAN_EXPR) {
+        if (compStmt->getValue()->getType() == ValueExprType::BOOLEAN_EXPR) {
             auto *rightValue = static_cast<BooleanExprAST*>(compStmt->getValue().get());
             return evaluateCondition(leftValue, rightValue->getValue(), op);
         }
@@ -135,7 +135,7 @@ bool Interpreter::evaluateCompStatement(CompStmtExprAST* compStmt) {
         throw std::runtime_error("Internal compiler error - left value was boolean and right was not");
     } else if (keyValue.is_number_integer()) {
         auto leftValue = keyValue.get<int>();
-        if (compStmt->getValue()->getType() == ValueExprAST::NUMBER_EXPR) {
+        if (compStmt->getValue()->getType() == ValueExprType::NUMBER_EXPR) {
             auto* rightValue = static_cast<NumberExprAST*>(compStmt->getValue().get());
             return evaluateCondition(leftValue, rightValue->getValue(), op);
         }

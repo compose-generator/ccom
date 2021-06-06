@@ -13,10 +13,14 @@
 #include "TopLevelExprAST.h"
 
 class StmtLstExprAST: public TopLevelExprAST {
-private:
-    std::vector<std::unique_ptr<StmtExprAST>> stmts;
 public:
+    // Constructors
     explicit StmtLstExprAST(std::vector<std::unique_ptr<StmtExprAST>> stmts):
-            TopLevelExprAST(TopLevelExprAST::Type::STMT_LST_EXPR), stmts(std::move(stmts)) {}
+            TopLevelExprAST(TopLevelExprType::STMT_LST_EXPR), stmts(std::move(stmts)) {}
+
+    // Public methods
     const std::vector<std::unique_ptr<StmtExprAST>> &getStatements();
+private:
+    // Members
+    std::vector<std::unique_ptr<StmtExprAST>> stmts;
 };
