@@ -20,6 +20,9 @@
 ## Introduction
 CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or XML, but can also be used for a variety of programming languages with support for comments.
 
+## Documentation
+Please visit the documentation at [ccom.compose-generator.com](https://ccom.compose-generator.com).
+
 ## Supported data formats
 |            | Line comment iden | Block comment iden open | Block comment iden close |
 |------------|-------------------|-------------------------|--------------------------|
