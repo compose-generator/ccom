@@ -102,7 +102,11 @@ $ winget install ChilliBits.CCom
 <details><summary><b>Use with Docker</b></summary>
 <p>
 
-<i>CCom will be published as a Docker image soon ...</i>
+*Note for Windows users: This command does not work with Windows CMD command line. Please use Windows PowerShell instead.*
+
+```sh
+$ docker run --rm -it -v ${pwd}:/ccom/out chillibits/ccom
+```
 
 </p>
 </details>
