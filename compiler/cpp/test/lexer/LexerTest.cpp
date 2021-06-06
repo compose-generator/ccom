@@ -673,72 +673,123 @@ TEST_P(LexerTests, TestLexerWithExpectToken) {
     }
 }
 
-void expectToken(Lexer lexer, Token expectedToken) {
+void expectToken(Lexer& lexer, Token expectedToken) {
     Token actualToken = lexer.getLookahead();
     if (actualToken.getType() != expectedToken.getType() || actualToken.getValue() != expectedToken.getValue() ||
         actualToken.getCodePos() != expectedToken.getCodePos()) {
-        throw std::runtime_error("Expected and actual tokens do not match at " + actualToken.getCodePos());
+        throw std::runtime_error("Expected and actual tokens do not match at " + actualToken.getCodePos() +
+            ". Expected was " + std::to_string(expectedToken.getType()) + ", actual was " +
+            std::to_string(actualToken.getType()) + ", actual value was: '" + actualToken.getValue() + "'");
     }
+    lexer.advance();
 }
 
 TEST(LexerTests, TestLexerAdvancedCpp) {
     FileReader reader = FileReader("test-files");
     std::string advancedInput = reader.fileToString("advanced", "advanced.cpp");
     Lexer lexer = Lexer(false, advancedInput, "//", "/*", "*/");
+    std::string expectedValue;
 
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_IF);
-    lexer.expect(TOK_HAS);
-    lexer.expect(TOK_NOT);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_NUMBER);
-    lexer.expect(TOK_INDEX);
-    lexer.expect(TOK_STRING);
-    lexer.expect(TOK_STRING);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_OR);
-    lexer.expect(TOK_EQUALS);
-    lexer.expect(TOK_NOT_EQUALS);
-    lexer.expect(TOK_LESS_EQUAL);
-    lexer.expect(TOK_GREATER);
-    lexer.expect(TOK_LESS);
-    lexer.expect(TOK_GREATER_EQUAL);
-    lexer.expect(TOK_GREATER);
-    lexer.expect(TOK_EQUALS);
-    lexer.expect(TOK_GREATER);
-    lexer.expect(TOK_FALSE);
-    lexer.expect(TOK_TRUE);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_BLOCK_IDEN_OPEN);
-    lexer.expect(TOK_NUMBER);
-    lexer.expect(TOK_STRING);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_NOT);
-    lexer.expect(TOK_EQUALS);
-    lexer.expect(TOK_HAS);
-    lexer.expect(TOK_FALSE);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_BLOCK_IDEN_OPEN);
-    lexer.expect(TOK_NUMBER);
-    lexer.expect(TOK_STRING);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_NOT_EQUALS);
-    lexer.expect(TOK_HAS);
-    lexer.expect(TOK_TRUE);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
+    expectedValue = "// Copyright (c) Marc Auberer 2021. All rights reserved.\n"
+                    "\n"
+                    "//\n"
+                    "// Created by Marc on 02.05.2021.\n"
+                    "//\n"
+                    "\n"
+                    "#include \"Token.h\"\n"
+                    "\n"
+                    "Token::Token() = default;\n"
+                    "\n"
+                    "Token::Token(int type, unsigned int lineNum, unsigned int colNum) {\n"
+                    "    this->type = type;\n"
+                    "    ";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 1, 1));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 13, 5));
+    expectToken(lexer, Token(TOK_IF, 13, 9));
+    expectToken(lexer, Token(TOK_HAS, 13, 12));
+    expectToken(lexer, Token(TOK_NOT, 13, 16));
+    expectToken(lexer, Token(TOK_DOT, 13, 20));
+    expectToken(lexer, Token(TOK_NUMBER, "42", 13, 22));
+    expectToken(lexer, Token(TOK_INDEX, "142", 13, 25));
+    expectToken(lexer, Token(TOK_STRING, "Identifier (not)", 13, 31));
+    expectToken(lexer, Token(TOK_STRING, "Keyword (not)", 13, 50));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "realIdentifier", 13, 66));
+    expectToken(lexer, Token(TOK_OR, 13, 81));
+    expectToken(lexer, Token(TOK_EQUALS, 13, 83));
+    expectToken(lexer, Token(TOK_NOT_EQUALS, 13, 86));
+    expectToken(lexer, Token(TOK_LESS_EQUAL, 13, 89));
+    expectToken(lexer, Token(TOK_GREATER, 13, 91));
+    expectToken(lexer, Token(TOK_LESS, 13, 93));
+    expectToken(lexer, Token(TOK_GREATER_EQUAL, 13, 94));
+    expectToken(lexer, Token(TOK_GREATER, 13, 96));
+    expectToken(lexer, Token(TOK_EQUALS, 13, 98));
+    expectToken(lexer, Token(TOK_GREATER, 13, 100));
+    expectToken(lexer, Token(TOK_FALSE, 13, 102));
+    expectToken(lexer, Token(TOK_TRUE, 13, 108));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 13, 113));
+    expectedValue = " this->lineNum = lineNum;\n"
+                    "     this->colNum = colNum;\n"
+                    "     {\n"
+                    "     }\n"
+                    "    ";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 14, 5));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 18, 5));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 18, 9));
+    expectedValue = "\n"
+                    "}\n"
+                    "\n"
+                    "Token::Token(int type, std::string value, unsigned int lineNum, unsigned int colNum) {\n"
+                    "    this->type = type;\n"
+                    "    this->value = std::move(value);\n"
+                    "    this->lineNum = lineNum;\n"
+                    "    this->colNum = colNum;\n"
+                    "}\n"
+                    "\n"
+                    "int Token::getType() const {\n"
+                    "    return type;\n"
+                    "}\n"
+                    "\n"
+                    "std::string Token::getValue() {\n"
+                    "    return value;\n"
+                    "}\n"
+                    "\n"
+                    "std::string Token::getCodePos() {\n"
+                    "    ";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 18, 10));
+    expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_OPEN, 37, 5));
+    expectToken(lexer, Token(TOK_NUMBER, "23492873", 38, 6));
+    expectToken(lexer, Token(TOK_STRING, "string", 38, 15));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "iden", 38, 24));
+    expectToken(lexer, Token(TOK_NOT, 38, 29));
+    expectToken(lexer, Token(TOK_EQUALS, 38, 33));
+    expectToken(lexer, Token(TOK_HAS, 38, 36));
+    expectToken(lexer, Token(TOK_FALSE, 38, 40));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 38, 46));
+    expectedValue = "return \"Line \" + std::to_string(lineNum) + \", Col \" + std::to_string(colNum);\n"
+                    "     ";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 39, 6));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 40, 6));
+    expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_CLOSE, 40, 7));
+    expectedValue = "\n"
+                    "    ";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 40, 9));
+    expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_OPEN, 41, 5));
+    expectToken(lexer, Token(TOK_NUMBER, "123", 42, 6));
+    expectToken(lexer, Token(TOK_STRING, "string", 42, 10));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "iden", 42, 19));
+    expectToken(lexer, Token(TOK_NOT_EQUALS, 42, 24));
+    expectToken(lexer, Token(TOK_HAS, 42, 27));
+    expectToken(lexer, Token(TOK_TRUE, 42, 31));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 43, 6));
+    expectedValue = "return \"Line \" + std::to_string(lineNum) +\n"
+                    "            \", Col \" + std::to_string(colNum);\n"
+                    "     ";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 44, 6));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 46, 6));
+    expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_CLOSE, 46, 7));
+    expectedValue = "\n"
+                    "}";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 46, 9));
 }
 
 TEST(LexerTests, TestLexerAdvancedPython) {
