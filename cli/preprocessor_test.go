@@ -10,7 +10,7 @@ import (
 
 func TestGetComIdenFromLang_Success1(t *testing.T) {
 	// Manual input
-	langList := []string{"yaml", "yml", "python", "py", "docker", "dockerfile"}
+	langList := []string{"yaml", "yml", "docker", "dockerfile"}
 	for _, lang := range langList {
 		lineComIden, blockComIdenOpen, blockComIdenClose := getCommentIdenFromLang(lang, "")
 		assert.Equal(t, "#", lineComIden)
@@ -18,7 +18,7 @@ func TestGetComIdenFromLang_Success1(t *testing.T) {
 		assert.Empty(t, blockComIdenClose)
 	}
 	// Auto
-	langList = []string{"yaml", "yml", "py"}
+	langList = []string{"yaml", "yml"}
 	for _, lang := range langList {
 		lineComIden, blockComIdenOpen, blockComIdenClose := getCommentIdenFromLang("auto", "./test-files/test."+lang)
 		assert.Equal(t, "#", lineComIden)
@@ -28,6 +28,25 @@ func TestGetComIdenFromLang_Success1(t *testing.T) {
 }
 
 func TestGetComIdenFromLang_Success2(t *testing.T) {
+	// Manual input
+	langList := []string{"python", "py"}
+	for _, lang := range langList {
+		lineComIden, blockComIdenOpen, blockComIdenClose := getCommentIdenFromLang(lang, "")
+		assert.Equal(t, "#", lineComIden)
+		assert.Equal(t, "\"\"\"", blockComIdenOpen)
+		assert.Equal(t, "\"\"\"", blockComIdenClose)
+	}
+	// Auto
+	langList = []string{"py"}
+	for _, lang := range langList {
+		lineComIden, blockComIdenOpen, blockComIdenClose := getCommentIdenFromLang("auto", "./test-files/test."+lang)
+		assert.Equal(t, "#", lineComIden)
+		assert.Equal(t, "\"\"\"", blockComIdenOpen)
+		assert.Equal(t, "\"\"\"", blockComIdenClose)
+	}
+}
+
+func TestGetComIdenFromLang_Success3(t *testing.T) {
 	// Manual
 	langList := []string{"java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust", "rs"}
 	for _, lang := range langList {
@@ -46,7 +65,7 @@ func TestGetComIdenFromLang_Success2(t *testing.T) {
 	}
 }
 
-func TestGetComIdenFromLang_Success3(t *testing.T) {
+func TestGetComIdenFromLang_Success4(t *testing.T) {
 	langList := []string{"html", "htm", "xml"}
 	// Manual
 	for _, lang := range langList {
