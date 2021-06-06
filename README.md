@@ -238,7 +238,7 @@ PAYLOAD               --> (COM_IDEN_PAYLOAD CHARS)+
 STMT_LST              --> STMT (`|` STMT)*
 STMT                  --> HAS_STMT | COMP_STMT
 HAS_STMT              --> has KEY | not has KEY
-COMP_STMT             --> KEY == VALUE | KEY != VALUE
+COMP_STMT             --> KEY COMP_OP VALUE
 KEY                   --> IDENTIFIER INDEX? (.IDENTIFIER INDEX?)*
 INDEX                 --> [NUMBER]
 IDENTIFIER            --> LETTER+
@@ -246,6 +246,7 @@ VALUE                 --> STRING | NUMBER | BOOLEAN
 STRING                --> "CHARS_LIMITED"
 NUMBER                --> DIGIT+
 BOOLEAN               --> true | false
+COMP_OP               --> == | != | < | > | <= | >=
 CHARS                 --> ({UNICODE}\{COM_LINE_IDEN, COM_BLOCK_IDEN_OPEN})*
 CHARS_LIMITED         --> (LETTER* DIGIT* SCHAR*)*
 LETTER                --> a|b|...|y|z|A|B|...|Y|Z
