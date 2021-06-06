@@ -942,47 +942,59 @@ TEST(LexerTests, TestLexerAdvancedYAML) {
     std::string advancedInput = reader.fileToString("advanced", "advanced.yml");
     Lexer lexer = Lexer(false, advancedInput, "#", "", "");
 
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_IF);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_INDEX);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_EQUALS);
-    lexer.expect(TOK_FALSE);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_IF);
-    lexer.expect(TOK_HAS);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_BRACE_CLOSE);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_IF);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_INDEX);
-    lexer.expect(TOK_DOT);
-    lexer.expect(TOK_IDENTIFIER);
-    lexer.expect(TOK_NOT_EQUALS);
-    lexer.expect(TOK_STRING);
-    lexer.expect(TOK_BRACE_OPEN);
-    lexer.expect(TOK_ARBITRARY);
-    lexer.expect(TOK_COM_LINE_IDEN);
-    lexer.expect(TOK_BRACE_CLOSE);
+    std::string expectedValue = "build: ${{SPRING_MAVEN_SOURCE_DIRECTORY}}\n"
+                                "container_name: ${{PROJECT_NAME_CONTAINER}}-backend-spring-maven\n"
+                                "restart: always\n"
+                                "networks:\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 1, 1));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 5, 1));
+    expectToken(lexer, Token(TOK_IF, 5, 4));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "service", 5, 7));
+    expectToken(lexer, Token(TOK_DOT, 5, 14));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "frontend", 5, 15));
+    expectToken(lexer, Token(TOK_INDEX, "1", 5, 23));
+    expectToken(lexer, Token(TOK_DOT, 5, 26));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "preselected", 5, 27));
+    expectToken(lexer, Token(TOK_EQUALS, 5, 39));
+    expectToken(lexer, Token(TOK_FALSE, 5, 42));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 5, 48));
+    expectedValue = "  - frontend-backend\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 6, 1));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 7, 1));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 7, 4));
+    expectedValue = "\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 7, 5));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 8, 1));
+    expectToken(lexer, Token(TOK_IF, 8, 4));
+    expectToken(lexer, Token(TOK_HAS, 8, 7));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "service", 8, 11));
+    expectToken(lexer, Token(TOK_DOT, 8, 18));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "database", 8, 19));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 8, 28));
+    expectedValue = "  - backend-database\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 9, 1));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 10, 1));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 10, 4));
+    expectedValue = "\n"
+                    "ports:\n"
+                    "  - ${{SPRING_MAVEN_PORT}}:8080\n"
+                    "env_file:\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 10, 5));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 14, 1));
+    expectToken(lexer, Token(TOK_IF, 14, 4));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "service", 14, 7));
+    expectToken(lexer, Token(TOK_DOT, 14, 14));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "frontend", 14, 15));
+    expectToken(lexer, Token(TOK_INDEX, "0", 14, 23));
+    expectToken(lexer, Token(TOK_DOT, 14, 26));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "name", 14, 27));
+    expectToken(lexer, Token(TOK_NOT_EQUALS, 14, 32));
+    expectToken(lexer, Token(TOK_STRING, "spring-gradle", 14, 35));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 14, 51));
+    expectedValue = "   - environment.env\n";
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 15, 1));
+    expectToken(lexer, Token(TOK_COM_LINE_IDEN, 16, 1));
+    expectToken(lexer, Token(TOK_BRACE_CLOSE, 16, 4));
 }
 
 INSTANTIATE_TEST_SUITE_P(
