@@ -33,7 +33,7 @@ nfpms:
       - rpm
     contents:
       - src: bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
-        dst: /usr/bin/ # ToDo: Move compiler binaries to /usr/lib/ccom instead of the /usr/bin directory, which should only be used for main binaries.
+        dst: /usr/lib/ccom/
 dockers:
   - image_templates:
       - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64

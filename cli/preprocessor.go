@@ -125,22 +125,28 @@ func runCompilerExecutable(
 	blockCommentIdenOpen string,
 	blockCommentIdenClose string,
 ) string {
+	// Determine executeable path based on the environment
+	executablePath := "./"
+	if util.FileExists("/usr/lib/ccom") {
+		executablePath = "/usr/lib/ccom/"
+	}
+
 	// Determine executeable name by name of compiler
-	executableName := "./ccomc"
+	executableName := "ccomc"
 	switch compiler {
 	case "cpp", "c++":
-		executableName = "./ccomc"
+		executableName = "ccomc"
 	case "java":
-		executableName = "./ccomc-java.jar"
+		executableName = "ccomc-java.jar"
 	default:
 		log.Fatal("Invalid compiler name. Only 'cpp' and 'java' are allowed values.")
 	}
 	// Check if executable exists
-	if !util.CommandExists(executableName) {
+	if !util.CommandExists(executablePath + executableName) {
 		log.Fatal("Compiler executable not found. Please check your installation")
 	}
 	// Execute compiler with user inputs
-	return util.ExecuteAndWaitWithOutput(executableName, strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
+	return util.ExecuteAndWaitWithOutput(executablePath+executableName, strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
 }
 
 func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
