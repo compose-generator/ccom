@@ -20,7 +20,7 @@ const std::vector<LanguageDescriptor> LANGUAGES {
 
 const ParserParams PARSER_TEST_PARAMETERS[] = {
         {
-            "string-expr"
+            "has-block"
         }
 };
 

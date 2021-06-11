@@ -7,6 +7,7 @@
 #pragma once
 
 #include "ValueExprAST.h"
+#include <string>
 
 class NumberExprAST : public ValueExprAST {
 public:
@@ -15,6 +16,7 @@ public:
 
     // Public methods
     int getValue() const;
+    std::string serialize() const;
 private:
     // Members
     int value;

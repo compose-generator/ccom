@@ -5,6 +5,7 @@
 #pragma once
 
 #include "ValueExprAST.h"
+#include <string>
 
 class BooleanExprAST : public ValueExprAST {
 public:
@@ -13,6 +14,7 @@ public:
 
     // Public methods
     bool getValue() const;
+    std::string serialize() const;
 private:
     // Members
     bool value;
