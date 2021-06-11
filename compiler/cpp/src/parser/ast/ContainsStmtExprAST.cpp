@@ -17,3 +17,7 @@ std::unique_ptr<KeyExprAST> const &ContainsStmtExprAST::getValueKey() {
 std::unique_ptr<ValueExprAST> const &ContainsStmtExprAST::getValue() {
     return value;
 }
+
+bool ContainsStmtExprAST::getInverted() const {
+    return isInverted;
+};

@@ -67,7 +67,7 @@ std::unique_ptr<StmtLstExprAST> Parser::parseStmtList() {
 std::unique_ptr<StmtExprAST> Parser::parseStmt() {
     if (lexer.getLookahead().getType() == TOK_HAS || lexer.getLookahead().getType() == TOK_NOT)
         return parseHasStmt(); // Consume HasStmt
-    return parseCompStmt(); // Consume CompStmt
+    return parseCompOrContainsStmt(); // Consume CompStmt or ContainsStmt
 }
 
 std::unique_ptr<HasStmtExprAST> Parser::parseHasStmt() {
@@ -81,34 +81,31 @@ std::unique_ptr<HasStmtExprAST> Parser::parseHasStmt() {
     return std::make_unique<HasStmtExprAST>(std::move(key), inverted);
 }
 
-std::unique_ptr<CompStmtExprAST> Parser::parseCompStmt() {
+std::unique_ptr<StmtExprAST> Parser::parseCompOrContainsStmt() {
     std::unique_ptr<KeyExprAST> key = parseKey(); // Consume key
-    Operator op;
-    switch (lexer.getLookahead().getType()) {
-        case TOK_EQUALS:
-            op = OP_EQUALS;
-            break;
-        case TOK_NOT_EQUALS:
-            op = OP_NOT_EQUALS;
-            break;
-        case TOK_GREATER:
-            op = OP_GREATER;
-            break;
-        case TOK_LESS:
-            op = OP_LESS;
-            break;
-        case TOK_GREATER_EQUAL:
-            op = OP_GREATER_EQUAL;
-            break;
-        case TOK_LESS_EQUAL:
-            op = OP_LESS_EQUAL;
-            break;
-        default:
-            throw std::runtime_error("Unknown comparison operator at " + lexer.getLookahead().getCodePos());
-    }
-    lexer.advance(); // Consume operator
+    // Decide how to proceed depending on the next token
+    if (lexer.getLookahead().getType() == TOK_CONTAINS || lexer.getLookahead().getType() == TOK_NOT)
+        return parseContainsStmt(std::move(key)); // Consume ContainsStmt
+    return parseCompStmt(std::move(key));
+}
+
+std::unique_ptr<CompStmtExprAST> Parser::parseCompStmt(std::unique_ptr<KeyExprAST> key) {
+    Operator op = parseOperator(); // Consume operator
     std::unique_ptr<ValueExprAST> value = parseValue(); // Consume value
     return std::make_unique<CompStmtExprAST>(std::move(key), op, std::move(value));
+}
+
+std::unique_ptr<ContainsStmtExprAST> Parser::parseContainsStmt(std::unique_ptr<KeyExprAST> listKey) {
+    bool inverted = false;
+    if (lexer.getLookahead().getType() == TOK_NOT) {
+        inverted = true;
+        lexer.advance(); // Consume 'not'
+    }
+    lexer.expect(TOK_CONTAINS); // consume 'contains'
+    std::unique_ptr<KeyExprAST> valueKey = parseKey(); // consume value key
+    Operator op = parseOperator(); // Consume operator
+    std::unique_ptr<ValueExprAST> value = parseValue(); // consume value
+    return std::make_unique<ContainsStmtExprAST>(std::move(listKey), std::move(valueKey), std::move(value), op, inverted);
 }
 
 std::unique_ptr<IfBlockExprAST> Parser::parseIfBlock() {
@@ -191,4 +188,32 @@ std::unique_ptr<NumberExprAST> Parser::parseNumber() {
     int value = stoi(lexer.getLookahead().getValue());
     lexer.advance(); // Consume number literal
     return std::make_unique<NumberExprAST>(value);
+}
+
+Operator Parser::parseOperator() {
+    Operator op;
+    switch (lexer.getLookahead().getType()) {
+        case TOK_EQUALS:
+            op = OP_EQUALS;
+            break;
+        case TOK_NOT_EQUALS:
+            op = OP_NOT_EQUALS;
+            break;
+        case TOK_GREATER:
+            op = OP_GREATER;
+            break;
+        case TOK_LESS:
+            op = OP_LESS;
+            break;
+        case TOK_GREATER_EQUAL:
+            op = OP_GREATER_EQUAL;
+            break;
+        case TOK_LESS_EQUAL:
+            op = OP_LESS_EQUAL;
+            break;
+        default:
+            throw std::runtime_error("Unknown comparison operator at " + lexer.getLookahead().getCodePos());
+    }
+    lexer.advance(); // Consume operator
+    return op;
 }

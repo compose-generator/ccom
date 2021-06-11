@@ -31,6 +31,7 @@ enum TokenType {
     TOK_IF, // if
     TOK_HAS, // has
     TOK_NOT, // not
+    TOK_CONTAINS, // contains
 
     // Boolean values
     TOK_TRUE, // true

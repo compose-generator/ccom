@@ -18,6 +18,7 @@
 #include "ast/IfBlockExprAST.h"
 #include "ast/CompStmtExprAST.h"
 #include "ast/HasStmtExprAST.h"
+#include "ast/ContainsStmtExprAST.h"
 #include "ast/ComBlockBlockExprAST.h"
 #include "ast/ComLineBlockExprAST.h"
 #include "ast/SectionExprAST.h"
@@ -40,7 +41,9 @@ private:
     std::unique_ptr<StmtLstExprAST> parseStmtList();
     std::unique_ptr<StmtExprAST> parseStmt();
     std::unique_ptr<HasStmtExprAST> parseHasStmt();
-    std::unique_ptr<CompStmtExprAST> parseCompStmt();
+    std::unique_ptr<StmtExprAST> parseCompOrContainsStmt();
+    std::unique_ptr<CompStmtExprAST> parseCompStmt(std::unique_ptr<KeyExprAST>);
+    std::unique_ptr<ContainsStmtExprAST> parseContainsStmt(std::unique_ptr<KeyExprAST>);
     std::unique_ptr<IfBlockExprAST> parseIfBlock();
     std::unique_ptr<ComLineBlockExprAST> parseComLineBlock();
     std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock();
@@ -50,6 +53,7 @@ private:
     std::unique_ptr<StringExprAST> parseString();
     std::unique_ptr<BooleanExprAST> parseBoolean();
     std::unique_ptr<NumberExprAST> parseNumber();
+    Operator parseOperator();
 
     // Members
     bool isSingleStatement;
