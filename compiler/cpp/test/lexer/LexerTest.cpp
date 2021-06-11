@@ -284,6 +284,39 @@ const LexerParams LEXER_TEST_PARAMETERS[] = {
             }
     },
     {
+            "contains",
+            {
+                    {
+                            "cpp",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_CONTAINS, 1, 5)
+                            }
+                    },
+                    {
+                            "html",
+                            {
+                                    Token(TokenType::TOK_COM_BLOCK_IDEN_OPEN, 1, 1),
+                                    Token(TokenType::TOK_CONTAINS, 1, 7)
+                            }
+                    },
+                    {
+                            "py",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_CONTAINS, 1, 4)
+                            }
+                    },
+                    {
+                            "yml",
+                            {
+                                    Token(TokenType::TOK_COM_LINE_IDEN, 1, 1),
+                                    Token(TokenType::TOK_CONTAINS, 1, 4)
+                            }
+                    }
+            }
+    },
+    {
             "identifier",
             {
                     {
