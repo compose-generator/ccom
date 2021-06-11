@@ -16,7 +16,9 @@ public:
 
     // Public methods
     json getJSONValueFromKey(const std::unique_ptr<KeyExprAST>&);
+    json getJSONValueFromKey(json data, const std::unique_ptr<KeyExprAST>&);
     bool jsonKeyExists(const std::unique_ptr<KeyExprAST>&);
+    bool jsonKeyExists(json data, const std::unique_ptr<KeyExprAST>&);
 private:
     // Members
     json data;

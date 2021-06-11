@@ -2,7 +2,13 @@
 
 #include "JSONParser.h"
 
+#include <utility>
+
 json JSONParser::getJSONValueFromKey(const std::unique_ptr<KeyExprAST>& key) {
+    return getJSONValueFromKey(data, key);
+}
+
+json JSONParser::getJSONValueFromKey(const json data, const std::unique_ptr<KeyExprAST>& key) {
     json dataTmp = data;
     for (const std::unique_ptr<IdentifierExprAST>& identifier : key->getIdentifiers()) {
         std::string identifierName = identifier->getName();
@@ -22,6 +28,10 @@ json JSONParser::getJSONValueFromKey(const std::unique_ptr<KeyExprAST>& key) {
 }
 
 bool JSONParser::jsonKeyExists(const std::unique_ptr<KeyExprAST> &key) {
+    return jsonKeyExists(data, key);
+}
+
+bool JSONParser::jsonKeyExists(const json data, const std::unique_ptr<KeyExprAST> &key) {
     json dataTmp = data;
     for (const std::unique_ptr<IdentifierExprAST>& identifier : key->getIdentifiers()) {
         std::string identifierName = identifier->getName();

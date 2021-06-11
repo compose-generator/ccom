@@ -4,6 +4,7 @@
 
 #include "../analyzer/Analyzer.h"
 #include <stdexcept>
+#include "../exception/UnexpectedDataTypeException.h"
 
 class Interpreter {
 public:
@@ -22,7 +23,9 @@ private:
     bool evaluateStmtList(StmtLstExprAST*);
     bool evaluateHasStatement(HasStmtExprAST*);
     bool evaluateCompStatement(CompStmtExprAST*);
-    template <typename T> bool evaluateCondition(T leftValue, T rightValue, Operator op);
+    bool evaluateContainsStatement(ContainsStmtExprAST*);
+    bool compareJsonWithValue(json&, ValueExprAST*, Operator);
+    template <typename T> bool evaluateCondition(T, T, Operator);
 
     // Members
     Analyzer analyzer;

@@ -11,7 +11,7 @@ public:
     // Constructors
     explicit ContainsStmtExprAST(std::unique_ptr<KeyExprAST> listKey, std::unique_ptr<KeyExprAST> valueKey,
                                  std::unique_ptr<ValueExprAST> value, Operator op, bool inverted):
-        StmtExprAST(StmtExprType::HAS_STMT_EXPR), listKey(std::move(listKey)), valueKey(std::move(valueKey)),
+        StmtExprAST(StmtExprType::CONTAINS_STMT_EXPR), listKey(std::move(listKey)), valueKey(std::move(valueKey)),
         value(std::move(value)), op(op), isInverted(inverted) {}
 
     // Public methods

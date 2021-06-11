@@ -99,6 +99,11 @@ bool Interpreter::evaluateStmtList(StmtLstExprAST* stmtList) {
                 if (evaluateCompStatement(compStmt)) return true;
                 continue;
             }
+            case StmtExprType::CONTAINS_STMT_EXPR: {
+                auto* containsStmt = static_cast<ContainsStmtExprAST*>(stmt.get());
+                if (evaluateContainsStatement(containsStmt)) return true;
+                continue;
+            }
             default:
                 throw std::runtime_error("Got unknown Stmt object");
         }
@@ -115,26 +120,53 @@ bool Interpreter::evaluateHasStatement(HasStmtExprAST* hasStmt) {
 bool Interpreter::evaluateCompStatement(CompStmtExprAST* compStmt) {
     json keyValue = jsonParser.getJSONValueFromKey(compStmt->getKey());
     Operator op = compStmt->getOperator();
+    return compareJsonWithValue(keyValue, compStmt->getValue().get(), op);
+}
+
+bool Interpreter::evaluateContainsStatement(ContainsStmtExprAST* containsStmt) {
+    json listKeyValue = jsonParser.getJSONValueFromKey(containsStmt->getListKey());
+
+    // Check if listKey is an array
+    if (!listKeyValue.is_array())
+        throw UnexpectedDataTypeException(listKeyValue.dump(), "array");
+
+    Operator op = containsStmt->getOperator();
+
+    // Loop through array
+    for (auto& listItem : listKeyValue) {
+        // Skip the comparison, if the attribute does not even exist
+        if (!jsonParser.jsonKeyExists(listItem, containsStmt->getValueKey()))
+            continue;
+        // Read value
+        json valueKeyValue = jsonParser.getJSONValueFromKey(listItem, containsStmt->getValueKey());
+        // Compare data with hardcoded value
+        if (compareJsonWithValue(valueKeyValue, containsStmt->getValue().get(), op))
+            return !containsStmt->getInverted();
+    }
+    return containsStmt->getInverted();
+}
+
+bool Interpreter::compareJsonWithValue(json& keyValue, ValueExprAST* value, Operator op) {
     if (keyValue.is_string()) {
         auto leftValue = keyValue.get<std::string>();
-        if (compStmt->getValue()->getType() == ValueExprType::STRING_EXPR) {
-            auto *rightValue = static_cast<StringExprAST*>(compStmt->getValue().get());
+        if (value->getType() == ValueExprType::STRING_EXPR) {
+            auto *rightValue = static_cast<StringExprAST*>(value);
             return evaluateCondition(leftValue, rightValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out
         throw std::runtime_error("Internal compiler error - left value was string and right was not");
     } else if (keyValue.is_boolean()) {
         auto leftValue = keyValue.get<bool>();
-        if (compStmt->getValue()->getType() == ValueExprType::BOOLEAN_EXPR) {
-            auto *rightValue = static_cast<BooleanExprAST*>(compStmt->getValue().get());
+        if (value->getType() == ValueExprType::BOOLEAN_EXPR) {
+            auto *rightValue = static_cast<BooleanExprAST*>(value);
             return evaluateCondition(leftValue, rightValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out
         throw std::runtime_error("Internal compiler error - left value was boolean and right was not");
     } else if (keyValue.is_number_integer()) {
         auto leftValue = keyValue.get<int>();
-        if (compStmt->getValue()->getType() == ValueExprType::NUMBER_EXPR) {
-            auto* rightValue = static_cast<NumberExprAST*>(compStmt->getValue().get());
+        if (value->getType() == ValueExprType::NUMBER_EXPR) {
+            auto* rightValue = static_cast<NumberExprAST*>(value);
             return evaluateCondition(leftValue, rightValue->getValue(), op);
         }
         // This should never get triggered, because invalid type combinations are already filtered out

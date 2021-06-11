@@ -68,7 +68,9 @@ set(SOURCES
         exception/IncompatibleTypesException.cpp
         exception/IncompatibleTypesException.h
         exception/UnknownDataTypeException.cpp
-        exception/UnknownDataTypeException.h)
+        exception/UnknownDataTypeException.h
+        exception/UnexpectedDataTypeException.cpp
+        exception/UnexpectedDataTypeException.h)
 
 add_executable(${BINARY}_run ${SOURCES})
 
