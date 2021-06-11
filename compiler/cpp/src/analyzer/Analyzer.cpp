@@ -84,17 +84,17 @@ void Analyzer::checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt) {
     switch (compStmt->getValue()->getType()) {
         case ValueExprType::STRING_EXPR:
             if (!jsonKeyValue.is_string())
-                throw std::runtime_error(jsonKeyValue.dump() + " is not a string");
+                throw IncompatibleTypesException(jsonKeyValue.dump(), "string");
             return;
         case ValueExprType::BOOLEAN_EXPR:
             if (!jsonKeyValue.is_boolean())
-                throw std::runtime_error(jsonKeyValue.dump() + " is not a boolean");
+                throw IncompatibleTypesException(jsonKeyValue.dump(), "boolean");
             return;
         case ValueExprType::NUMBER_EXPR:
             if (!jsonKeyValue.is_number_integer())
-                throw std::runtime_error(jsonKeyValue.dump() + " is not an integer");
+                throw IncompatibleTypesException(jsonKeyValue.dump(), "integer");
             return;
         case ValueExprType::VALUE_EXPR:
-            throw std::runtime_error(jsonKeyValue.dump() + " is an unknown data type");
+            throw UnknownDataTypeException(jsonKeyValue.dump());
     }
 }

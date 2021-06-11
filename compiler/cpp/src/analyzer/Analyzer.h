@@ -7,6 +7,8 @@
 #include "../../lib/json/json.hpp"
 #include "../parser/Parser.h"
 #include "../util/JSONParser.h"
+#include "../exception/IncompatibleTypesException.h"
+#include "../exception/UnknownDataTypeException.h"
 
 using json = nlohmann::json;
 

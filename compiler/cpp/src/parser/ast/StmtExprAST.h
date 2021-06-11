@@ -7,7 +7,8 @@
 enum StmtExprType {
     STMT_EXPR,
     HAS_STMT_EXPR,
-    COMP_STMT_EXPR
+    COMP_STMT_EXPR,
+    CONTAINS_STMT_EXPR
 };
 
 class StmtExprAST {

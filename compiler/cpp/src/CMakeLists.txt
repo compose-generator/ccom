@@ -64,7 +64,11 @@ set(SOURCES
         exception/MaxLookaheadException.cpp
         exception/MaxLookaheadException.h
         exception/UnexpectedTokenException.cpp
-        exception/UnexpectedTokenException.h)
+        exception/UnexpectedTokenException.h
+        exception/IncompatibleTypesException.cpp
+        exception/IncompatibleTypesException.h
+        exception/UnknownDataTypeException.cpp
+        exception/UnknownDataTypeException.h)
 
 add_executable(${BINARY}_run ${SOURCES})
 
