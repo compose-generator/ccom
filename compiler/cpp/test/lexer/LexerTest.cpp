@@ -686,7 +686,7 @@ void expectToken(Lexer& lexer, Token expectedToken) {
 
 TEST(LexerTests, TestLexerAdvancedCpp) {
     FileReader reader = FileReader("test-files");
-    std::string advancedInput = reader.fileToString("advanced", "advanced.cpp");
+    std::string advancedInput = reader.fileToString("lexer/advanced", "advanced.cpp");
     Lexer lexer = Lexer(false, advancedInput, "//", "/*", "*/");
 
     std::string expectedValue = "// Copyright (c) Marc Auberer 2021. All rights reserved.\n"
@@ -793,7 +793,7 @@ TEST(LexerTests, TestLexerAdvancedCpp) {
 
 TEST(LexerTests, TestLexerAdvancedPython) {
     FileReader reader = FileReader("test-files");
-    std::string advancedInput = reader.fileToString("advanced", "advanced.py");
+    std::string advancedInput = reader.fileToString("lexer/advanced", "advanced.py");
     Lexer lexer = Lexer(false, advancedInput, "#", "", "");
 
     std::string expectedValue = "from os.path import isfile, isdir, join\n"
@@ -868,7 +868,7 @@ TEST(LexerTests, TestLexerAdvancedPython) {
 
 TEST(LexerTests, TestLexerAdvancedHTML) {
     FileReader reader = FileReader("test-files");
-    std::string advancedInput = reader.fileToString("advanced", "advanced.html");
+    std::string advancedInput = reader.fileToString("lexer/advanced", "advanced.html");
     Lexer lexer = Lexer(false, advancedInput, "", "<!--", "-->");
 
     std::string expectedValue = "<html>\n"
@@ -939,7 +939,7 @@ TEST(LexerTests, TestLexerAdvancedHTML) {
 
 TEST(LexerTests, TestLexerAdvancedYAML) {
     FileReader reader = FileReader("test-files");
-    std::string advancedInput = reader.fileToString("advanced", "advanced.yml");
+    std::string advancedInput = reader.fileToString("lexer/advanced", "advanced.yml");
     Lexer lexer = Lexer(false, advancedInput, "#", "", "");
 
     std::string expectedValue = "build: ${{SPRING_MAVEN_SOURCE_DIRECTORY}}\n"
