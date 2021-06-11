@@ -35,6 +35,8 @@ set(SOURCES
         parser/ast/HasStmtExprAST.h
         parser/ast/CompStmtExprAST.cpp
         parser/ast/CompStmtExprAST.h
+        parser/ast/ContainsStmtExprAST.cpp
+        parser/ast/ContainsStmtExprAST.h
         parser/ast/ValueExprAST.cpp
         parser/ast/ValueExprAST.h
         parser/ast/ComBlockBlockExprAST.cpp

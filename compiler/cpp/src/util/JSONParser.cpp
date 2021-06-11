@@ -1,6 +1,4 @@
-//
-// Created by Marc on 24.05.2021.
-//
+// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
 
 #include "JSONParser.h"
 
