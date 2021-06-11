@@ -657,7 +657,7 @@ TEST_P(LexerTests, TestLexerWithExpectToken) {
     FileReader reader = FileReader("test-files");
     // Loop through all languages
     for (auto lang : LANGUAGES) {
-        std::string input = reader.fileToString(param.fileName, param.fileName + "." + lang.getFileExtension());
+        std::string input = reader.fileToString( "lexer/" + param.fileName, param.fileName + "." + lang.getFileExtension());
         Lexer lexer = Lexer(false, input, lang.getComLineIden(), lang.getComBlockIdenOpen(), lang.getComBlockIdenClose());
 
         // Check if the expected tokens vector exists
