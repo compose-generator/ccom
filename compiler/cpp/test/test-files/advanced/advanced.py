@@ -12,7 +12,7 @@ def checkFileExistence():
     status = True
     template_path = '../../../predefined-services'
     template_types = [f for f in listdir(template_path) if isdir(join(template_path, f))]
-    #? if true | .false [756] ... {
+    #? if true | .false [756] ... contains {
     # for template_type in template_types:
     #         template_type_path = template_path + '/' + template_type
     #         services = [f for f in listdir(template_type_path) if isdir(join(template_type_path, f))]

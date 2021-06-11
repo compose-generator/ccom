@@ -810,6 +810,7 @@ TEST(LexerTests, TestLexerAdvancedCpp) {
     expectToken(lexer, Token(TOK_NOT_EQUALS, 42, 24));
     expectToken(lexer, Token(TOK_HAS, 42, 27));
     expectToken(lexer, Token(TOK_TRUE, 42, 31));
+    expectToken(lexer, Token(TOK_CONTAINS, 42, 36));
     expectToken(lexer, Token(TOK_BRACE_OPEN, 43, 6));
     expectedValue = "return \"Line \" + std::to_string(lineNum) +\n"
                     "            \", Col \" + std::to_string(colNum);\n"
@@ -869,7 +870,8 @@ TEST(LexerTests, TestLexerAdvancedPython) {
     expectToken(lexer, Token(TOK_DOT, 15, 31));
     expectToken(lexer, Token(TOK_DOT, 15, 32));
     expectToken(lexer, Token(TOK_DOT, 15, 33));
-    expectToken(lexer, Token(TOK_BRACE_OPEN, 15, 35));
+    expectToken(lexer, Token(TOK_CONTAINS, 15, 35));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 15, 44));
     expectedValue = " for template_type in template_types:\n"
                     "             template_type_path = template_path + '/' + template_type\n"
                     "             services = [f for f in listdir(template_type_path) if isdir(join(template_type_path, f))]\n"
@@ -954,11 +956,12 @@ TEST(LexerTests, TestLexerAdvancedHTML) {
     expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_OPEN, 25, 16));
     expectToken(lexer, Token(TOK_IDENTIFIER, "nice", 25, 21));
     expectToken(lexer, Token(TOK_STRING, "string", 25, 25));
-    expectToken(lexer, Token(TOK_BRACE_OPEN, 25, 33));
+    expectToken(lexer, Token(TOK_CONTAINS, 25, 33));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 25, 41));
     expectedValue = "<div>\n"
                     "        <p>This is even more payload</>p>\n"
                     "    </div>";
-    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 25, 34));
+    expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 25, 42));
     expectToken(lexer, Token(TOK_BRACE_CLOSE, 27, 11));
     expectToken(lexer, Token(TOK_COM_BLOCK_IDEN_CLOSE, 27, 12));
     expectedValue = "\n"
@@ -1016,12 +1019,11 @@ TEST(LexerTests, TestLexerAdvancedYAML) {
     expectToken(lexer, Token(TOK_IDENTIFIER, "service", 14, 7));
     expectToken(lexer, Token(TOK_DOT, 14, 14));
     expectToken(lexer, Token(TOK_IDENTIFIER, "frontend", 14, 15));
-    expectToken(lexer, Token(TOK_INDEX, "0", 14, 23));
-    expectToken(lexer, Token(TOK_DOT, 14, 26));
-    expectToken(lexer, Token(TOK_IDENTIFIER, "name", 14, 27));
-    expectToken(lexer, Token(TOK_NOT_EQUALS, 14, 32));
-    expectToken(lexer, Token(TOK_STRING, "spring-gradle", 14, 35));
-    expectToken(lexer, Token(TOK_BRACE_OPEN, 14, 51));
+    expectToken(lexer, Token(TOK_CONTAINS, 14, 24));
+    expectToken(lexer, Token(TOK_IDENTIFIER, "name", 14, 33));
+    expectToken(lexer, Token(TOK_NOT_EQUALS, 14, 38));
+    expectToken(lexer, Token(TOK_STRING, "spring-gradle", 14, 41));
+    expectToken(lexer, Token(TOK_BRACE_OPEN, 14, 57));
     expectedValue = "   - environment.env\n";
     expectToken(lexer, Token(TOK_ARBITRARY, expectedValue, 15, 1));
     expectToken(lexer, Token(TOK_COM_LINE_IDEN, 16, 1));

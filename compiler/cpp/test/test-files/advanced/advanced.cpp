@@ -39,7 +39,7 @@ std::string Token::getCodePos() {
      return "Line " + std::to_string(lineNum) + ", Col " + std::to_string(colNum);
      }*/
     /*?
-     123 "string" iden != has true
+     123 "string" iden != has true contains
      {
      return "Line " + std::to_string(lineNum) +
             ", Col " + std::to_string(colNum);
