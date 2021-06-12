@@ -129,3 +129,8 @@ docker_manifests:
 release:
   name_template: v{{ .Tag }}
   prerelease: auto
+  footer: Visit [ccom.compose-generator.com](https://ccom.compose-generator.com) to test out the new features!
+announce:
+  twitter:
+    enabled: true
+    message_template: 'CCom {{ .Tag }} is now available! Check out the new features: ccom.compose-generator.com!'
