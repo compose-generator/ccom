@@ -1,10 +1,11 @@
 package util
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
+	"strconv"
 	"strings"
+	"syscall"
 
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
@@ -14,7 +15,18 @@ import (
 // ExecuteAndWaitWithOutput executes a command and return the command output as string
 func ExecuteAndWaitWithOutput(c ...string) string {
 	cmd := exec.Command(c[0], c[1:]...)
-	output, _ := cmd.CombinedOutput()
+	output, err := cmd.CombinedOutput()
+	if err != nil {
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+				Pel()
+				Pel()
+				Error("Compiler exited with status code "+strconv.Itoa(status.ExitStatus())+"\nFailed to compile: "+string(output), true)
+			}
+		} else {
+			Error("Failed to call compiler executable", true)
+		}
+	}
 	return strings.TrimRight(string(output), "\r\n")
 }
 
@@ -36,7 +48,7 @@ func YesNoQuestion(question string, defaultValue bool) (result bool) {
 
 func handleInterrupt(err error) {
 	if err == terminal.InterruptErr {
-		fmt.Println()
+		Pel()
 		os.Exit(0)
 	} else if err != nil {
 		panic(err)
