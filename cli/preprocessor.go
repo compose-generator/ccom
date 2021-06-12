@@ -75,6 +75,7 @@ func processInput(
 		}
 		fmt.Println()
 		fmt.Println("Overall runtime: " + strconv.Itoa(overallRuntime) + " ms")
+		fmt.Println("Average runtime: " + strconv.Itoa(overallRuntime/benchmarkRuns) + " ms")
 	}
 }
 
