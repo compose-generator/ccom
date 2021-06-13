@@ -13,8 +13,9 @@ builds:
       - 5
       #- 6 # Waiting for third party fix
       - 7
+    mod_timestamp: '{{ .CommitTimestamp }}'
     ldflags:
-      - -s -w -X ccom.version={{ .Version }} -X ccom.commit={{ .Commit }} -X ccom.date={{ .CommitDate }} -X ccom.builtBy=github-actions
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.builtBy=github-actions
 archives:
   - files:
       - LICENSE
