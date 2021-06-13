@@ -42,10 +42,10 @@ dockers:
       - chillibits/ccom:latest-amd64
     dockerfile: Dockerfile
     use_buildx: true
+    goarch: amd64
     extra_files:
       - bin
     build_flag_templates:
-      - --pull
       - --label=org.opencontainers.image.created={{.Date}}
       - --label=org.opencontainers.image.name={{.ProjectName}}
       - --label=org.opencontainers.image.revision={{.FullCommit}}
@@ -60,10 +60,10 @@ dockers:
       - chillibits/ccom:latest-i386
     dockerfile: Dockerfile
     use_buildx: true
+    goarch: 386
     extra_files:
       - bin
     build_flag_templates:
-      - --pull
       - --label=org.opencontainers.image.created={{.Date}}
       - --label=org.opencontainers.image.name={{.ProjectName}}
       - --label=org.opencontainers.image.revision={{.FullCommit}}
@@ -78,10 +78,11 @@ dockers:
       - chillibits/ccom:latest-arm32v7
     dockerfile: Dockerfile
     use_buildx: true
+    goarch: arm
+    goarm: 7
     extra_files:
       - bin
     build_flag_templates:
-      - --pull
       - --label=org.opencontainers.image.created={{.Date}}
       - --label=org.opencontainers.image.name={{.ProjectName}}
       - --label=org.opencontainers.image.revision={{.FullCommit}}
@@ -96,9 +97,15 @@ dockers:
       - chillibits/ccom:latest-arm64v8
     dockerfile: Dockerfile
     use_buildx: true
+    goarch: arm64
     extra_files:
       - bin
     build_flag_templates:
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
       - --build-arg=COMPILER_PATH=linux-arm64
       - --platform=linux/arm64/v8
 docker_manifests:
