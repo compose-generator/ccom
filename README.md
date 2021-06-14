@@ -237,9 +237,9 @@ COM_BLOCK_IDEN_CLOSE  --> */
 PAYLOAD               --> (COM_IDEN_PAYLOAD CHARS)+
 STMT_LST              --> STMT (`|` STMT)*
 STMT                  --> HAS_STMT | COMP_STMT | CONTAINS_STMT
-HAS_STMT              --> has KEY | not has KEY
+HAS_STMT              --> not? has KEY
 COMP_STMT             --> KEY COMP_OP VALUE
-CONTAINS_STMT         --> KEY contains KEY COMP_OP VALUE
+CONTAINS_STMT         --> KEY not? contains KEY COMP_OP VALUE
 KEY                   --> IDENTIFIER INDEX? (.IDENTIFIER INDEX?)*
 INDEX                 --> [NUMBER]
 IDENTIFIER            --> LETTER+
