@@ -126,24 +126,33 @@ bool Interpreter::evaluateCompStatement(CompStmtExprAST* compStmt) {
 bool Interpreter::evaluateContainsStatement(ContainsStmtExprAST* containsStmt) {
     json listKeyValue = jsonParser.getJSONValueFromKey(containsStmt->getListKey());
 
-    // Check if listKey is an array
-    if (!listKeyValue.is_array())
-        throw UnexpectedDataTypeException(listKeyValue.dump(), "array");
-
     Operator op = containsStmt->getOperator();
 
-    // Loop through array
-    for (auto& listItem : listKeyValue) {
-        // Skip the comparison, if the attribute does not even exist
-        if (!jsonParser.jsonKeyExists(listItem, containsStmt->getValueKey()))
-            continue;
+    if (listKeyValue.is_array()) {
+        // Loop through array
+        for (auto& listItem : listKeyValue) {
+            // Skip the comparison, if the sub-key does not even exist
+            if (!jsonParser.jsonKeyExists(listItem, containsStmt->getValueKey()))
+                continue;
+            // Read value
+            json valueKeyValue = jsonParser.getJSONValueFromKey(listItem, containsStmt->getValueKey());
+            // Compare data with hardcoded value
+            if (compareJsonWithValue(valueKeyValue, containsStmt->getValue().get(), op))
+                return !containsStmt->getInverted();
+        }
+        return containsStmt->getInverted();
+    } else if (listKeyValue.is_object()) {
+        // Cancel the comparison, if the sub-key does not even exist
+        if (!jsonParser.jsonKeyExists(listKeyValue, containsStmt->getValueKey()))
+            return containsStmt->getInverted();
         // Read value
-        json valueKeyValue = jsonParser.getJSONValueFromKey(listItem, containsStmt->getValueKey());
+        json valueKeyValue = jsonParser.getJSONValueFromKey(listKeyValue, containsStmt->getValueKey());
         // Compare data with hardcoded value
         if (compareJsonWithValue(valueKeyValue, containsStmt->getValue().get(), op))
             return !containsStmt->getInverted();
+        return containsStmt->getInverted();
     }
-    return containsStmt->getInverted();
+    throw UnexpectedDataTypeException(listKeyValue.dump(), "array or object");
 }
 
 bool Interpreter::compareJsonWithValue(json& keyValue, ValueExprAST* value, Operator op) {
