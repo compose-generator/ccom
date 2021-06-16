@@ -68,11 +68,19 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs: build-compiler
     runs-on: ubuntu-latest
+    env:
+      DOCKER_CLI_EXPERIMENTAL: enabled
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
 
       - name: Set up Go
         uses: actions/setup-go@v2
@@ -93,18 +101,33 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PACKAGE_SIGNING }}
           passphrase: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
 
+      - name: Docker login GHCR
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.CR_PAT }}
+
+      - name: Docker login Docker Hub
+        uses: docker/login-action@v1
+        with:
+          registry: docker.io
+          username: chillibits
+          password: ${{ secrets.DOCKER_HUB_SECRET }}
+
       - name: Download all artifacts of compiler build
         uses: actions/download-artifact@v2
         with:
           path: bin
 
-      - name: Rename compiler binaries
+      - name: Rename compiler binaries & allow execution
         working-directory: bin
         run: |
           mv ccomc-linux-x86 ccomc-linux-386
           mv ccomc-linux-x64 ccomc-linux-amd64
           mv ccomc-windows-static-x86 ccomc-windows-386
           mv ccomc-windows-static-x64 ccomc-windows-amd64
+          chmod -R +x ./
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
@@ -117,6 +140,10 @@ jobs:
           NFPM_PUBLISH_DEB_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
           NFPM_PUBLISH_RPM_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
           NFPM_PUBLISH_APK_PASSPHRASE: ${{ secrets.GPG_PACKAGE_SIGNING_PASSPHRASE }}
+          TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
+          TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+          TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
+          TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
 
       - uses: actions/upload-artifact@v2
         with:
