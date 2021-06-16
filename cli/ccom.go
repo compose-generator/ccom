@@ -1,15 +1,22 @@
 package main
 
 import (
+	"ccom/util"
 	"log"
 	"os"
 
 	"github.com/urfave/cli/v2"
 )
 
-func main() {
-	const VERSION = "0.1.0"
+// nolint: gochecknoglobals
+var (
+	version = "dev"
+	commit  = ""
+	date    = ""
+	builtBy = ""
+)
 
+func main() {
 	// Version flag
 	cli.VersionFlag = &cli.BoolFlag{
 		Name:    "version",
@@ -20,7 +27,7 @@ func main() {
 	// Main cli configuration
 	app := &cli.App{
 		Name:    "ccom",
-		Version: VERSION,
+		Version: util.BuildVersion(version, commit, date, builtBy),
 		Authors: []*cli.Author{
 			{Name: "Marc Auberer", Email: "marc.auberer@chillibits.com"},
 		},
