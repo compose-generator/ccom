@@ -11,5 +11,5 @@ std::unique_ptr<PayloadExprAST> const &ComLineBlockExprAST::getPayload() {
 }
 
 std::string ComLineBlockExprAST::serialize() const {
-    return "com-line-block(stmt-lst: " + stmtList.serialize() + ", payload: " + payload->serialize() + ")";
+    return "com-line-block(stmt-lst: " + stmtList->serialize() + ", payload: " + payload->serialize() + ")";
 }

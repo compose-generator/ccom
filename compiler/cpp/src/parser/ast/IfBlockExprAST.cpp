@@ -11,5 +11,5 @@ std::unique_ptr<PayloadExprAST> const &IfBlockExprAST::getPayload() {
 }
 
 std::string IfBlockExprAST::serialize() const {
-    return "if(stmt-lst: " + stmtList.serialize() + ", payload: " + payload.serialize() + ")";
+    return "if(stmt-lst: " + stmtList->serialize() + ", payload: " + payload->serialize() + ")";
 }
