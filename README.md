@@ -38,6 +38,7 @@ Please visit the documentation at [ccom.compose-generator.com](https://ccom.comp
 | XML        | -                 | <!--                    | -->                      |
 | Rust       | //                | /*                      | */                       |
 | Assembler  | ;                 | -                       | -                        |
+| Python     | #                 | """                     | """                      |
 
 *Note: Formats like JSON, where no comments are supported can also work with CCom, however then the file input is not valid before pre-processing it with CCom.*
 

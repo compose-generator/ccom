@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/kardianos/osext"
 )
 
 func processInput(
@@ -93,16 +95,14 @@ func analyze(
 	if *compiler == "" {
 		*compiler = "cpp"
 	}
-	if lang != "" {
+
+	// Ensure value of comment char
+	if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
 		*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang, *fileInput)
-	} else {
-		// Ensure value of comment char
-		if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
-			util.Error("You must provide at least one of line comment or block comments identifiers.", true)
-		} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
-			util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", true)
-		}
+	} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
+		util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", true)
 	}
+
 	// Get raw data strings
 	if !modeSingle {
 		ensureFileInputString(fileInput)
@@ -124,7 +124,9 @@ func runCompilerExecutable(
 	blockCommentIdenClose string,
 ) string {
 	// Determine executeable path based on the environment
-	executablePath := "./"
+	executablePath, _ := osext.Executable()
+	executablePath = strings.ReplaceAll(executablePath, "\\", "/")
+	executablePath = executablePath[:strings.LastIndex(executablePath, "/")] + "/"
 	if util.FileExists("/usr/lib/ccom") {
 		executablePath = "/usr/lib/ccom/"
 	}
@@ -148,7 +150,7 @@ func runCompilerExecutable(
 }
 
 func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
-	if lang == "auto" {
+	if lang == "" || lang == "auto" {
 		if !util.FileExists(fileInput) {
 			util.Error("Please use lang 'auto' only in combination of valid file paths as file input", true)
 		}
