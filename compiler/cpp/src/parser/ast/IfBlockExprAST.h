@@ -19,6 +19,7 @@ public:
     // Public methods
     const std::unique_ptr<StmtLstExprAST> &getStmtList();
     const std::unique_ptr<PayloadExprAST> &getPayload();
+    std::string serialize() const;
 private:
     // Members
     std::unique_ptr<StmtLstExprAST> stmtList;

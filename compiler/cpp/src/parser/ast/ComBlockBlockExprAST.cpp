@@ -9,3 +9,7 @@
 std::unique_ptr<IfBlockExprAST> const &ComBlockBlockExprAST::getIfBlock() {
     return ifBlock;
 }
+
+std::string ComBlockBlockExprAST::serialize() const {
+    return "com-block-block(" + ifBlock->serialize() + ")";
+}

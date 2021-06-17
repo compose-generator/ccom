@@ -9,3 +9,7 @@
 std::string PayloadExprAST::getValue() const {
     return value;
 }
+
+std::string PayloadExprAST::serialize() const {
+    return "payload(value: '" + value + "')";
+}

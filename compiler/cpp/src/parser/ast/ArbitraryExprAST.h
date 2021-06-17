@@ -18,7 +18,7 @@ public:
 
     // Public methods
     std::string getValue() const;
-
+    std::string serialize() const;
 private:
     // Members
     std::string value;

@@ -10,6 +10,9 @@
 #include "KeyExprAST.h"
 #include "ValueExprAST.h"
 #include "StmtExprAST.h"
+#include "NumberExprAST.h"
+#include "BooleanExprAST.h"
+#include "StringExprAST.h"
 
 enum Operator {
     OP_EQUALS,
@@ -30,6 +33,7 @@ public:
     Operator getOperator() const;
     const std::unique_ptr<KeyExprAST> &getKey();
     const std::unique_ptr<ValueExprAST> &getValue();
+    std::string serialize() const;
 private:
     // Members
     Operator op;

@@ -18,6 +18,7 @@ public:
     // Public methods
     std::string getName() const;
     int getIndex() const;
+    std::string serialize() const;
 private:
     // Members
     std::string name;

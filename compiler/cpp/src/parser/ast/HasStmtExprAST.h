@@ -19,6 +19,7 @@ public:
     // Public methods
     const std::unique_ptr<KeyExprAST> &getKey();
     bool getInverted() const;
+    std::string serialize() const;
 private:
     // Members
     std::unique_ptr<KeyExprAST> key;

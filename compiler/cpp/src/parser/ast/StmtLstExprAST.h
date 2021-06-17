@@ -11,6 +11,8 @@
 #include <memory>
 #include "StmtExprAST.h"
 #include "TopLevelExprAST.h"
+#include "HasStmtExprAST.h"
+#include "CompStmtExprAST.h"
 
 class StmtLstExprAST: public TopLevelExprAST {
 public:
@@ -20,6 +22,7 @@ public:
 
     // Public methods
     const std::vector<std::unique_ptr<StmtExprAST>> &getStatements();
+    std::string serialize() const;
 private:
     // Members
     std::vector<std::unique_ptr<StmtExprAST>> stmts;
