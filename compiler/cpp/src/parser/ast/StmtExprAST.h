@@ -1,8 +1,4 @@
-// Copyright (c) Marc Auberer 2021. All rights reserved.
-
-//
-// Created by Marc on 09.05.2021.
-//
+// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
 
 #pragma once
 
@@ -11,7 +7,8 @@
 enum StmtExprType {
     STMT_EXPR,
     HAS_STMT_EXPR,
-    COMP_STMT_EXPR
+    COMP_STMT_EXPR,
+    CONTAINS_STMT_EXPR
 };
 
 class StmtExprAST {

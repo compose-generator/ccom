@@ -33,3 +33,18 @@ func Error(message string, exit bool) {
 		os.Exit(1)
 	}
 }
+
+// BuildVersion takes individual version component strings and merges it to a version string output
+func BuildVersion(version, commit, date, builtBy string) string {
+	result := version
+	if commit != "" {
+		result = fmt.Sprintf("%s, commit: %s", result, commit)
+	}
+	if date != "" {
+		result = fmt.Sprintf("%s, built at: %s", result, date)
+	}
+	if builtBy != "" {
+		result = fmt.Sprintf("%s, built by: %s", result, builtBy)
+	}
+	return result
+}

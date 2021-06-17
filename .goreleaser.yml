@@ -13,6 +13,9 @@ builds:
       - 5
       #- 6 # Waiting for third party fix
       - 7
+    mod_timestamp: '{{ .CommitTimestamp }}'
+    ldflags:
+      - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.builtBy=github-actions
 archives:
   - files:
       - LICENSE
@@ -33,7 +36,111 @@ nfpms:
       - rpm
     contents:
       - src: bin/ccomc-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}/*
-        dst: /usr/bin/ # ToDo: Move compiler binaries to /usr/lib/ccom instead of the /usr/bin directory, which should only be used for main binaries.
+        dst: /usr/lib/ccom/
+dockers:
+  - image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
+      - ghcr.io/compose-generator/ccom:latest-amd64
+      - chillibits/ccom:{{ .Version }}-amd64
+      - chillibits/ccom:latest-amd64
+    dockerfile: Dockerfile
+    use_buildx: true
+    goarch: amd64
+    extra_files:
+      - bin
+    build_flag_templates:
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --build-arg=COMPILER_PATH=linux-amd64
+      - --platform=linux/amd64
+  - image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
+      - ghcr.io/compose-generator/ccom:latest-i386
+      - chillibits/ccom:{{ .Version }}-i386
+      - chillibits/ccom:latest-i386
+    dockerfile: Dockerfile
+    use_buildx: true
+    goarch: 386
+    extra_files:
+      - bin
+    build_flag_templates:
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --build-arg=COMPILER_PATH=linux-386
+      - --platform=linux/i386
+  - image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
+      - ghcr.io/compose-generator/ccom:latest-arm32v7
+      - chillibits/ccom:{{ .Version }}-arm32v7
+      - chillibits/ccom:latest-arm32v7
+    dockerfile: Dockerfile
+    use_buildx: true
+    goarch: arm
+    goarm: 7
+    extra_files:
+      - bin
+    build_flag_templates:
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --build-arg=COMPILER_PATH=linux-armv7
+      - --platform=linux/arm/v7
+  - image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
+      - ghcr.io/compose-generator/ccom:latest-arm64v8
+      - chillibits/ccom:{{ .Version }}-arm64v8
+      - chillibits/ccom:latest-arm64v8
+    dockerfile: Dockerfile
+    use_buildx: true
+    goarch: arm64
+    extra_files:
+      - bin
+    build_flag_templates:
+      - --label=org.opencontainers.image.created={{.Date}}
+      - --label=org.opencontainers.image.name={{.ProjectName}}
+      - --label=org.opencontainers.image.revision={{.FullCommit}}
+      - --label=org.opencontainers.image.version={{.Version}}
+      - --label=org.opencontainers.image.source={{.GitURL}}
+      - --build-arg=COMPILER_PATH=linux-arm64
+      - --platform=linux/arm64/v8
+docker_manifests:
+  - name_template: chillibits/ccom:{{ .Version }}
+    image_templates:
+      - chillibits/ccom:{{ .Version }}-amd64
+      - chillibits/ccom:{{ .Version }}-i386
+      - chillibits/ccom:{{ .Version }}-arm32v7
+      - chillibits/ccom:{{ .Version }}-arm64v8
+  - name_template: chillibits/ccom:latest
+    image_templates:
+      - chillibits/ccom:{{ .Version }}-amd64
+      - chillibits/ccom:{{ .Version }}-i386
+      - chillibits/ccom:{{ .Version }}-arm32v7
+      - chillibits/ccom:{{ .Version }}-arm64v8
+  - name_template: ghcr.io/compose-generator/ccom:{{ .Version }}
+    image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
+  - name_template: ghcr.io/compose-generator/ccom:latest
+    image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
 release:
   name_template: v{{ .Tag }}
   prerelease: auto
+  footer: Visit [ccom.compose-generator.com](https://ccom.compose-generator.com) to test out the new features!
+announce:
+  twitter:
+    enabled: true
+    message_template: 'CCom {{ .Tag }} is now available! Check out the new features: ccom.compose-generator.com!'
