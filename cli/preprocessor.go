@@ -2,10 +2,7 @@ package main
 
 import (
 	"ccom/util"
-	"errors"
-	"fmt"
 	"io/ioutil"
-	"log"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -28,23 +25,23 @@ func processInput(
 ) {
 	// Analyze correctness of inputs
 	if !silentFlag {
-		fmt.Print("Analyzing inputs ... ")
+		util.P("Analyzing inputs ... ")
 	}
 	analyze(&fileInput, &dataInput, &compiler, lang, &lineCommentChars, &blockCommentCharsOpen, &blockCommentCharsClose, modeSingle)
 	if !silentFlag {
-		fmt.Println("done")
+		util.Done()
 	}
 
 	if benchmarkRuns <= 0 { // Normal compiler mode
 		// Feed the compiler with the input
 		if !silentFlag {
-			fmt.Print("Compiling ... ")
+			util.P("Compiling ... ")
 		}
 
 		result := runCompilerExecutable(compiler, modeSingle, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
 
 		if !silentFlag {
-			fmt.Println("done")
+			util.Done()
 		}
 
 		// Write output
@@ -60,9 +57,9 @@ func processInput(
 			ioutil.WriteFile(outFile, []byte(result), 0777)
 		} else { // Print to console
 			if !silentFlag {
-				fmt.Println()
+				util.Pel()
 			}
-			fmt.Println(result)
+			util.Pl(result)
 		}
 	} else { // Benchmarking mode
 		overallRuntime := 0
@@ -71,10 +68,11 @@ func processInput(
 			runCompilerExecutable(compiler, modeSingle, fileInput, dataInput, lineCommentChars, blockCommentCharsOpen, blockCommentCharsClose)
 			duration := time.Since(start).Milliseconds()
 			overallRuntime += int(duration)
-			fmt.Println(strconv.Itoa(i) + ". run: " + strconv.Itoa(int(duration)) + " ms")
+			util.Pl(strconv.Itoa(i) + ". run: " + strconv.Itoa(int(duration)) + " ms")
 		}
-		fmt.Println()
-		fmt.Println("Overall runtime: " + strconv.Itoa(overallRuntime) + " ms")
+		util.Pel()
+		util.Info("Overall runtime: " + strconv.Itoa(overallRuntime) + " ms")
+		util.Info("Average runtime: " + strconv.Itoa(overallRuntime/benchmarkRuns) + " ms")
 	}
 }
 
@@ -100,9 +98,9 @@ func analyze(
 	} else {
 		// Ensure value of comment char
 		if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
-			log.Fatal("You must provide at least one of line comment or block comments identifiers.")
+			util.Error("You must provide at least one of line comment or block comments identifiers.", true)
 		} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
-			log.Fatal("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.")
+			util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", true)
 		}
 	}
 	// Get raw data strings
@@ -139,11 +137,11 @@ func runCompilerExecutable(
 	case "java":
 		executableName = "ccomc-java.jar"
 	default:
-		log.Fatal("Invalid compiler name. Only 'cpp' and 'java' are allowed values.")
+		util.Error("Invalid compiler name. Only 'cpp' and 'java' are allowed values.", true)
 	}
 	// Check if executable exists
 	if !util.CommandExists(executablePath + executableName) {
-		log.Fatal("Compiler executable not found. Please check your installation")
+		util.Error("Compiler executable not found. Please check your installation", true)
 	}
 	// Execute compiler with user inputs
 	return util.ExecuteAndWaitWithOutput(executablePath+executableName, strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
@@ -152,7 +150,7 @@ func runCompilerExecutable(
 func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
 	if lang == "auto" {
 		if !util.FileExists(fileInput) {
-			log.Fatal("Please use lang 'auto' only in combination of valid file paths as file input")
+			util.Error("Please use lang 'auto' only in combination of valid file paths as file input", true)
 		}
 		lang = filepath.Ext(fileInput)[1:]
 	}
@@ -175,7 +173,7 @@ func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden stri
 		blockCommentIdenOpen = "<!--"
 		blockCommentIdenClose = "-->"
 	default:
-		log.Fatal("Unknown lang")
+		util.Error("Unknown lang", true)
 	}
 	return
 }
@@ -185,7 +183,7 @@ func ensureFileInputString(text *string) {
 	if util.FileExists(*text) && !util.IsDir(*text) {
 		result, err := util.GetFileContents(*text)
 		if err != nil {
-			log.Fatal("Could not read input file")
+			util.Error("Could not read input file", true)
 		}
 		*text = result
 	}
@@ -196,7 +194,7 @@ func ensureDataInputString(text *string) {
 	if util.FileExists(*text) && !util.IsDir(*text) {
 		result, err := util.GetFileContents(*text)
 		if err != nil {
-			log.Fatal("Could not read data file")
+			util.Error("Could not read data file", true)
 		}
 		*text = result
 	}
@@ -205,5 +203,5 @@ func ensureDataInputString(text *string) {
 		return
 	}
 	// Noting => throw error
-	log.Fatal(errors.New("The data file parameter must be a valid filepath or a JSON string"))
+	util.Error("The data file parameter must be a valid filepath or a JSON string", true)
 }
