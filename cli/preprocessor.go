@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/kardianos/osext"
 )
 
 func processInput(
@@ -124,7 +126,9 @@ func runCompilerExecutable(
 	blockCommentIdenClose string,
 ) string {
 	// Determine executeable path based on the environment
-	executablePath := "./"
+	executablePath, _ := osext.Executable()
+	executablePath = strings.ReplaceAll(executablePath, "\\", "/")
+	executablePath = executablePath[:strings.LastIndex(executablePath, "/")] + "/"
 	if util.FileExists("/usr/lib/ccom") {
 		executablePath = "/usr/lib/ccom/"
 	}
