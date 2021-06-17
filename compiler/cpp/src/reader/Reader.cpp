@@ -1,9 +1,6 @@
-//
-// Created by Marc on 23.05.2021.
-//
+// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
 
 #include "Reader.h"
-
 
 Reader::Reader(std::string fileInput, unsigned int maxLookahead):
     fileInput(std::move(fileInput)), maxLookahead(maxLookahead) {

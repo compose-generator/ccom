@@ -11,6 +11,6 @@ networks:
 ports:
   - ${{SPRING_MAVEN_PORT}}:8080
 env_file:
-#? if service.frontend[0].name != "spring-gradle" {
+#? if service.frontend contains name != "spring-gradle" {
 #   - environment.env
 #? }

@@ -1,6 +1,4 @@
-//
-// Created by Marc on 24.05.2021.
-//
+// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
 
 # pragma once
 
@@ -18,7 +16,9 @@ public:
 
     // Public methods
     json getJSONValueFromKey(const std::unique_ptr<KeyExprAST>&);
+    json getJSONValueFromKey(json data, const std::unique_ptr<KeyExprAST>&);
     bool jsonKeyExists(const std::unique_ptr<KeyExprAST>&);
+    bool jsonKeyExists(json data, const std::unique_ptr<KeyExprAST>&);
 private:
     // Members
     json data;

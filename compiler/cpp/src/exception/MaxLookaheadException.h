@@ -1,6 +1,4 @@
-//
-// Created by Marc on 27.05.2021.
-//
+// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
 
 #pragma once
 

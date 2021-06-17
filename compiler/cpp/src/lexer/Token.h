@@ -1,8 +1,4 @@
-// Copyright (c) Marc Auberer 2021. All rights reserved.
-
-//
-// Created by Marc on 02.05.2021.
-//
+// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
 
 #pragma once
 
@@ -35,6 +31,7 @@ enum TokenType {
     TOK_IF, // if
     TOK_HAS, // has
     TOK_NOT, // not
+    TOK_CONTAINS, // contains
 
     // Boolean values
     TOK_TRUE, // true
