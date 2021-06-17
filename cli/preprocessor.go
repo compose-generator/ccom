@@ -95,16 +95,14 @@ func analyze(
 	if *compiler == "" {
 		*compiler = "cpp"
 	}
-	if lang != "" {
+
+	// Ensure value of comment char
+	if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
 		*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang, *fileInput)
-	} else {
-		// Ensure value of comment char
-		if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
-			util.Error("You must provide at least one of line comment or block comments identifiers.", true)
-		} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
-			util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", true)
-		}
+	} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
+		util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", true)
 	}
+
 	// Get raw data strings
 	if !modeSingle {
 		ensureFileInputString(fileInput)
@@ -152,7 +150,7 @@ func runCompilerExecutable(
 }
 
 func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
-	if lang == "auto" {
+	if lang == "" || lang == "auto" {
 		if !util.FileExists(fileInput) {
 			util.Error("Please use lang 'auto' only in combination of valid file paths as file input", true)
 		}
