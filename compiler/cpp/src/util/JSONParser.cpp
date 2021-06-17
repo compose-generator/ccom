@@ -12,12 +12,12 @@ json JSONParser::getJSONValueFromKey(const json data, const std::unique_ptr<KeyE
     json dataTmp = data;
     for (const std::unique_ptr<IdentifierExprAST>& identifier : key->getIdentifiers()) {
         std::string identifierName = identifier->getName();
-        int identifierIndex = identifier->getIndex();
         if (!dataTmp.contains(identifierName))
             throw std::runtime_error("Identifier " + identifierName + " does not exist in data input");
 
         dataTmp = dataTmp[identifierName];
 
+        int identifierIndex = identifier->getIndex();
         if (identifierIndex >= 0) { // Identifier has an index attached to it
             if (dataTmp.empty())
                 throw std::runtime_error("Index " + std::to_string(identifierIndex) + " does not exist in identifier " + identifierName);
