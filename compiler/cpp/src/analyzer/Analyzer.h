@@ -1,6 +1,4 @@
-//
-// Created by Marc on 24.05.2021.
-//
+// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
 
 #pragma once
 
@@ -9,6 +7,8 @@
 #include "../../lib/json/json.hpp"
 #include "../parser/Parser.h"
 #include "../util/JSONParser.h"
+#include "../exception/IncompatibleTypesException.h"
+#include "../exception/UnknownDataTypeException.h"
 
 using json = nlohmann::json;
 

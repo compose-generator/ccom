@@ -20,6 +20,9 @@
 ## Introduction
 CCom is a language for pre-processing source files. It's primary purpose is to evaluate conditional sections in formats like YAML or XML, but can also be used for a variety of programming languages with support for comments.
 
+## Documentation
+Please visit the documentation at [ccom.compose-generator.com](https://ccom.compose-generator.com).
+
 ## Supported data formats
 |            | Line comment iden | Block comment iden open | Block comment iden close |
 |------------|-------------------|-------------------------|--------------------------|
@@ -99,7 +102,11 @@ $ winget install ChilliBits.CCom
 <details><summary><b>Use with Docker</b></summary>
 <p>
 
-<i>CCom will be published as a Docker image soon ...</i>
+*Note for Windows users: This command does not work with Windows CMD command line. Please use Windows PowerShell instead.*
+
+```sh
+$ docker run --rm -it -v $(pwd):/ccom/out chillibits/ccom
+```
 
 </p>
 </details>
@@ -236,9 +243,10 @@ COM_BLOCK_IDEN_OPEN   --> /*?
 COM_BLOCK_IDEN_CLOSE  --> */
 PAYLOAD               --> (COM_IDEN_PAYLOAD CHARS)+
 STMT_LST              --> STMT (`|` STMT)*
-STMT                  --> HAS_STMT | COMP_STMT
-HAS_STMT              --> has KEY | not has KEY
+STMT                  --> HAS_STMT | COMP_STMT | CONTAINS_STMT
+HAS_STMT              --> not? has KEY
 COMP_STMT             --> KEY COMP_OP VALUE
+CONTAINS_STMT         --> KEY not? contains KEY COMP_OP VALUE
 KEY                   --> IDENTIFIER INDEX? (.IDENTIFIER INDEX?)*
 INDEX                 --> [NUMBER]
 IDENTIFIER            --> LETTER+

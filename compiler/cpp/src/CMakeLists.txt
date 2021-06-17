@@ -35,6 +35,8 @@ set(SOURCES
         parser/ast/HasStmtExprAST.h
         parser/ast/CompStmtExprAST.cpp
         parser/ast/CompStmtExprAST.h
+        parser/ast/ContainsStmtExprAST.cpp
+        parser/ast/ContainsStmtExprAST.h
         parser/ast/ValueExprAST.cpp
         parser/ast/ValueExprAST.h
         parser/ast/ComBlockBlockExprAST.cpp
@@ -62,7 +64,13 @@ set(SOURCES
         exception/MaxLookaheadException.cpp
         exception/MaxLookaheadException.h
         exception/UnexpectedTokenException.cpp
-        exception/UnexpectedTokenException.h)
+        exception/UnexpectedTokenException.h
+        exception/IncompatibleTypesException.cpp
+        exception/IncompatibleTypesException.h
+        exception/UnknownDataTypeException.cpp
+        exception/UnknownDataTypeException.h
+        exception/UnexpectedDataTypeException.cpp
+        exception/UnexpectedDataTypeException.h)
 
 add_executable(${BINARY}_run ${SOURCES})
 

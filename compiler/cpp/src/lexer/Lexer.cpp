@@ -1,6 +1,4 @@
-//
-// Created by Marc on 23.05.2021.
-//
+// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
 
 #include "Lexer.h"
 
@@ -203,6 +201,7 @@ Token Lexer::consumeIdentifierOrKeyword() {
     if (identifierName == "not") return constructToken(TOK_NOT);
     if (identifierName == "true") return constructToken(TOK_TRUE);
     if (identifierName == "false") return constructToken(TOK_FALSE);
+    if (identifierName == "contains") return constructToken(TOK_CONTAINS);
 
     return constructToken(TOK_IDENTIFIER, identifierName);
 }
