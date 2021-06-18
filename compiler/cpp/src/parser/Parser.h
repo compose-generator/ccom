@@ -44,7 +44,8 @@ private:
     std::unique_ptr<StmtExprAST> parseCompOrContainsStmt();
     std::unique_ptr<CompStmtExprAST> parseCompStmt(std::unique_ptr<KeyExprAST>);
     std::unique_ptr<ContainsStmtExprAST> parseContainsStmt(std::unique_ptr<KeyExprAST>);
-    std::unique_ptr<IfBlockExprAST> parseIfBlock();
+    std::unique_ptr<IfBlockExprAST> parseIfBlockComLine();
+    std::unique_ptr<IfBlockExprAST> parseIfBlockComBlock();
     std::unique_ptr<ComLineBlockExprAST> parseComLineBlock();
     std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock();
     std::unique_ptr<KeyExprAST> parseKey();

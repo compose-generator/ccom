@@ -7,8 +7,6 @@
 #include <memory>
 #include "StmtExprAST.h"
 #include "TopLevelExprAST.h"
-#include "HasStmtExprAST.h"
-#include "CompStmtExprAST.h"
 
 class StmtLstExprAST: public TopLevelExprAST {
 public:

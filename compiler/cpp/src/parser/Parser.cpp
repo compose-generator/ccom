@@ -108,7 +108,19 @@ std::unique_ptr<ContainsStmtExprAST> Parser::parseContainsStmt(std::unique_ptr<K
     return std::make_unique<ContainsStmtExprAST>(std::move(listKey), std::move(valueKey), std::move(value), op, inverted);
 }
 
-std::unique_ptr<IfBlockExprAST> Parser::parseIfBlock() {
+std::unique_ptr<IfBlockExprAST> Parser::parseIfBlockComLine() {
+    lexer.expect(TOK_IF); // Consume 'if'
+    std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList();  // Consume stmtList
+    if (lexer.getLookahead().getType() == TOK_COM_LINE_IDEN)
+        lexer.expect(TOK_COM_LINE_IDEN); // Consume ComLineIden optional
+    lexer.expect(TOK_BRACE_OPEN); // Consume '{'
+    std::unique_ptr<PayloadExprAST> payload = parsePayload(); // Consume payload
+    lexer.expect(TOK_COM_LINE_IDEN); // Consume ComLineIden
+    lexer.expect(TOK_BRACE_CLOSE); // Consume '}'
+    return std::make_unique<IfBlockExprAST>(std::move(stmtList), std::move(payload));
+}
+
+std::unique_ptr<IfBlockExprAST> Parser::parseIfBlockComBlock() {
     lexer.expect(TOK_IF); // Consume 'if'
     std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList(); // Consume stmtList
     lexer.expect(TOK_BRACE_OPEN); // Consume '{'
@@ -119,20 +131,13 @@ std::unique_ptr<IfBlockExprAST> Parser::parseIfBlock() {
 
 std::unique_ptr<ComLineBlockExprAST> Parser::parseComLineBlock() {
     lexer.expect(TOK_COM_LINE_IDEN); // Consume ComLineIden
-    lexer.expect(TOK_IF); // Consume 'if'
-    std::unique_ptr<StmtLstExprAST> stmtList = parseStmtList();  // Consume stmtList
-    if (lexer.getLookahead().getType() == TOK_COM_LINE_IDEN)
-        lexer.expect(TOK_COM_LINE_IDEN); // Consume ComLineIden optional
-    lexer.expect(TOK_BRACE_OPEN); // Consume '{'
-    std::unique_ptr<PayloadExprAST> payload = parsePayload(); // Consume payload
-    lexer.expect(TOK_COM_LINE_IDEN); // Consume ComLineIden
-    lexer.expect(TOK_BRACE_CLOSE); // Consume '}'
-    return std::make_unique<ComLineBlockExprAST>(std::move(stmtList), std::move(payload));
+    std::unique_ptr<IfBlockExprAST> ifBlock = parseIfBlockComLine(); // Consume if block
+    return std::make_unique<ComLineBlockExprAST>(std::move(ifBlock));
 }
 
 std::unique_ptr<ComBlockBlockExprAST> Parser::parseComBlockBlock() {
     lexer.expect(TOK_COM_BLOCK_IDEN_OPEN); // Consume ComBlockIdenOpen
-    std::unique_ptr<IfBlockExprAST> ifBlock = parseIfBlock(); // Consume if block
+    std::unique_ptr<IfBlockExprAST> ifBlock = parseIfBlockComBlock(); // Consume if block
     lexer.expect(TOK_COM_BLOCK_IDEN_CLOSE); // Consume ComBlockIdenClose
     return std::make_unique<ComBlockBlockExprAST>(std::move(ifBlock));
 }

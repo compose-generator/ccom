@@ -21,3 +21,8 @@ std::unique_ptr<ValueExprAST> const &ContainsStmtExprAST::getValue() {
 bool ContainsStmtExprAST::getInverted() const {
     return isInverted;
 };
+
+std::string ContainsStmtExprAST::serialize() const {
+    return "contains-stmt(list-key: " + listKey->serialize() + ", value-key" + valueKey->serialize() +
+        ", operator: " + std::to_string(op) + ", value: " + value->serialize() + ")";
+}

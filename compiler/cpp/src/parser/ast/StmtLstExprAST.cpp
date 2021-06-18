@@ -7,22 +7,9 @@ std::vector<std::unique_ptr<StmtExprAST>> const &StmtLstExprAST::getStatements()
 }
 
 std::string StmtLstExprAST::serialize() const {
-    std::string result = "stmt-lst(";
+    std::string serializedStatements;
     for (auto& stmt : stmts) {
-        switch (stmt->getType()) {
-            case StmtExprType::HAS_STMT_EXPR: {
-                auto* hasStmt = static_cast<HasStmtExprAST*>(stmt.get());
-                result += hasStmt->serialize();
-                continue;
-            }
-            case StmtExprType::COMP_STMT_EXPR: {
-                auto* compStmt = static_cast<CompStmtExprAST*>(stmt.get());
-                result += compStmt->serialize();
-                continue;
-            }
-            default:
-                throw std::runtime_error("Got unknown Stmt object");
-        }
+        serializedStatements += stmt->serialize();
     }
-    return result + ")";
+    return "stmt-lst(" + serializedStatements + ")";
 }

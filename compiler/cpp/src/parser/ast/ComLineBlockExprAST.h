@@ -3,23 +3,19 @@
 #pragma once
 
 #include <memory>
-#include "StmtLstExprAST.h"
-#include "PayloadExprAST.h"
 #include "ComBlockExprAST.h"
+#include "IfBlockExprAST.h"
 
 class ComLineBlockExprAST : public ComBlockExprAST {
 public:
     // Constructors
-    explicit ComLineBlockExprAST(std::unique_ptr<StmtLstExprAST> stmtList, std::unique_ptr<PayloadExprAST> payload):
-            ComBlockExprAST(ComBlockExprType::COM_LINE_BLOCK_EXPR),
-            stmtList(std::move(stmtList)), payload(std::move(payload)) {}
+    explicit ComLineBlockExprAST(std::unique_ptr<IfBlockExprAST> ifBlock):
+            ComBlockExprAST(ComBlockExprType::COM_LINE_BLOCK_EXPR), ifBlock(std::move(ifBlock)) {}
 
     // Public methods
-    const std::unique_ptr<StmtLstExprAST> &getStmtList();
-    const std::unique_ptr<PayloadExprAST> &getPayload();
+    const std::unique_ptr<IfBlockExprAST> &getIfBlock();
     std::string serialize() const;
 private:
     // Members
-    std::unique_ptr<StmtLstExprAST> stmtList;
-    std::unique_ptr<PayloadExprAST> payload;
+    std::unique_ptr<IfBlockExprAST> ifBlock;
 };

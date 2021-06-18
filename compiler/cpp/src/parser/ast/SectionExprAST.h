@@ -15,6 +15,7 @@ public:
 
     // Public methods
     const std::vector<std::unique_ptr<ComBlockExprAST>> &getComBlocks();
+    std::string serialize() const;
 private:
     // Members
     std::vector<std::unique_ptr<ComBlockExprAST>> comBlocks;

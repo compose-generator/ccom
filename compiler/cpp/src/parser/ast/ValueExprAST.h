@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include <string>
+#include <stdexcept>
+
 enum ValueExprType {
     VALUE_EXPR,
     NUMBER_EXPR,
@@ -16,6 +19,7 @@ public:
 
     // Public methods
     ValueExprType getType();
+    std::string serialize();
 protected:
     // Protected constructors
     explicit ValueExprAST(ValueExprType t): type(t) {}
