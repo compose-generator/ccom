@@ -52,7 +52,11 @@ std::string Interpreter::getOutputOfContent(ContentExprAST* content) {
 }
 
 std::string Interpreter::getOutputOfArbitrarySection(ArbitraryExprAST* arbitraryExpr) {
-    return arbitraryExpr->getValue();
+    std::string arbitrary = arbitraryExpr->getValue();
+    // Cut of first char, if it is a line break
+    if (arbitrary.rfind('\n', 0) == 0)
+        arbitrary.erase(0, 1);
+    return arbitrary;
 }
 
 std::string Interpreter::getOutputOfRelevantSection(SectionExprAST* relevantSection) {
