@@ -4,18 +4,12 @@
 #include <gtest/gtest.h>
 #include "../util/LanguageDescriptor.h"
 #include "../../lib/json/json.hpp"
+#include "../util/FileReader.h"
 
 using json = nlohmann::json;
 
 struct ParserParams {
     const std::string fileName;
-};
-
-const std::vector<LanguageDescriptor> LANGUAGES {
-        LanguageDescriptor("cpp", "//", "/*", "*/"),
-        LanguageDescriptor("html", "", "<!--", "-->"),
-        LanguageDescriptor("py", "#", R"(""")", R"(""")"),
-        LanguageDescriptor("yml", "#", "", "")
 };
 
 const ParserParams PARSER_TEST_PARAMETERS[] = {
@@ -28,11 +22,21 @@ class ParserTests : public ::testing::TestWithParam<ParserParams> {};
 
 TEST_P(ParserTests, TestParserWithExpectToken) {
     ParserParams param = GetParam();
-
-}
-
-void compareASTs(const std::unique_ptr<TopLevelExprAST> expected, const std::unique_ptr<TopLevelExprAST> actual) {
-
+    // Load parser input and expected output
+    FileReader reader = FileReader("test-files");
+    std::string input = reader.fileToString( "parser/" + param.fileName, "parser-input.cpp");
+    std::string expectedAst = reader.fileToString( "parser/" + param.fileName, "expected-ast.txt");
+    // Make expected AST transformations
+    size_t pos;
+    while ((pos = expectedAst.find("\\n")) != std::string::npos)
+        expectedAst.replace(pos, 2, "\n");
+    // Initialize parser
+    Parser parser = Parser(false, input, "//", "/*", "*/");
+    // Parse AST from input
+    TopLevelExprAST* actualAst = parser.parseAST();
+    // Serialize actual AST and compare it with the expected AST
+    std::string serializedAst = actualAst->serialize();
+    EXPECT_EQ(serializedAst, expectedAst);
 }
 
 INSTANTIATE_TEST_SUITE_P(

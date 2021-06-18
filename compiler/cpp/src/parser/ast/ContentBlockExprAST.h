@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include <string>
+#include <stdexcept>
+
 enum ContentBlockExprType {
     CONTENT_BLOCK_EXPR,
     SECTION_EXPR,
@@ -15,6 +18,7 @@ public:
 
     // Public methods
     ContentBlockExprType getType();
+    std::string serialize();
 protected:
     // Protected constructors
     explicit ContentBlockExprAST(ContentBlockExprType t): type(t) {}
