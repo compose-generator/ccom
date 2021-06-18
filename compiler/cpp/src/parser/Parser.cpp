@@ -184,7 +184,7 @@ std::unique_ptr<StringExprAST> Parser::parseString() {
 }
 
 std::unique_ptr<BooleanExprAST> Parser::parseBoolean() {
-    bool value = lexer.getLookahead().getValue() == "true";
+    bool value = lexer.getLookahead().getType() == TOK_TRUE;
     lexer.advance(); // Consume boolean literal
     return std::make_unique<BooleanExprAST>(value);
 }
