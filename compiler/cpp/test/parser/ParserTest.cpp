@@ -15,6 +15,12 @@ struct ParserParams {
 const ParserParams PARSER_TEST_PARAMETERS[] = {
         {
             "has-block"
+        },
+        {
+            "comp-block"
+        },
+        {
+            "contains-block"
         }
 };
 
