@@ -104,7 +104,7 @@ Token Lexer::consumeSection() {
         case '"': return consumeString();
     }
 
-    if (isalpha(curChar)) return consumeIdentifierOrKeyword();
+    if (isalpha(curChar) || curChar == '_') return consumeIdentifierOrKeyword();
     if (isdigit(curChar)) return consumeNumber();
 
     throw UnexpectedCharException(curChar, reader.getLineNum(), reader.getColNum());
@@ -189,7 +189,7 @@ Token Lexer::consumeIdentifierOrKeyword() {
     std::stringstream identifierStr;
     identifierStr << (char) reader.getLookahead();
     reader.advance();
-    while (isalnum(reader.getLookahead())) { // [a-zA-Z0-9]*
+    while (isalnum(reader.getLookahead()) || reader.getLookahead() == '_') { // [a-zA-Z0-9_]*
         identifierStr << (char) reader.getLookahead();
         reader.advance();
     }
