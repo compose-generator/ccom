@@ -11,6 +11,6 @@ networks:
 ports:
   - ${{SPRING_MAVEN_PORT}}:8080
 env_file:
-#? if service.frontend[0] contains name != "spring-maven" {
+#? if service.frontend[0] contains _SERVICE_NAME != "spring-maven" {
 #   - environment.env
 #? }

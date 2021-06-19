@@ -250,17 +250,18 @@ COMP_STMT             --> KEY COMP_OP VALUE
 CONTAINS_STMT         --> KEY not? contains KEY COMP_OP VALUE
 KEY                   --> IDENTIFIER INDEX? (.IDENTIFIER INDEX?)*
 INDEX                 --> [NUMBER]
-IDENTIFIER            --> LETTER+
+IDENTIFIER            --> LETTER (LETTER* DIGIT* UNDERSCORE*)* | UNDERSCORE (LETTER* DIGIT* UNDERSCORE*)*
 VALUE                 --> STRING | NUMBER | BOOLEAN
 STRING                --> "CHARS_LIMITED"
 NUMBER                --> DIGIT+
 BOOLEAN               --> true | false
 COMP_OP               --> == | != | < | > | <= | >=
 CHARS                 --> ({UNICODE}\{COM_LINE_IDEN, COM_BLOCK_IDEN_OPEN})*
-CHARS_LIMITED         --> (LETTER* DIGIT* SCHAR*)*
+CHARS_LIMITED         --> (LETTER* DIGIT* SCHAR* UNDERSCORE*)*
 LETTER                --> a|b|...|y|z|A|B|...|Y|Z
 DIGIT                 --> 0|1|2|3|4|5|6|7|8|9
-SCHAR                 --> -|.|_|[|]|{|}|/|\|'
+SCHAR                 --> -|.|[|]|{|}|/|\|'
+UNDERSCORE            --> _
 UNICODE               --> Any unicode character
 ```
 
