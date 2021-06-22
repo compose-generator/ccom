@@ -250,7 +250,7 @@ COMP_STMT             --> KEY COMP_OP VALUE
 CONTAINS_STMT         --> KEY not? contains KEY COMP_OP VALUE
 KEY                   --> IDENTIFIER INDEX? (.IDENTIFIER INDEX?)*
 INDEX                 --> [NUMBER]
-IDENTIFIER            --> LETTER (LETTER* DIGIT* UNDERSCORE*)* | UNDERSCORE (LETTER* DIGIT* UNDERSCORE*)*
+IDENTIFIER            --> (Letter|UNDERSCORE) (LETTER* DIGIT* UNDERSCORE*)*
 VALUE                 --> STRING | NUMBER | BOOLEAN
 STRING                --> "CHARS_LIMITED"
 NUMBER                --> DIGIT+
