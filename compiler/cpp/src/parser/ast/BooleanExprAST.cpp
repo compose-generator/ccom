@@ -5,3 +5,7 @@
 bool BooleanExprAST::getValue() const {
     return value;
 }
+
+std::string BooleanExprAST::serialize() const {
+    return "boolean(value: '" + std::to_string(value) + "')";
+}

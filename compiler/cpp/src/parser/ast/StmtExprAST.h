@@ -3,6 +3,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 
 enum StmtExprType {
     STMT_EXPR,
@@ -18,6 +19,7 @@ public:
 
     // Public methods
     StmtExprType getType();
+    std::string serialize();
 protected:
     // Protected constructors
     explicit StmtExprAST(StmtExprType t): type(t) {}

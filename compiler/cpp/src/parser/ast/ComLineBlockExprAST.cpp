@@ -2,10 +2,10 @@
 
 #include "ComLineBlockExprAST.h"
 
-std::unique_ptr<StmtLstExprAST> const &ComLineBlockExprAST::getStmtList() {
-    return stmtList;
+const std::unique_ptr<IfBlockExprAST> &ComLineBlockExprAST::getIfBlock() {
+    return ifBlock;
 }
 
-std::unique_ptr<PayloadExprAST> const &ComLineBlockExprAST::getPayload() {
-    return payload;
+std::string ComLineBlockExprAST::serialize() const {
+    return "com-line-block(" + ifBlock->serialize() + ")";
 }

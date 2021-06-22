@@ -1,0 +1,1 @@
+content(section(com-line-block(if(stmt-lst: stmt-lst(has-stmt(key: key(identifier(name: 'test', index: '-1')identifier(name: 'attribute', index: '-1')identifier(name: 'key', index: '-1')), isInverted: 1)), payload: payload(value: 'Test payload\n')))))

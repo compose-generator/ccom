@@ -20,6 +20,7 @@ public:
     const std::unique_ptr<KeyExprAST> &getValueKey();
     const std::unique_ptr<ValueExprAST> &getValue();
     bool getInverted() const;
+    std::string serialize() const;
 private:
     // Members
     Operator op;

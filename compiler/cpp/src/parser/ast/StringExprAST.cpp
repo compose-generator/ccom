@@ -5,3 +5,7 @@
 std::string StringExprAST::getValue() const {
     return value;
 }
+
+std::string StringExprAST::serialize() const {
+    return "string(value: '" + value + "')";
+}

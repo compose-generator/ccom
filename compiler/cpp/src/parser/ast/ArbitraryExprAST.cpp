@@ -5,3 +5,7 @@
 std::string ArbitraryExprAST::getValue() const {
     return value;
 }
+
+std::string ArbitraryExprAST::serialize() const {
+    return "arbitrary(value: '" + value + "')";
+}

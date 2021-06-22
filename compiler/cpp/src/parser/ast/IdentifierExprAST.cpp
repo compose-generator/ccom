@@ -9,3 +9,7 @@ std::string IdentifierExprAST::getName() const {
 int IdentifierExprAST::getIndex() const {
     return index;
 }
+
+std::string IdentifierExprAST::serialize() const {
+    return "identifier(name: '" + name + "', index: '" + std::to_string(index) + "')";
+}

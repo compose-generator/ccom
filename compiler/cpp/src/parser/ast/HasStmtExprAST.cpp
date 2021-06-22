@@ -9,3 +9,7 @@ std::unique_ptr<KeyExprAST> const &HasStmtExprAST::getKey() {
 bool HasStmtExprAST::getInverted() const {
     return isInverted;
 };
+
+std::string HasStmtExprAST::serialize() const {
+    return "has-stmt(key: " + key->serialize() + ", isInverted: " + std::to_string(isInverted) + ")";
+}

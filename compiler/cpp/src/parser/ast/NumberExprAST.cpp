@@ -5,3 +5,7 @@
 int NumberExprAST::getValue() const {
     return value;
 }
+
+std::string NumberExprAST::serialize() const {
+    return "number(value: '" + std::to_string(value) + "')";
+}

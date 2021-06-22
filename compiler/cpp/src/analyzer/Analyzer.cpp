@@ -51,7 +51,7 @@ void Analyzer::checkDataTypeCompatibilityContent(ContentExprAST* content) {
                 switch (comBlock->getType()) {
                     case ComBlockExprType::COM_LINE_BLOCK_EXPR: {
                         auto* lineBlockExpr = static_cast<ComLineBlockExprAST*>(comBlock.get());
-                        checkDataTypeCompatibilityStmtList(lineBlockExpr->getStmtList().get());
+                        checkDataTypeCompatibilityStmtList(lineBlockExpr->getIfBlock()->getStmtList().get());
                         continue;
                     }
                     case ComBlockExprType::COM_BLOCK_BLOCK_EXPR: {

@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include <stdexcept>
+#include <string>
+
 enum TopLevelExprType {
     TOP_LEVEL_EXPR,
     CONTENT_EXPR,
@@ -15,6 +18,7 @@ public:
 
     // Public methods
     TopLevelExprType getType();
+    std::string serialize();
 protected:
     // Protected constructors
     explicit TopLevelExprAST(TopLevelExprType t): type(t) {}

@@ -52,7 +52,11 @@ std::string Interpreter::getOutputOfContent(ContentExprAST* content) {
 }
 
 std::string Interpreter::getOutputOfArbitrarySection(ArbitraryExprAST* arbitraryExpr) {
-    return arbitraryExpr->getValue();
+    std::string arbitrary = arbitraryExpr->getValue();
+    // Cut off first char, if it is a line break
+    if (arbitrary.rfind('\n', 0) == 0)
+        arbitrary.erase(0, 1);
+    return arbitrary;
 }
 
 std::string Interpreter::getOutputOfRelevantSection(SectionExprAST* relevantSection) {
@@ -63,9 +67,10 @@ std::string Interpreter::getOutputOfRelevantSection(SectionExprAST* relevantSect
         switch (comBlock->getType()) {
             case ComBlockExprType::COM_LINE_BLOCK_EXPR: {
                 auto* lineBlockExpr = static_cast<ComLineBlockExprAST*>(comBlock.get());
+                const std::unique_ptr<IfBlockExprAST>& ifBlock = lineBlockExpr->getIfBlock();
                 // Evaluate condition and append payload to output string if condition was truthy
-                if (evaluateStmtList(lineBlockExpr->getStmtList().get())) {
-                    result += lineBlockExpr->getPayload()->getValue();
+                if (evaluateStmtList(ifBlock->getStmtList().get())) {
+                    result += ifBlock->getPayload()->getValue();
                 }
                 break;
             }

@@ -16,6 +16,7 @@ public:
 
     // Public methods
     const std::vector<std::unique_ptr<StmtExprAST>> &getStatements();
+    std::string serialize() const;
 private:
     // Members
     std::vector<std::unique_ptr<StmtExprAST>> stmts;

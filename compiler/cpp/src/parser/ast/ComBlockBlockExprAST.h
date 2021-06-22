@@ -14,6 +14,7 @@ public:
 
     // Public methods
     const std::unique_ptr<IfBlockExprAST> &getIfBlock();
+    std::string serialize() const;
 private:
     // Members
     std::unique_ptr<IfBlockExprAST> ifBlock;

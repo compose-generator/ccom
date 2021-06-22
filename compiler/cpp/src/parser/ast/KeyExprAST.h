@@ -13,6 +13,7 @@ public:
 
     // Public methods
     const std::vector<std::unique_ptr<IdentifierExprAST>> &getIdentifiers();
+    std::string serialize() const;
 private:
     // Members
     std::vector<std::unique_ptr<IdentifierExprAST>> identifiers;
