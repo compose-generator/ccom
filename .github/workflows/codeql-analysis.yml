@@ -6,23 +6,88 @@ on:
   workflow_dispatch:
 
 jobs:
-  analyze:
-    name: Analyze
+  analyze-go:
+    name: Analyze Go Code
     runs-on: ubuntu-latest
-
     strategy:
       fail-fast: false
-      matrix:
-        language: [ 'go', 'cpp', 'java' ]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
         with:
-          languages: ${{ matrix.language }}
+          languages: go
+
       - name: Autobuild
         uses: github/codeql-action/autobuild@v1
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
+  analyze-cpp:
+    name: Analyze C++ Code
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: cpp
+
+      - name: Prepare environment
+        run: |
+          shopt -s extglob
+          rm -rf !("compiler")
+          cp -fR ./compiler/cpp/* .
+          rm -rf ./compiler
+
+      - name: Download Libs
+        run: |
+          mkdir -p ./lib/json
+          cd lib
+          git clone https://github.com/google/googletest.git
+          curl -sSL "https://github.com/nlohmann/json/releases/download/v3.9.1/json.hpp" --output json/json.hpp
+
+      - name: Build project
+        uses: nicledomaS/cmake_build_action@v1.4
+        with:
+          submodule_update: ON
+          run_tests: ON
+          cmake_args: -DWITH_TESTS=ON
+          unit_test_build: -Dtest=ON
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
+  analyze-java:
+    name: Analyze Java Code
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: java
+
+      - name: Set up JDK 15
+        uses: actions/setup-java@v2
+        with:
+          java-version: '15'
+          distribution: 'adopt'
+
+      - name: Run the Maven verify phase
+        working-directory: compiler/java
+        run: mvn verify --batch-mode --update-snapshots --quiet --no-transfer-progress
+
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v1
