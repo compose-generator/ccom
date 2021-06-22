@@ -23,6 +23,6 @@ bool ContainsStmtExprAST::getInverted() const {
 };
 
 std::string ContainsStmtExprAST::serialize() const {
-    return "contains-stmt(list-key: " + listKey->serialize() + ", value-key" + valueKey->serialize() +
+    return "contains-stmt(list-key: " + listKey->serialize() + ", value-key: " + valueKey->serialize() +
         ", operator: " + std::to_string(op) + ", value: " + value->serialize() + ")";
 }
