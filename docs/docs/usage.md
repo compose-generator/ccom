@@ -30,7 +30,7 @@ CCom supports two modes of usage: <br>
 - The input file / string with conditional sections to an output file / string
 - The single mode, which can evaluate a single statement list to a boolean
 
-Here is an example for a input file, in this case a YAML file: <br>
+Here is an example for an input file, in this case a YAML file: <br>
 ```yaml
 build: ${{SPRING_MAVEN_SOURCE_DIRECTORY}}
 restart: always
@@ -46,7 +46,7 @@ env_file:
 #? }
 ```
 
-Here is an example for a input for a single statement list: <br>
+Here is an example for an input for a single statement list: <br>
 `has this.is.a.test.key | this.is contains a.test.key == "value" | this.is.test >= 42`
 
 The cli defaults the mode to the input file, however you can switch to single mode by using the `--mode-single` or `-m` flag for the cli.
@@ -74,7 +74,7 @@ As CCom does not know the content type of your input file, you sometimes have to
 - `python`
 - more to come ...
 
-If you did not found your language on the list, you can set the comment identifiers by hand. Here is an example: <br>
+If you did not find your language in the list, you can set the comment identifiers by hand. Here is an example: <br>
 `ccom --data ./test-data.json --line-comment-iden "//" --block-comment-iden-open "/*" --block-comment-iden-close "*/" ./test-file.java`
 
 ## Switch compilers
@@ -82,13 +82,13 @@ CCom has multiple compiler backend implementations, which have different strengt
 To switch between compiler implementations, you can use `--compiler` / `-c`. Valid values are `cpp` and `java`.
 
 ## Benchmarking
-CCom comes with a built-in benchmark mode to test the performance of compiling different files in combination with different compiler backends. To run a benchmark for a input file with input data, you can use `--benchmark` / `-b` and specify a number of runs. <br>
+CCom comes with a built-in benchmark mode to test the performance of compiling different files in combination with different compiler backends. To run a benchmark for an input file with input data, you can use `--benchmark` / `-b` and specify a number of runs. <br>
 E.g.: `ccom  --data ./test-data.json --benchmark 500 --out-file ./output.yml ./input-file.yml`
 
 CCom will show you how long every run takes as well as the total and average runtime.
 
 ## Silent mode
-The default behavior of CCom is, to print a few information about compile status to the console. If you're using CCom for your purpose, you might not want such compile status outputs. To disable all CCom outputs, except the compile result output, you can use the `--silent` or `-s` flag for the cli.
+By default, CCom prints some information about the compile status to the console. If you're using CCom for your purpose, you might not want such compile status outputs. To disable all CCom outputs, except the compile result output, you can use the `--silent` or `-s` flag for the cli.
 
 ## Force flag
 CCom warns you per default if the output file already exists. To disable that warning, you can simply use the `--force` or `-f` flag for the cli.
