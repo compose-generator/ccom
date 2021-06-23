@@ -162,11 +162,11 @@ func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden stri
 		lineCommentIden = "#"
 		blockCommentIdenOpen = ""
 		blockCommentIdenClose = ""
-	case "python", "py":
+	case "python", "py", "elixir", "ex", "exs":
 		lineCommentIden = "#"
 		blockCommentIdenOpen = "\"\"\""
 		blockCommentIdenClose = "\"\"\""
-	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust", "rs":
+	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust", "rs", "swift", "php", "kotlin", "kt", "dart", "groovy":
 		lineCommentIden = "//"
 		blockCommentIdenOpen = "/*"
 		blockCommentIdenClose = "*/"
@@ -174,6 +174,42 @@ func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden stri
 		lineCommentIden = ""
 		blockCommentIdenOpen = "<!--"
 		blockCommentIdenClose = "-->"
+	case "haskell", "hs":
+		lineCommentIden = "--"
+		blockCommentIdenOpen = "{-"
+		blockCommentIdenClose = "-}"
+	case "lua":
+		lineCommentIden = "--"
+		blockCommentIdenOpen = "--[["
+		blockCommentIdenClose = "]]"
+	case "pascal", "pas":
+		lineCommentIden = ""
+		blockCommentIdenOpen = "(*"
+		blockCommentIdenClose = "*)"
+	case "perl", "pl":
+		lineCommentIden = "#"
+		blockCommentIdenOpen = "=item"
+		blockCommentIdenClose = "=cut"
+	case "r":
+		lineCommentIden = "#"
+		blockCommentIdenOpen = ""
+		blockCommentIdenClose = ""
+	case "powershell", "ps":
+		lineCommentIden = "#"
+		blockCommentIdenOpen = "<#"
+		blockCommentIdenClose = "#>"
+	case "ruby", "rb":
+		lineCommentIden = "#"
+		blockCommentIdenOpen = "=begin"
+		blockCommentIdenClose = "=end"
+	case "sql":
+		lineCommentIden = "--"
+		blockCommentIdenOpen = ""
+		blockCommentIdenClose = ""
+	case "julia", "jl":
+		lineCommentIden = "#"
+		blockCommentIdenOpen = "#="
+		blockCommentIdenClose = "=#"
 	default:
 		util.Error("Unknown lang", true)
 	}
