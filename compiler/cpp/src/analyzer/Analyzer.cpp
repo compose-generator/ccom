@@ -6,7 +6,7 @@
 
 Analyzer::Analyzer(bool isSingleStatement, const std::string &fileInput, JSONParser jsonParser,
                    const std::string &inputCommentLineIdentifiers, const std::string &inputCommentBlockOpenIdentifiers,
-                   const std::string &inputCommentBlockCloseIdentifiers): jsonParser(jsonParser) {
+                   const std::string &inputCommentBlockCloseIdentifiers): jsonParser(std::move(jsonParser)) {
     this->isSingleStatement = isSingleStatement;
 
     // Initialize parser

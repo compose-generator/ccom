@@ -7,6 +7,7 @@ add_executable(${BINARY}
         reader/ReaderTest.cpp
         lexer/LexerTest.cpp
         parser/ParserTest.cpp
+        analyzer/AnalyzerTest.cpp
         util/LanguageDescriptor.cpp
         util/LanguageDescriptor.h
         util/FileReader.cpp

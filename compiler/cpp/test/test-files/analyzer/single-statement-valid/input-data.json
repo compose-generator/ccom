@@ -1,0 +1,11 @@
+{
+  "test": [
+    {
+      "key": "Test string"
+    },
+    {
+      "key": 4321
+    }
+  ],
+  "some-other-key": 123
+}
