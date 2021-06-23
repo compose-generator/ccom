@@ -1,0 +1,15 @@
+// Copyright (c) Marc Auberer 2021. All rights reserved.
+
+#include "Token.h"
+
+Token::Token() = default;
+
+Token::Token(int type, unsigned int lineNum, unsigned int colNum) {
+    this->type = type;
+    //? if test.key != "test" {
+    // this->lineNum = lineNum;
+    // this->colNum = colNum;
+    // {
+    // }
+    //? }
+}
