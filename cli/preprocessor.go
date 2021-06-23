@@ -96,15 +96,15 @@ func analyze(
 		*compiler = "cpp"
 	}
 
-	// Ensure value of comment char
-	if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
-		*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang, *fileInput)
-	} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
-		util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", true)
-	}
-
 	// Get raw data strings
 	if !modeSingle {
+		// Ensure value of comment char
+		if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
+			*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang, *fileInput)
+		} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
+			util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", true)
+		}
+
 		ensureFileInputString(fileInput)
 	}
 	ensureDataInputString(dataInput)
