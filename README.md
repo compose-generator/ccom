@@ -26,19 +26,34 @@ Please visit the documentation at [ccom.compose-generator.com](https://ccom.comp
 ## Supported data formats
 |            | Line comment iden | Block comment iden open | Block comment iden close |
 |------------|-------------------|-------------------------|--------------------------|
-| YAML       | #                 | -                       | -                        |
-| Java       | //                | /*                      | */                       |
-| Go         | //                | /*                      | */                       |
+| Assembly   | ;                 | -                       | -                        |
 | C          | //                | /*                      | */                       |
 | C++        | //                | /*                      | */                       |
-| JavaScript | //                | /*                      | */                       |
-| TypeScript | //                | /*                      | */                       |
+| Dart       | //                | /*                      | */                       |
 | Dockerfile | #                 | -                       | -                        |
+| Elixir     | #                 | """                     | """                      |
+| Go         | //                | /*                      | */                       |
+| Groovy     | //                | /*                      | */                       |
+| Haskell    | --                | -{                      | -}                       |
 | HTML       | -                 | <!--                    | -->                      |
-| XML        | -                 | <!--                    | -->                      |
-| Rust       | //                | /*                      | */                       |
-| Assembly   | ;                 | -                       | -                        |
+| Java       | //                | /*                      | */                       |
+| JavaScript | //                | /*                      | */                       |
+| Julia      | #                 | #=                      | =#                       |
+| Kotlin     | //                | /*                      | */                       |
+| Lua        | --                | --[[                    | ]]                       |
+| Pascal     | -                 | (*                      | *)                       |
+| Perl       | #                 | =item                   | =cut                     |
+| PHP        | //                | /*                      | */                       |
+| Powershell | #                 | <#                      | #>                       |
 | Python     | #                 | """                     | """                      |
+| R          | #                 | -                       | -                        |
+| Ruby       | #                 | =begin                  | =end                     |
+| Rust       | //                | /*                      | */                       |
+| SQL        | --                | -                       | -                        |
+| Swift      | //                | /*                      | */                       |
+| TypeScript | //                | /*                      | */                       |
+| XML        | -                 | <!--                    | -->                      |
+| YAML       | #                 | -                       | -                        |
 
 *Note: Formats like JSON, where no comments are supported can also work with CCom, however then the file input is not valid before pre-processing it with CCom.*
 
