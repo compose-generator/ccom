@@ -284,6 +284,7 @@ UNICODE               --> Any unicode character
 -   `if`
 -   `has`
 -   `not`
+-   `contains`
 
 ## Special characters
 -   `?`

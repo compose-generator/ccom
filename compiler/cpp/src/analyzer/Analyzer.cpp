@@ -6,7 +6,7 @@
 
 Analyzer::Analyzer(bool isSingleStatement, const std::string &fileInput, JSONParser jsonParser,
                    const std::string &inputCommentLineIdentifiers, const std::string &inputCommentBlockOpenIdentifiers,
-                   const std::string &inputCommentBlockCloseIdentifiers): jsonParser(jsonParser) {
+                   const std::string &inputCommentBlockCloseIdentifiers): jsonParser(std::move(jsonParser)) {
     this->isSingleStatement = isSingleStatement;
 
     // Initialize parser
@@ -84,15 +84,15 @@ void Analyzer::checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt) {
     switch (compStmt->getValue()->getType()) {
         case ValueExprType::STRING_EXPR:
             if (!jsonKeyValue.is_string())
-                throw IncompatibleTypesException(jsonKeyValue.dump(), "string");
+                throw IncompatibleTypesException(jsonKeyValue.dump(), "a string");
             return;
         case ValueExprType::BOOLEAN_EXPR:
             if (!jsonKeyValue.is_boolean())
-                throw IncompatibleTypesException(jsonKeyValue.dump(), "boolean");
+                throw IncompatibleTypesException(jsonKeyValue.dump(), "a boolean");
             return;
         case ValueExprType::NUMBER_EXPR:
             if (!jsonKeyValue.is_number_integer())
-                throw IncompatibleTypesException(jsonKeyValue.dump(), "integer");
+                throw IncompatibleTypesException(jsonKeyValue.dump(), "an integer");
             return;
         case ValueExprType::VALUE_EXPR:
             throw UnknownDataTypeException(jsonKeyValue.dump());

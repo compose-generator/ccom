@@ -1,0 +1,6 @@
+{
+  "test": {
+    "key": false
+  },
+  "some-other-key": 123
+}

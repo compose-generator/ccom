@@ -8,7 +8,7 @@ class IncompatibleTypesException : public std::exception {
 public:
     // Constructors
     explicit IncompatibleTypesException(const std::string& valueDump, const std::string& expectedTypeName) {
-        errorMessage = "Incompatible data types: '" + valueDump + "' is not a " + expectedTypeName;
+        errorMessage = "Incompatible data types: '" + valueDump + "' is not " + expectedTypeName;
     }
 
     // Public methods
