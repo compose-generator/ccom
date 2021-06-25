@@ -78,6 +78,8 @@ void Analyzer::checkDataTypeCompatibilityStmtList(StmtLstExprAST* stmtLst) {
 }
 
 void Analyzer::checkDataTypeCompatibilityCompStmt(CompStmtExprAST* compStmt) {
+    // Abort check successfully when the key does not exist. Non-existent keys will be evaluated to false by the interpreter
+    if (!jsonParser.jsonKeyExists(compStmt->getKey())) return;
     // Check if 'value' has the same type as the JSON key value
     auto jsonKeyValue = jsonParser.getJSONValueFromKey(compStmt->getKey());
 
