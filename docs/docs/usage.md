@@ -78,7 +78,7 @@ If you did not find your language in the list, you can set the comment identifie
 `ccom --data ./test-data.json --line-comment-iden "//" --block-comment-iden-open "/*" --block-comment-iden-close "*/" ./test-file.java`
 
 ## Switch compilers
-CCom has multiple compiler backend implementations, which have different strengths and weaknesses. The default compiler backend is called `cpp`.
+CCom has multiple compiler frontend implementations, which have different strengths and weaknesses. The default compiler backend is called `cpp`.
 To switch between compiler implementations, you can use `--compiler` / `-c`. Valid values are `cpp` and `java`.
 
 ## Benchmarking
