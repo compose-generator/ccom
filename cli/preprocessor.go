@@ -157,62 +157,14 @@ func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden stri
 		lang = filepath.Ext(fileInput)[1:]
 	}
 
-	switch lang {
-	case "yaml", "yml", "docker", "dockerfile":
-		lineCommentIden = "#"
-		blockCommentIdenOpen = ""
-		blockCommentIdenClose = ""
-	case "python", "py", "elixir", "ex", "exs":
-		lineCommentIden = "#"
-		blockCommentIdenOpen = "\"\"\""
-		blockCommentIdenClose = "\"\"\""
-	case "java", "c", "c++", "cpp", "golang", "go", "javascript", "js", "typescript", "ts", "rust", "rs", "swift", "php", "kotlin", "kt", "dart", "groovy":
-		lineCommentIden = "//"
-		blockCommentIdenOpen = "/*"
-		blockCommentIdenClose = "*/"
-	case "html", "htm", "xml":
-		lineCommentIden = ""
-		blockCommentIdenOpen = "<!--"
-		blockCommentIdenClose = "-->"
-	case "haskell", "hs":
-		lineCommentIden = "--"
-		blockCommentIdenOpen = "{-"
-		blockCommentIdenClose = "-}"
-	case "lua":
-		lineCommentIden = "--"
-		blockCommentIdenOpen = "--[["
-		blockCommentIdenClose = "]]"
-	case "pascal", "pas":
-		lineCommentIden = ""
-		blockCommentIdenOpen = "(*"
-		blockCommentIdenClose = "*)"
-	case "perl", "pl":
-		lineCommentIden = "#"
-		blockCommentIdenOpen = "=item"
-		blockCommentIdenClose = "=cut"
-	case "r":
-		lineCommentIden = "#"
-		blockCommentIdenOpen = ""
-		blockCommentIdenClose = ""
-	case "powershell", "ps":
-		lineCommentIden = "#"
-		blockCommentIdenOpen = "<#"
-		blockCommentIdenClose = "#>"
-	case "ruby", "rb":
-		lineCommentIden = "#"
-		blockCommentIdenOpen = "=begin"
-		blockCommentIdenClose = "=end"
-	case "sql":
-		lineCommentIden = "--"
-		blockCommentIdenOpen = ""
-		blockCommentIdenClose = ""
-	case "julia", "jl":
-		lineCommentIden = "#"
-		blockCommentIdenOpen = "#="
-		blockCommentIdenClose = "=#"
-	default:
+	languageList := util.GetLanguageList()
+	language, found := languageList[lang]
+	if !found {
 		util.Error("Unknown lang", true)
 	}
+	lineCommentIden = language.LineComIden
+	blockCommentIdenOpen = language.BlockComIdenOpen
+	blockCommentIdenClose = language.BlockComIdenClose
 	return
 }
 
