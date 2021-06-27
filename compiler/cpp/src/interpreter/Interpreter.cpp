@@ -123,12 +123,14 @@ bool Interpreter::evaluateHasStatement(HasStmtExprAST* hasStmt) {
 }
 
 bool Interpreter::evaluateCompStatement(CompStmtExprAST* compStmt) {
+    if (!jsonParser.jsonKeyExists(compStmt->getKey())) return false;
     json keyValue = jsonParser.getJSONValueFromKey(compStmt->getKey());
     Operator op = compStmt->getOperator();
     return compareJsonWithValue(keyValue, compStmt->getValue().get(), op);
 }
 
 bool Interpreter::evaluateContainsStatement(ContainsStmtExprAST* containsStmt) {
+    if (!jsonParser.jsonKeyExists(containsStmt->getListKey())) return false;
     json listKeyValue = jsonParser.getJSONValueFromKey(containsStmt->getListKey());
 
     Operator op = containsStmt->getOperator();
