@@ -1,0 +1,10 @@
+test: "Value"
+yaml:
+  structure:
+    #? if test.data contains name == "testService" {
+    # test: payload
+    #? }
+  prefix:
+    data: false
+end:
+  structure: 123

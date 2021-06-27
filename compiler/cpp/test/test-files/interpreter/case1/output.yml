@@ -1,0 +1,8 @@
+test: "Value"
+yaml:
+  structure:
+    test: payload
+  prefix:
+    data: false
+end:
+  structure: 123
