@@ -84,8 +84,7 @@ const AnalyzerParams ANALYZER_TEST_PARAMETERS[] = {
         }
 };
 
-class AnalyzerTests : public ::testing::TestWithParam<AnalyzerParams> {
-};
+class AnalyzerTests : public ::testing::TestWithParam<AnalyzerParams> {};
 
 TEST_P(AnalyzerTests, TestAnalyzerWithValidAndInvalidTestFiles) {
     AnalyzerParams param = GetParam();
