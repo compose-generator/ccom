@@ -33,6 +33,15 @@ const InterpreterParams INTERPRETER_TEST_PARAMETERS[] = {
                 "*/",
                 false,
                 ""
+        },
+        {
+                "case3",
+                "html",
+                "",
+                "<!--",
+                "-->",
+                false,
+                ""
         }
 };
 
