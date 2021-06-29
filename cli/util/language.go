@@ -2,6 +2,7 @@ package util
 
 import "ccom/model"
 
+// GetLanguageList returns a list of language descriptors for each supported language
 func GetLanguageList() map[string]model.LanguageDescriptor {
 	languages := make(map[string]model.LanguageDescriptor)
 

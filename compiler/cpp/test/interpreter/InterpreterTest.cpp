@@ -19,6 +19,15 @@ const InterpreterParams INTERPRETER_TEST_PARAMETERS[] = {
         {
                 "case1",
                 "yml",
+                "#",
+                "",
+                "",
+                false,
+                ""
+        },
+        {
+                "case1",
+                "cpp",
                 "//",
                 "/*",
                 "*/",
