@@ -44,7 +44,7 @@ dockers:
       - chillibits/ccom:{{ .Version }}-amd64
       - chillibits/ccom:latest-amd64
     dockerfile: Dockerfile
-    use_buildx: true
+    use: buildx
     goarch: amd64
     extra_files:
       - bin
@@ -62,7 +62,7 @@ dockers:
       - chillibits/ccom:{{ .Version }}-i386
       - chillibits/ccom:latest-i386
     dockerfile: Dockerfile
-    use_buildx: true
+    use: buildx
     goarch: 386
     extra_files:
       - bin
@@ -80,7 +80,7 @@ dockers:
       - chillibits/ccom:{{ .Version }}-arm32v7
       - chillibits/ccom:latest-arm32v7
     dockerfile: Dockerfile
-    use_buildx: true
+    use: buildx
     goarch: arm
     goarm: 7
     extra_files:
@@ -99,7 +99,7 @@ dockers:
       - chillibits/ccom:{{ .Version }}-arm64v8
       - chillibits/ccom:latest-arm64v8
     dockerfile: Dockerfile
-    use_buildx: true
+    use: buildx
     goarch: arm64
     extra_files:
       - bin
