@@ -26,7 +26,7 @@ const InterpreterParams INTERPRETER_TEST_PARAMETERS[] = {
                 ""
         },
         {
-                "case1",
+                "case2",
                 "cpp",
                 "//",
                 "/*",
