@@ -248,7 +248,7 @@ To access `0.7.0`, you can use the key `version`. To access `./spring-maven`, yo
 Start symbol: `CONTENT`.
 
 ```
-CONTENT               --> (CHARS SECTION)* CHARS
+CONTENT               --> CHARS (SECTION CHARS)*
 SECTION               --> COM_LINE_BLOCK | COM_BLOCK_BLOCK
 COM_LINE_BLOCK        --> COM_LINE_IDEN if STMT_LST COM_LINE_IDEN? { PAYLOAD COM_LINE_IDEN }
 COM_BLOCK_BLOCK       --> COM_BLOCK_IDEN_OPEN IF_BLOCK COM_BLOCK_IDEN_CLOSE
