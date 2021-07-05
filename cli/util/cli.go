@@ -21,10 +21,10 @@ func ExecuteAndWaitWithOutput(c ...string) string {
 			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
 				Pel()
 				Pel()
-				Error("Compiler exited with status code "+strconv.Itoa(status.ExitStatus())+"\nFailed to compile: "+string(output), true)
+				Error("Compiler exited with status code "+strconv.Itoa(status.ExitStatus())+"\nFailed to compile: "+string(output), status.ExitStatus())
 			}
 		} else {
-			Error("Failed to call compiler executable", true)
+			Error("Failed to call compiler executable", 1)
 		}
 	}
 	return strings.TrimRight(string(output), "\r\n")

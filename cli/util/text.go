@@ -33,10 +33,10 @@ func Done() {
 }
 
 // Error prints an error message in red to the console and exits if the exit flag was set
-func Error(message string, exit bool) {
+func Error(message string, exitCode int) {
 	color.Red(message)
-	if exit {
-		os.Exit(1)
+	if exitCode != 0 {
+		os.Exit(exitCode)
 	}
 }
 
