@@ -49,6 +49,7 @@ Please visit the documentation at [ccom.compose-generator.com](https://ccom.comp
 | R          | #                 | -                       | -                        |
 | Ruby       | #                 | =begin                  | =end                     |
 | Rust       | //                | /*                      | */                       |
+| Spice      | //                | /*                      | */                       |
 | SQL        | --                | -                       | -                        |
 | Swift      | //                | /*                      | */                       |
 | TypeScript | //                | /*                      | */                       |
