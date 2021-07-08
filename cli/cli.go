@@ -154,11 +154,15 @@ func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden stri
 		if !util.FileExists(fileInput) {
 			util.Error("Please use lang 'auto' only in combination of valid file paths as file input", 1)
 		}
-		lang = filepath.Ext(fileInput)[1:]
+		if filepath.Ext(fileInput) != "" {
+			lang = filepath.Ext(fileInput)[1:]
+		} else {
+			lang = filepath.Base(fileInput)
+		}
 	}
 
 	languageList := util.GetLanguageList()
-	language, found := languageList[lang]
+	language, found := languageList[strings.ToLower(lang)]
 	if !found {
 		util.Error("Unknown lang", 1)
 	}
