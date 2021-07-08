@@ -63,7 +63,7 @@ Please visit the documentation at [ccom.compose-generator.com](https://ccom.comp
 
 ```sh
 $ curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
-$ sudo add-apt-repository "deb https://admin.repo.chillibits.com/repository/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main"
+$ sudo add-apt-repository "deb https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main"
 $ sudo apt-get update
 $ sudo apt-get install ccom
 ```
