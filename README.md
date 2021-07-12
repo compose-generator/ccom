@@ -165,7 +165,7 @@ property1: "value1"
 ...
 ```
 
-Another example for Java with line comments (whatever you want to achive with that)
+Another example for Java with line comments (whatever you want to achieve with that)
 ```java
 public class Example {
 	public static void main(String[] args) {
