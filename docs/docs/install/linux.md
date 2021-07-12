@@ -7,10 +7,9 @@ title: Install on Linux
     To install CCom on Debian, execute the following commands in your terminal:
     ```sh
     curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
-	sudo add-apt-repository "deb https://admin.repo.chillibits.com/repository/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main"
+	sudo add-apt-repository "deb https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main"
 	sudo apt-get update
 	sudo apt-get install ccom
-
     ```
 
 === "Fedora"
@@ -19,7 +18,6 @@ title: Install on Linux
     sudo dnf -y install dnf-plugins-core
 	sudo dnf config-manager --add-repo https://server.chillibits.com/files/repo/fedora.repo
 	sudo dnf install ccom
-
     ```
 
 === "CentOS"
@@ -28,7 +26,6 @@ title: Install on Linux
     sudo yum install -y yum-utils
 	sudo yum-config-manager --add-repo https://server.chillibits.com/files/repo/centos.repo
 	sudo yum install ccom
-
     ```
 
 === "Alpine"
