@@ -26,6 +26,7 @@ private:
     bool evaluateContainsStatement(ContainsStmtExprAST*);
     bool compareJsonWithValue(json&, ValueExprAST*, Operator);
     template <typename T> bool evaluateCondition(T, T, Operator);
+    bool hasSuffix(const std::string&, const std::string&);
 
     // Members
     Analyzer analyzer;
