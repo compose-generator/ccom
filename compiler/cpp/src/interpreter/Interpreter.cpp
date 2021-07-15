@@ -71,6 +71,7 @@ std::string Interpreter::getOutputOfRelevantSection(SectionExprAST* relevantSect
                 // Evaluate condition and append payload to output string if condition was truthy
                 if (evaluateStmtList(ifBlock->getStmtList().get())) {
                     result += ifBlock->getPayload()->getValue();
+                    if (!hasSuffix(result, "\n")) result += "\n";
                 }
                 break;
             }
@@ -201,4 +202,8 @@ template<typename T> bool Interpreter::evaluateCondition(T leftValue, T rightVal
         case OP_LESS_EQUAL: return leftValue <= rightValue;
     }
     return false;
+}
+
+bool Interpreter::hasSuffix(const std::string& str, const std::string& suffix) {
+    return str.size() >= suffix.size() && str.compare(str.size() - suffix.size(), suffix.size(), suffix) == 0;
 }
