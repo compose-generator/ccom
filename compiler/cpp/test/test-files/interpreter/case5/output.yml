@@ -1,0 +1,4 @@
+test-attr: "String"
+conditional-parent:
+  condition: true
+  condition2: true

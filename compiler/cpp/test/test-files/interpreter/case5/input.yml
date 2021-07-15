@@ -1,0 +1,8 @@
+test-attr: "String"
+conditional-parent:
+  #? if has test.data {
+  #condition: true
+  # }
+  # if test.data contains preselected == true {
+  #condition2: true
+  # }
