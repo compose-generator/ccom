@@ -42,6 +42,24 @@ const InterpreterParams INTERPRETER_TEST_PARAMETERS[] = {
                 "-->",
                 false,
                 ""
+        },
+        {
+                "case4",
+                "html",
+                "",
+                "<!--",
+                "-->",
+                false,
+                ""
+        },
+        {
+                "case5",
+                "yml",
+                "#",
+                "",
+                "",
+                false,
+                ""
         }
 };
 

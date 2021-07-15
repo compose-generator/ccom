@@ -7,7 +7,7 @@ go env -w GOARCH=amd64
 go build -o ../bin/ccom.exe .
 
 cd ../bin
-cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" ../compiler/cpp
+cmake -DCMAKE_BUILD_TYPE=Release -G "CodeBlocks - MinGW Makefiles" ../compiler/cpp
 mingw32-make
 
 move src\CCom_run.exe ccomc.exe
