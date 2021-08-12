@@ -230,6 +230,15 @@ func GetLanguageList() map[string]model.LanguageDescriptor {
 	languages["rust"] = rust
 	languages["rs"] = rust
 
+	// Spice
+	spice := model.LanguageDescriptor{
+		Name:              "Spice",
+		LineComIden:       "//",
+		BlockComIdenOpen:  "/*",
+		BlockComIdenClose: "*/",
+	}
+	languages["spice"] = spice
+
 	// SQL
 	sql := model.LanguageDescriptor{
 		Name:              "SQL",

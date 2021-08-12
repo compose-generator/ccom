@@ -11,19 +11,19 @@ For example a call could look like this:
 
 For customization, you have following cli options:
 
-| Option                                | Shortcut         | Description                                                                           | Default |
-|---------------------------------------|------------------|---------------------------------------------------------------------------------------|---------|
-| `--benchmark <number>`                | `-b <no>`        | Execute compiler benchmarks. n is the number of benchmark runs                        | 0       |
-| `--compiler <name>`                   | `-c <name>`      | Can be used to switch the compiler backend. Valid inputs are `cpp` and `java`         | "cpp"   |
-| `--data <data>`                       | `-d <data>`      | JSON string or path to JSON file, which holds the evaluation work data                | {}      |
-| `--lang <lang>`                       | `-l <lang>`      | File format / programming language (e.g. `yaml`, `java`, `html`, ...)                 | "auto"* |
-| `--mode-single`                       | `-m`             | Set input mode to single statement list                                               | -       |
-| `--out-file <path>`                   | `-o <path>`      | Path to output file. If you omit this flag, the output will be printed to the console | -       |
-| `--silent`                            | `-s`             | Only print raw compiler output and no debug output                                    | -       |
-| `--force`                             | `-f`             | Ignore safety checks. Warning: This could cause demage                                | -       |
-| `--line-comment-iden <string>`        | `-lci <string>`  | Specifies the line comment char(s) of your data format                                | "#"     |
-| `--block-comment-iden-open <string>`  | `-bcio <string>` | Specifies the opening block comment char(s) of your data format                       | ""      |
-| `--block-comment-iden-close <string>` | `-bcic <string>` | Specifies the closing block comment char(s) of your data format                       | ""      |
+| Option                                        | Shortcut         | Description                                                                           | Default |
+|-----------------------------------------------|------------------|---------------------------------------------------------------------------------------|---------|
+| `--benchmark <number>`                        | `-b <no>`        | Execute compiler benchmarks. n is the number of benchmark runs                        | 0       |
+| `--compiler <name>` (temporarily unavailable) | `-c <name>`      | Can be used to switch the compiler backend. Valid inputs are `cpp` and `java`         | "cpp"   |
+| `--data <data>`                               | `-d <data>`      | JSON string or path to JSON file, which holds the evaluation work data                | {}      |
+| `--lang <lang>`                               | `-l <lang>`      | File format / programming language (e.g. `yaml`, `java`, `html`, ...)                 | "auto"* |
+| `--mode-single`                               | `-m`             | Set input mode to single statement list                                               | -       |
+| `--out-file <path>`                           | `-o <path>`      | Path to output file. If you omit this flag, the output will be printed to the console | -       |
+| `--silent`                                    | `-s`             | Only print raw compiler output and no debug output                                    | -       |
+| `--force`                                     | `-f`             | Ignore safety checks. Warning: This could cause demage                                | -       |
+| `--line-comment-iden <string>`                | `-lci <string>`  | Specifies the line comment char(s) of your data format                                | "#"     |
+| `--block-comment-iden-open <string>`          | `-bcio <string>` | Specifies the opening block comment char(s) of your data format                       | ""      |
+| `--block-comment-iden-close <string>`         | `-bcic <string>` | Specifies the closing block comment char(s) of your data format                       | ""      |
 
 ## File mode vs single mode
 CCom supports two modes of usage: <br>
@@ -77,7 +77,7 @@ As CCom does not know the content type of your input file, you sometimes have to
 If you did not find your language in the list, you can set the comment identifiers by hand. Here is an example: <br>
 `ccom --data ./test-data.json --line-comment-iden "//" --block-comment-iden-open "/*" --block-comment-iden-close "*/" ./test-file.java`
 
-## Switch compilers
+## Switch compilers (temporarily unavailable)
 CCom has multiple compiler frontend implementations, which have different strengths and weaknesses. The default compiler backend is called `cpp`.
 To switch between compiler implementations, you can use `--compiler` / `-c`. Valid values are `cpp` and `java`.
 

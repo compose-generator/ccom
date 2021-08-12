@@ -49,12 +49,12 @@ func main() {
 				Aliases: []string{"bcic"},
 				Usage:   "Specifies the closing block comment identifier(s) of your data format",
 			},
-			&cli.StringFlag{
+			/*&cli.StringFlag{
 				Name:        "compiler",
 				Aliases:     []string{"c"},
 				DefaultText: "cpp",
 				Usage:       "CCom supports several compiler implementations, which you can choose from. Possible options are: 'cpp' (default), 'java', more to come ...",
-			},
+			},*/
 			&cli.StringFlag{
 				Name:        "data",
 				Aliases:     []string{"d"},
@@ -96,7 +96,7 @@ func main() {
 		Action: func(c *cli.Context) error {
 			processInput(
 				c.Args().Get(0),
-				c.String("compiler"),
+				/*c.String("compiler")*/ "cpp",
 				c.Int("benchmark"),
 				c.String("block-comment-iden-open"),
 				c.String("block-comment-iden-close"),

@@ -102,7 +102,7 @@ func analyze(
 		if *lineCommentIden == "" && *blockCommentIdenOpen == "" && *blockCommentIdenClose == "" {
 			*lineCommentIden, *blockCommentIdenOpen, *blockCommentIdenClose = getCommentIdenFromLang(lang, *fileInput)
 		} else if (*blockCommentIdenOpen == "" && *blockCommentIdenClose != "") || (*blockCommentIdenOpen != "" && *blockCommentIdenClose == "") {
-			util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", true)
+			util.Error("You cannot specify only one of blockCommentIdenOpen and blockCommentIdenClose. Please specify both or none.", 1)
 		}
 
 		ensureFileInputString(fileInput)
@@ -139,11 +139,11 @@ func runCompilerExecutable(
 	case "java":
 		executableName = "ccomc-java.jar"
 	default:
-		util.Error("Invalid compiler name. Only 'cpp' and 'java' are allowed values.", true)
+		util.Error("Invalid compiler name. Only 'cpp' and 'java' are allowed values.", 1)
 	}
 	// Check if executable exists
 	if !util.CommandExists(executablePath + executableName) {
-		util.Error("Compiler executable not found. Please check your installation", true)
+		util.Error("Compiler executable not found. Please check your installation", 1)
 	}
 	// Execute compiler with user inputs
 	return util.ExecuteAndWaitWithOutput(executablePath+executableName, strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
@@ -152,15 +152,19 @@ func runCompilerExecutable(
 func getCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
 	if lang == "" || lang == "auto" {
 		if !util.FileExists(fileInput) {
-			util.Error("Please use lang 'auto' only in combination of valid file paths as file input", true)
+			util.Error("Please use lang 'auto' only in combination of valid file paths as file input", 1)
 		}
-		lang = filepath.Ext(fileInput)[1:]
+		if filepath.Ext(fileInput) != "" {
+			lang = filepath.Ext(fileInput)[1:]
+		} else {
+			lang = filepath.Base(fileInput)
+		}
 	}
 
 	languageList := util.GetLanguageList()
-	language, found := languageList[lang]
+	language, found := languageList[strings.ToLower(lang)]
 	if !found {
-		util.Error("Unknown lang", true)
+		util.Error("Unknown lang", 1)
 	}
 	lineCommentIden = language.LineComIden
 	blockCommentIdenOpen = language.BlockComIdenOpen
@@ -173,7 +177,7 @@ func ensureFileInputString(text *string) {
 	if util.FileExists(*text) && !util.IsDir(*text) {
 		result, err := util.GetFileContents(*text)
 		if err != nil {
-			util.Error("Could not read input file", true)
+			util.Error("Could not read input file", 1)
 		}
 		*text = result
 	}
@@ -184,7 +188,7 @@ func ensureDataInputString(text *string) {
 	if util.FileExists(*text) && !util.IsDir(*text) {
 		result, err := util.GetFileContents(*text)
 		if err != nil {
-			util.Error("Could not read data file", true)
+			util.Error("Could not read data file", 1)
 		}
 		*text = result
 	}
@@ -193,5 +197,5 @@ func ensureDataInputString(text *string) {
 		return
 	}
 	// Noting => throw error
-	util.Error("The data file parameter must be a valid filepath or a JSON string", true)
+	util.Error("The data file parameter must be a valid filepath or a JSON string", 1)
 }
