@@ -52,4 +52,5 @@ jobs:
 
       - name: Run security scan
         working-directory: cli
+        shell: bash
         run: gosec -exclude=G204,G304 ./...
