@@ -56,7 +56,9 @@ func processInput(
 				}
 			}
 			// Write output to file
-			ioutil.WriteFile(outFile, []byte(result), 0777)
+			if err := ioutil.WriteFile(outFile, []byte(result), 0600); err != nil {
+				util.Error("Could not write output file", 1)
+			}
 		} else { // Print to console
 			if !silentFlag {
 				util.Pel()
