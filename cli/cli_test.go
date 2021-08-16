@@ -56,7 +56,7 @@ func TestGetComIdenFromLang_Success3(t *testing.T) {
 		assert.Equal(t, "*/", blockComIdenClose)
 	}
 	// Auto
-	langList = []string{"java", "c", "cpp", "go", "js", "ts", "rs"}
+	langList = []string{"java", "go", "js", "ts", "rs"}
 	for _, lang := range langList {
 		lineComIden, blockComIdenOpen, blockComIdenClose := getCommentIdenFromLang("auto", "./test-files/test."+lang)
 		assert.Equal(t, "//", lineComIden)
