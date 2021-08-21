@@ -37,7 +37,7 @@ jobs:
           mkdir -p ./compiler/cpp/lib/json
           cd ./compiler/cpp/lib
           git clone https://github.com/google/googletest.git
-          curl -sSL "https://github.com/nlohmann/json/releases/download/v3.9.1/json.hpp" --output json/json.hpp
+          curl -sSL "https://github.com/nlohmann/json/releases/download/v3.10.0/json.hpp" --output json/json.hpp
       
       - name: Configure
         run: ./dockcross cmake -Bbin -H./compiler/cpp -GNinja
