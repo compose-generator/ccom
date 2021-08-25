@@ -59,20 +59,12 @@ CCom accepts data in the JSON format only, but you can give it to the cli in one
 ## Language
 As CCom does not know the content type of your input file, you sometimes have to specify the files language or the comment identifiers. CCom is smart enough to recognize the language for some file extensions, but if the file contents does not match the extension, you can set the language manually via`--lang` / `-l`. This should work out for following languages:
 
-- `yaml`
-- `java`
-- `go`
-- `c`
-- `cpp`
-- `javascript`
-- `typescript`
-- `dockerfile`
-- `html`
-- `xml`
-- `rust`
-- `assembly`
-- `python`
-- more to come ...
+| Assembly | C          | C++    | Dart       | Dockerfile         |
+| Elexir   | Go         | Groovy | Haskell    | HTML               |
+| Java     | JavaScript | Julia  | Kotlin     | Lua                |
+| Pascal   | Perl       | PHP    | Powershell | Python             |
+| R        | Ruby       | Rust   | Spice      | SQL                |
+| Swift    | TypeScript | XML    | YAML       | *more to come ...* |
 
 If you did not find your language in the list, you can set the comment identifiers by hand. Here is an example: <br>
 `ccom --data ./test-data.json --line-comment-iden "//" --block-comment-iden-open "/*" --block-comment-iden-close "*/" ./test-file.java`
