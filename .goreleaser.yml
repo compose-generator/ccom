@@ -11,8 +11,10 @@ builds:
       - 386
     goarm:
       - 5
-      #- 6 # Waiting for third party fix
+      - 6
       - 7
+    env:
+      - CGO_ENABLED=0
     mod_timestamp: '{{ .CommitTimestamp }}'
     ldflags:
       - -s -w -X main.version={{ .Version }} -X main.commit={{ .Commit }} -X main.date={{ .CommitDate }} -X main.builtBy=github-actions
@@ -139,7 +141,10 @@ docker_manifests:
 release:
   name_template: v{{ .Tag }}
   prerelease: auto
-  footer: Visit [ccom.compose-generator.com](https://ccom.compose-generator.com) to test out the new features!
+  footer: |
+    ---
+    
+    __Visit [ccom.compose-generator.com](https://ccom.compose-generator.com) to test the new features!__
 announce:
   twitter:
     enabled: true
