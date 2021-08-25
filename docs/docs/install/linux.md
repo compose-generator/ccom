@@ -35,11 +35,11 @@ title: Install on Linux
 You can also install CCom from a Linux package.
 
 === "Debian/Ubuntu/Raspbian"
-    [Download amd64 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.deb){ .md-button .md-button--primary }
-    [Download arm64 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.deb){ .md-button .md-button--primary }
-    [Download armv5 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.deb){ .md-button .md-button--primary }
-    [Download armv6 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.deb){ .md-button .md-button--primary }
-    [Download armv7 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.deb){ .md-button .md-button--primary }
+    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.deb){ .md-button .md-button--primary }
+    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.deb){ .md-button .md-button--primary }
+    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.deb){ .md-button .md-button--primary }
+    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.deb){ .md-button .md-button--primary }
+    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.deb){ .md-button .md-button--primary }
 
     To install it, execute the following command:
     ```sh
@@ -47,11 +47,11 @@ You can also install CCom from a Linux package.
     ```
 
 === "Fedora/CentOS"
-    [Download amd64 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.rpm){ .md-button .md-button--primary }
-    [Download arm64 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.rpm){ .md-button .md-button--primary }
-    [Download armv5 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.rpm){ .md-button .md-button--primary }
-    [Download armv6 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.rpm){ .md-button .md-button--primary }
-    [Download armv7 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.rpm){ .md-button .md-button--primary }
+    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.rpm){ .md-button .md-button--primary }
+    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.rpm){ .md-button .md-button--primary }
+    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.rpm){ .md-button .md-button--primary }
+    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.rpm){ .md-button .md-button--primary }
+    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.rpm){ .md-button .md-button--primary }
 
     To install it, execute the following command:
     ```sh
@@ -59,11 +59,11 @@ You can also install CCom from a Linux package.
     ```
 
 === "Alpine"
-    [Download amd64 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.apk){ .md-button .md-button--primary }
-    [Download arm64 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.apk){ .md-button .md-button--primary }
-    [Download armv5 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.apk){ .md-button .md-button--primary }
-    [Download armv6 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.apk){ .md-button .md-button--primary }
-    [Download armv7 :fontawesome-solid-download:](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.apk){ .md-button .md-button--primary }
+    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.apk){ .md-button .md-button--primary }
+    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.apk){ .md-button .md-button--primary }
+    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.apk){ .md-button .md-button--primary }
+    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.apk){ .md-button .md-button--primary }
+    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.apk){ .md-button .md-button--primary }
 
     To install it, execute the following command:
     ```sh
