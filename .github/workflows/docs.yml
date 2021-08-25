@@ -1,12 +1,11 @@
 # Publish documentation
-
 name: Publish documentation
 
 on:
   push:
     branches:
       - 'main'
-      - 'docs/**'
+      #- 'docs/**'
       #- 'feature/**'
     paths:
       - 'docs/**'
@@ -18,12 +17,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: 3.x
+
       - name: Install dependencies
         run: pip install mkdocs-material mkdocs-minify-plugin
+
       - name: Build and deploy
         run: |
           cd docs

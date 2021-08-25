@@ -1,5 +1,4 @@
 # Publish Compiler binaries
-
 name: Release - Cross compilation
 
 on:
