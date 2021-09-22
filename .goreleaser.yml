@@ -153,3 +153,6 @@ announce:
   twitter:
     enabled: true
     message_template: 'CCom {{ .Tag }} is now available! Check out the new features: ccom.compose-generator.com!'
+milestones:
+  - close: true
+    fail_on_error: false
