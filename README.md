@@ -59,7 +59,7 @@ Please visit the documentation at [ccom.compose-generator.com](https://ccom.comp
 *Note: Formats like JSON, where no comments are supported can also work with CCom, however then the file input is not valid before pre-processing it with CCom.*
 
 ## Install
-<details><summary><b>Install on Debian / Ubuntu / Raspbian</b></summary>
+<details><summary><b>Install on Debian / Ubuntu</b></summary>
 <p>
 
 ```sh
@@ -96,10 +96,15 @@ $ sudo yum install ccom
 </p>
 </details>
 
-<details><summary><b>Install on Alpine</b></summary>
+<details><summary><b>Install on Raspbian</b></summary>
 <p>
 
-<i>CCom will be published for Alpine soon ...</i>
+```sh
+curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
+sudo echo "deb [arch=armhf] https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main" > /etc/apt/sources.list.d/chillibits.list
+sudo apt-get update
+sudo apt-get install ccom
+```
 
 </p>
 </details>
