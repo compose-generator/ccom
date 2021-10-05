@@ -3,8 +3,8 @@ title: Install on Linux
 ---
 
 ### Install from repository
-=== "Debian/Ubuntu/Raspbian"
-    To install CCom on Debian, execute the following commands in your terminal:
+=== "Debian/Ubuntu"
+    To install CCom on Debian or Ubuntu, execute the following commands in your terminal:
     ```sh
     curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
 	sudo add-apt-repository "deb https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main"
@@ -28,8 +28,14 @@ title: Install on Linux
 	sudo yum install ccom
     ```
 
-=== "Alpine"
-    *CCom will be published for Alpine soon ...*
+=== "Raspbian"
+    To install CCom on Raspbian, execute the following commands in your terminal:
+    ```sh
+    curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
+	sudo echo "deb [arch=armhf] https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main" > /etc/apt/sources.list.d/chillibits.list
+	sudo apt-get update
+	sudo apt-get install ccom
+    ```
 
 ### Install from package file
 You can also install CCom from a Linux package.

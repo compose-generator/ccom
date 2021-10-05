@@ -6,7 +6,7 @@ title: Usage
 In general, you call the cli like so: <br>
 `ccom [options] <input>`
 
-For example a call could look like this:
+For example a call could look like this: <br>
 `ccom --data ./data-file.json --out-file ./output-file.yml ./input-file.yml`
 
 For customization, you have following cli options:
@@ -27,8 +27,9 @@ For customization, you have following cli options:
 
 ## File mode vs single mode
 CCom supports two modes of usage: <br>
-- The input file / string with conditional sections to an output file / string
-- The single mode, which can evaluate a single statement list to a boolean
+
+-	The input file / string with conditional sections to an output file / string
+-	The single mode, which can evaluate a single statement list to a boolean
 
 Here is an example for an input file, in this case a YAML file: <br>
 ```yaml
