@@ -28,9 +28,6 @@ title: Install on Linux
 	sudo yum install ccom
     ```
 
-=== "Alpine"
-    *CCom will be published for Alpine soon ...*
-
 === "Raspbian"
     To install CCom on Raspbian, execute the following commands in your terminal:
     ```sh
