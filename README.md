@@ -5,13 +5,13 @@
   <p align="center">
     <a target="_blank" href="https://github.com/compose-generator/ccom/releases/latest"><img src="https://img.shields.io/github/v/release/compose-generator/ccom?include_prereleases"></a>
     <a target="_blank" href="https://hub.docker.com/r/chillibits/ccom"><img src="https://img.shields.io/docker/pulls/chillibits/ccom"></a>
-    <a target="_blank" href="./.github/workflows/ci-go.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-go.yml/badge.svg"></a>
-	<a target="_blank" href="./.github/workflows/ci-cpp.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-cpp.yml/badge.svg"></a>
-	<a target="_blank" href="./.github/workflows/ci-java.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-java.yml/badge.svg"></a>    
-	<a target="_blank" href="./.github/workflows/codeql-analysis.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/codeql-analysis.yml/badge.svg"></a>
+    <a target="_blank" href="https://github.com/compose-generator/ccom/actions/workflows/ci-go.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-go.yml/badge.svg"></a>
+	<a target="_blank" href="https://github.com/compose-generator/ccom/actions/workflows/ci-cpp.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-cpp.yml/badge.svg"></a>
+	<a target="_blank" href="https://github.com/compose-generator/ccom/actions/workflows/ci-java.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-java.yml/badge.svg"></a>    
+	<a target="_blank" href="https://github.com/compose-generator/ccom/actions/workflows/codeql-analysis.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/codeql-analysis.yml/badge.svg"></a>
     <a target="_blank" href="https://goreportcard.com/report/github.com/compose-generator/ccom"><img src="https://goreportcard.com/badge/github.com/compose-generator/ccom"></a>
     <a target="_blank" href="https://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-    <a target="_blank" href="./LICENSE.md"><img src="https://img.shields.io/github/license/compose-generator/ccom"></a>
+    <a target="_blank" href="./LICENSE"><img src="https://img.shields.io/github/license/compose-generator/ccom"></a>
   </p>
 </p>
 
