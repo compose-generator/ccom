@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="CCom Logo" src="https://github.com/compose-generator/ccom/raw/main/docs/docs/static/avatar.png" height="220" />
+  <img alt="CCom Logo" src="https://github.com/compose-generator/ccom/raw/main/media/logo-wide.png" height="280" />
   <h3 align="center">CCom language</h3>
   <p align="center">Compiler for the CCom (Conditional Comments) language.</p>
   <p align="center">
