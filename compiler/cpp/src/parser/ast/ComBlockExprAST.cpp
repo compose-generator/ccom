@@ -3,8 +3,6 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 #include "ComBlockExprAST.h"
 #include "ComLineBlockExprAST.h" // This import cant be in the header file for some reason
 #include "ComBlockBlockExprAST.h" // This import cant be in the header file for some reason

@@ -3,8 +3,6 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 #include <reader/Reader.h>
 #include <gtest/gtest.h>
 

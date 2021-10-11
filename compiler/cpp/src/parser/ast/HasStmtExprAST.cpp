@@ -3,8 +3,6 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 #include "HasStmtExprAST.h"
 
 std::unique_ptr<KeyExprAST> const &HasStmtExprAST::getKey() {

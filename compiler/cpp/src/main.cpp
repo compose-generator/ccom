@@ -3,9 +3,9 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
-#include "main.h"
+#include <iostream>
+#include <vector>
+#include "interpreter/Interpreter.h"
 
 // CLI call: ./ccom <single-stmt> <file-input> <data-input> <com-line-iden> <com-block-open-iden> <com-block-close-iden>
 // WARNING: Please make sure you include all cli args correctly, because if not, the cli crashes with bad_alloc error

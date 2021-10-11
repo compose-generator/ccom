@@ -3,8 +3,6 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 #include "Interpreter.h"
 
 Interpreter::Interpreter(bool isSingleStatement, const std::string &fileInput, const std::string &dataInput,

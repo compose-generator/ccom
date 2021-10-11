@@ -3,8 +3,6 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 #include "ComLineBlockExprAST.h"
 
 const std::unique_ptr<IfBlockExprAST> &ComLineBlockExprAST::getIfBlock() {

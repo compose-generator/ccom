@@ -3,13 +3,11 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 #include <parser/Parser.h>
 #include <gtest/gtest.h>
-#include "../util/LanguageDescriptor.h"
-#include "../../lib/json/json.hpp"
-#include "../util/FileReader.h"
+#include "util/LanguageDescriptor.h"
+#include "util/FileReader.h"
+#include "../lib/json/json.hpp"
 
 using json = nlohmann::json;
 

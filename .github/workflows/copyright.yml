@@ -5,8 +5,9 @@ on:
   push:
     branches:
       - dev
-#    paths:
-#      - src/**
+    paths:
+      - cli/**
+      - compiler/**
   workflow_dispatch:
 
 jobs:
@@ -22,7 +23,7 @@ jobs:
           CopyrightString: '/*\nCopyright © 2021 Compose Generator Contributors\nAll rights reserved.\n*/\n\n'
           Path: 'cli, compiler'
           IgnorePath: 'cli/vendor, compiler/cpp/test/test-files, compiler/java/src/test'
-          FileType: '.go, .cpp, .java'
+          FileType: '.go, .cpp, .h, .java'
           
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3

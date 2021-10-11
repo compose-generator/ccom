@@ -3,8 +3,6 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 #include "ValueExprAST.h"
 #include "NumberExprAST.h" // This import cant be in the header file for some reason
 #include "BooleanExprAST.h" // This import cant be in the header file for some reason

@@ -3,8 +3,6 @@ Copyright © 2021 Compose Generator Contributors
 All rights reserved.
 */
 
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 #include "Parser.h"
 
 Parser::Parser(bool isSingleStatement, const std::string &fileInput, const std::string &inputCommentLineIdentifiers,

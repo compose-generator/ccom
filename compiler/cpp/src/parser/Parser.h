@@ -1,5 +1,3 @@
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
-
 # pragma once
 
 #include <memory>
