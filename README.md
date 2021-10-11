@@ -1,17 +1,17 @@
 <p align="center">
-  <img alt="CCom Logo" src="./docs/docs/static/avatar.png" height="220" />
+  <img alt="CCom Logo" src="./media/logo-wide.png" height="280" />
   <h3 align="center">CCom language</h3>
   <p align="center">Compiler for the CCom (Conditional Comments) language.</p>
   <p align="center">
     <a target="_blank" href="https://github.com/compose-generator/ccom/releases/latest"><img src="https://img.shields.io/github/v/release/compose-generator/ccom?include_prereleases"></a>
     <a target="_blank" href="https://hub.docker.com/r/chillibits/ccom"><img src="https://img.shields.io/docker/pulls/chillibits/ccom"></a>
-    <a target="_blank" href="./.github/workflows/ci-go.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-go.yml/badge.svg"></a>
-	<a target="_blank" href="./.github/workflows/ci-cpp.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-cpp.yml/badge.svg"></a>
-	<a target="_blank" href="./.github/workflows/ci-java.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-java.yml/badge.svg"></a>    
-	<a target="_blank" href="./.github/workflows/codeql-analysis.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/codeql-analysis.yml/badge.svg"></a>
+    <a target="_blank" href="https://github.com/compose-generator/ccom/actions/workflows/ci-go.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-go.yml/badge.svg"></a>
+	<a target="_blank" href="https://github.com/compose-generator/ccom/actions/workflows/ci-cpp.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-cpp.yml/badge.svg"></a>
+	<a target="_blank" href="https://github.com/compose-generator/ccom/actions/workflows/ci-java.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/ci-java.yml/badge.svg"></a>    
+	<a target="_blank" href="https://github.com/compose-generator/ccom/actions/workflows/codeql-analysis.yml"><img src="https://github.com/compose-generator/ccom/actions/workflows/codeql-analysis.yml/badge.svg"></a>
     <a target="_blank" href="https://goreportcard.com/report/github.com/compose-generator/ccom"><img src="https://goreportcard.com/badge/github.com/compose-generator/ccom"></a>
     <a target="_blank" href="https://makeapullrequest.com"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
-    <a target="_blank" href="./LICENSE.md"><img src="https://img.shields.io/github/license/compose-generator/ccom"></a>
+    <a target="_blank" href="./LICENSE"><img src="https://img.shields.io/github/license/compose-generator/ccom"></a>
   </p>
 </p>
 
@@ -59,10 +59,11 @@ Please visit the documentation at [ccom.compose-generator.com](https://ccom.comp
 *Note: Formats like JSON, where no comments are supported can also work with CCom, however then the file input is not valid before pre-processing it with CCom.*
 
 ## Install
-<details><summary><b>Install on Debian / Ubuntu / Raspbian</b></summary>
+<details><summary><b>Install on Debian / Ubuntu</b></summary>
 <p>
 
 ```sh
+$ sudo apt-get install ca-certificates
 $ curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
 $ sudo add-apt-repository "deb https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main"
 $ sudo apt-get update
@@ -96,10 +97,16 @@ $ sudo yum install ccom
 </p>
 </details>
 
-<details><summary><b>Install on Alpine</b></summary>
+<details><summary><b>Install on Raspbian</b></summary>
 <p>
 
-<i>CCom will be published for Alpine soon ...</i>
+```sh
+$ sudo apt-get install ca-certificates
+$ curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
+$ sudo echo "deb [arch=armhf] https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main" > /etc/apt/sources.list.d/chillibits.list
+$ sudo apt-get update
+$ sudo apt-get install ccom
+```
 
 </p>
 </details>
@@ -119,11 +126,16 @@ $ winget install ChilliBits.CCom
 <details><summary><b>Use with Docker</b></summary>
 <p>
 
-*Note for Windows users: This command does not work with Windows CMD command line. Please use Windows PowerShell instead.*
-
+**Linux:**
 ```sh
 $ docker run --rm -it -v $(pwd):/ccom/out chillibits/ccom
 ```
+
+**Windows:**
+```sh
+$ docker run --rm -it -v ${pwd}:/ccom/out chillibits/ccom
+```
+*Note: This command does not work with Windows CMD command line. Please use Windows PowerShell instead.*
 
 </p>
 </details>

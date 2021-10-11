@@ -1,4 +1,7 @@
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
+/*
+Copyright © 2021 Compose Generator Contributors
+All rights reserved.
+*/
 
 #include "ContentBlockExprAST.h"
 #include "SectionExprAST.h" // This import cant be in the header file for some reason

@@ -3,9 +3,10 @@ title: Install on Linux
 ---
 
 ### Install from repository
-=== "Debian/Ubuntu/Raspbian"
-    To install CCom on Debian, execute the following commands in your terminal:
+=== "Debian/Ubuntu"
+    To install CCom on Debian or Ubuntu, execute the following commands in your terminal:
     ```sh
+	sudo apt-get install ca-certificates
     curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
 	sudo add-apt-repository "deb https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main"
 	sudo apt-get update
@@ -28,18 +29,28 @@ title: Install on Linux
 	sudo yum install ccom
     ```
 
-=== "Alpine"
-    *CCom will be published for Alpine soon ...*
+=== "Raspbian"
+    To install CCom on Raspbian, execute the following commands in your terminal:
+    ```sh
+	sudo apt-get install ca-certificates
+    curl -fsSL https://server.chillibits.com/files/repo/gpg | sudo apt-key add -
+	sudo echo "deb [arch=armhf] https://repo.chillibits.com/$(lsb_release -is | awk '{print tolower($0)}')-$(lsb_release -cs) $(lsb_release -cs) main" > /etc/apt/sources.list.d/chillibits.list
+	sudo apt-get update
+	sudo apt-get install ccom
+    ```
+
+	!!! warning
+        The support for Raspbian is at the experimental stage. Please File a bug ticket on <a href="https://github.com/compose-generator/ccom/issues/new/choose" target="_blank">GitHub</a> if there occurs a bug for you while installing.
 
 ### Install from package file
 You can also install CCom from a Linux package.
 
 === "Debian/Ubuntu/Raspbian"
-    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.deb){ .md-button .md-button--primary }
-    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.deb){ .md-button .md-button--primary }
-    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.deb){ .md-button .md-button--primary }
-    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.deb){ .md-button .md-button--primary }
-    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.deb){ .md-button .md-button--primary }
+    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.deb){ .md-button .md-button--primary .md-button--small }
+    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.deb){ .md-button .md-button--primary .md-button--small }
+    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.deb){ .md-button .md-button--primary .md-button--small }
+    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.deb){ .md-button .md-button--primary .md-button--small }
+    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.deb){ .md-button .md-button--primary .md-button--small }
 
     To install it, execute the following command:
     ```sh
@@ -47,11 +58,11 @@ You can also install CCom from a Linux package.
     ```
 
 === "Fedora/CentOS"
-    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.rpm){ .md-button .md-button--primary }
-    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.rpm){ .md-button .md-button--primary }
-    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.rpm){ .md-button .md-button--primary }
-    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.rpm){ .md-button .md-button--primary }
-    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.rpm){ .md-button .md-button--primary }
+    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.rpm){ .md-button .md-button--primary .md-button--small }
+    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.rpm){ .md-button .md-button--primary .md-button--small }
+    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.rpm){ .md-button .md-button--primary .md-button--small }
+    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.rpm){ .md-button .md-button--primary .md-button--small }
+    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.rpm){ .md-button .md-button--primary .md-button--small }
 
     To install it, execute the following command:
     ```sh
@@ -59,11 +70,11 @@ You can also install CCom from a Linux package.
     ```
 
 === "Alpine"
-    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.apk){ .md-button .md-button--primary }
-    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.apk){ .md-button .md-button--primary }
-    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.apk){ .md-button .md-button--primary }
-    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.apk){ .md-button .md-button--primary }
-    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.apk){ .md-button .md-button--primary }
+    [Download amd64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_amd64.apk){ .md-button .md-button--primary .md-button--small }
+    [Download arm64](https://github.com/compose-generator/ccom/releases/latest/download/ccom_arm64.apk){ .md-button .md-button--primary .md-button--small }
+    [Download armv5](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv5.apk){ .md-button .md-button--primary .md-button--small }
+    [Download armv6](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv6.apk){ .md-button .md-button--primary .md-button--small }
+    [Download armv7](https://github.com/compose-generator/ccom/releases/latest/download/ccom_armv7.apk){ .md-button .md-button--primary .md-button--small }
 
     To install it, execute the following command:
     ```sh

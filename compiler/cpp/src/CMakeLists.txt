@@ -2,7 +2,6 @@ set(BINARY ${CMAKE_PROJECT_NAME})
 
 set(SOURCES
         main.cpp
-        main.h
         util/JSONParser.cpp
         util/JSONParser.h
         reader/Reader.cpp

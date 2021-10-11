@@ -1,9 +1,12 @@
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
+/*
+Copyright © 2021 Compose Generator Contributors
+All rights reserved.
+*/
 
 #include <gtest/gtest.h>
 #include <parser/ast/TopLevelExprAST.h>
 #include <analyzer/Analyzer.h>
-#include "../util/FileReader.h"
+#include "util/FileReader.h"
 
 struct AnalyzerParams {
     const std::string fileName;

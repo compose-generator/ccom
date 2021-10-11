@@ -1,10 +1,13 @@
-// Copyright (c) 2021 Compose Generator Contributors. All rights reserved.
+/*
+Copyright © 2021 Compose Generator Contributors
+All rights reserved.
+*/
 
 #include <vector>
 #include <lexer/Lexer.h>
 #include <gtest/gtest.h>
-#include "../util/LanguageDescriptor.h"
-#include "../util/FileReader.h"
+#include "util/LanguageDescriptor.h"
+#include "util/FileReader.h"
 
 struct LexerParams {
     const std::string fileName;

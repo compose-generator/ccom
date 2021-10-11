@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="CCom Logo" src="https://github.com/compose-generator/ccom/raw/main/docs/docs/static/avatar.png" height="220" />
+  <img alt="CCom Logo" src="https://github.com/compose-generator/ccom/raw/main/media/logo-wide.png" height="280" />
   <h3 align="center">CCom language</h3>
   <p align="center">Compiler for the CCom (Conditional Comments) language.</p>
   <p align="center">
@@ -27,11 +27,16 @@ You can use CCom by directly installing it on your Docker host system or by gene
 For installation instructions for Linux, Windows, etc., please visit the [installation guide](https://ccom.compose-generator.com/install/linux).
 
 ## QuickStart with Docker
-*Note for Windows users: This command does not work with Windows CMD command line. Please use Windows PowerShell instead.*
+**Linux:**
+```sh
+$ docker run --rm -it -v $(pwd):/ccom/out chillibits/ccom
+```
 
+**Windows:**
 ```sh
 $ docker run --rm -it -v ${pwd}:/ccom/out chillibits/ccom
 ```
+*Note: This command does not work with Windows CMD command line. Please use Windows PowerShell instead.*
 
 ## Contribute otherwise to the project
 If you want to contribute to this project, please ensure you comply with the [contribution guidelines](https://github.com/compose-generator/ccom/blob/main/CONTRIBUTING.md).

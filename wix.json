@@ -1,31 +1,33 @@
 {
-    "product": "CCom",
-    "company": "ChilliBits",
-    "license": "LICENSE",
-    "files": {
-        "guid": "d503a6bc-fc43-4a9d-8155-f9c85223ec1c",
-        "items": [
-            "ccom.exe",
-            "ccomc.exe"
-        ]
-    },
-    "env": {
-        "guid": "ad47448f-1a46-455c-ba91-f6a9a2e436ae",
-        "vars": [
-            {
-                "name": "PATH",
-                "value": "[INSTALLDIR]",
-                "permanent": "yes",
-                "system": "no",
-                "action": "set",
-                "part": "last"
-            }
-        ]
-    },
-    "choco": {
-        "description": "Compiler for the CCom (Conditional Comments) language",
-        "project-url": "https://github.com/compose-generator/ccom",
-        "tags": "comment language data condition",
-        "license-url": "https://github.com/compose-generator/ccom/blob/main/LICENSE"
-    }
+  "product": "CCom",
+  "company": "ChilliBits",
+  "license": "LICENSE",
+  "upgrade-code": "a4c2fe8c-490a-4c52-a57b-9064f60adca3",
+  "files": {
+    "guid": "d503a6bc-fc43-4a9d-8155-f9c85223ec1c",
+    "items": [
+      "ccom.exe",
+      "ccomc.exe"
+    ]
+  },
+  "env": {
+    "guid": "ad47448f-1a46-455c-ba91-f6a9a2e436ae",
+    "vars": [
+      {
+        "name": "PATH",
+        "value": "[INSTALLDIR]",
+        "permanent": "yes",
+        "system": "no",
+        "action": "set",
+        "part": "last"
+      }
+    ]
+  },
+  "shortcuts": {},
+  "choco": {
+    "description": "Compiler for the CCom (Conditional Comments) language",
+    "project-url": "https://github.com/compose-generator/ccom",
+    "tags": "comment language data condition",
+    "license-url": "https://github.com/compose-generator/ccom/blob/main/LICENSE"
+  }
 }
