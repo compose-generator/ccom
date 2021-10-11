@@ -146,13 +146,10 @@ release:
   name_template: v{{ .Tag }}
   prerelease: auto
   footer: |
-    ---
-    
-    __Visit [ccom.compose-generator.com](https://ccom.compose-generator.com) to test the new features!__
-announce:
-  twitter:
-    enabled: true
-    message_template: 'CCom {{ .Tag }} is now available! Check out the new features: ccom.compose-generator.com!'
+    ## What to do next?
+    - [Install CCom](https://ccom.compose-generator.com/install/linux/)
+    - Visit [ccom.compose-generator.com](https://ccom.compose-generator.com) to test the new features
+    - Follow [@composegen](https://twitter.com/composegen) on Twitter
 milestones:
   - close: true
     fail_on_error: false
