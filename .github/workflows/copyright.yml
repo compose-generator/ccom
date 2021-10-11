@@ -20,9 +20,9 @@ jobs:
         uses: VinnyBabuManjaly/copyright-action@v1.0.0
         with:
           CopyrightString: '/*\nCopyright © 2021 Compose Generator Contributors\nAll rights reserved.\n*/\n\n'
-          Path: 'cli,'
-          IgnorePath: 'cli/vendor,compiler/cpp/test/test-files,compiler/java/src/test'
-          FileType: '.go,.cpp,.java'
+          Path: 'cli, compiler'
+          IgnorePath: 'cli/vendor, compiler/cpp/test/test-files, compiler/java/src/test'
+          FileType: '.go, .cpp, .java'
           
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
