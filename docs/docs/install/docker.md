@@ -14,13 +14,21 @@ You don't have to pull the image first. You also can skip this step.
     ```
 
 ### Use
-=== "Docker Hub"
+=== "Linux - Docker Hub"
     ```sh
     docker run --rm -it -v $(pwd):/ccom/out chillibits/ccom
     ```
-=== "GitHub Container Registry"
+=== "Linux - GHCR"
     ```sh
     docker run --rm -it -v $(pwd):/ccom/out ghcr.io/chillibits/ccom
+    ```
+=== "Windows - Docker Hub"
+    ```sh
+    docker run --rm -it -v ${pwd}:/ccom/out chillibits/ccom
+    ```
+=== "Windows - GHCR"
+    ```sh
+    docker run --rm -it -v ${pwd}:/ccom/out ghcr.io/chillibits/ccom
     ```
 
 ### Customize
