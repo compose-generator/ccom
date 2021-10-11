@@ -1,3 +1,8 @@
+/*
+Copyright © 2021 Compose Generator Contributors
+All rights reserved.
+*/
+
 # pragma once
 
 #include "../../lib/json/json.hpp"
