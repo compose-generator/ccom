@@ -1,3 +1,8 @@
+/*
+Copyright © 2021 Compose Generator Contributors
+All rights reserved.
+*/
+
 package model
 
 // LanguageDescriptor contains all comment identifiers for a specific language
