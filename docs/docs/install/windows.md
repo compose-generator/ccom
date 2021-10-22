@@ -3,7 +3,7 @@ title: Install on Windows
 ---
 
 ### Install via winget cli
-CCom gets distributed for Windows via the new Windows package manager called [winget](https://github.com/microsoft/winget-cli).
+CCom gets distributed for Windows via the new Windows package manager CLI called [winget](https://github.com/microsoft/winget-cli).
 
 As soon as the Windows package manager is installed on your Windows machine, you can open up powershell and execute the following installation command: <br>
 ```sh
@@ -22,3 +22,5 @@ Note: It is possible that you see an error notification by your anti-virus softw
 ```sh
 ccom [options] <input>
 ```
+
+*[CLI]: Command Line Interface

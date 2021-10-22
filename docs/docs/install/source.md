@@ -6,7 +6,7 @@ title: Build or install from source
 Before being able to compile the source code, you first have to download it from GitHub and install Golang (if you don't have it already).
 Depending on which compiler executable you want to use, you also have to either install Java JDK15 or a common C++ compiler and CMake.
 
-#### Clone from GitHub
+#### Clone source from GitHub
 ```sh
 git clone https://github.com/compose-generator/ccom.git
 cd ccom
