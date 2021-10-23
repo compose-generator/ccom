@@ -4,12 +4,12 @@ name: Publish documentation
 on:
   push:
     branches:
-      - 'main'
-      - 'docs/**'
-      #- 'feature/**'
-      - 'fix/**'
+      - main
+      - docs/**
+      #- feature/**
+      - fix/**
     paths:
-      - 'docs/**'
+      - docs/**
   workflow_dispatch:
 
 jobs:

@@ -1,16 +1,16 @@
+# C++ CI workflow
 name: C++ CI
 
 on:
   push:
     paths:
-      - 'compiler/cpp/**'
+      - compiler/cpp/**
   pull_request:
-    branches: [ main, dev, feature/** ]
+    branches: [ main, release/**, feature/** ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-        
     steps:
       - name: Checkout
         uses: actions/checkout@v2
