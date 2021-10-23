@@ -1,13 +1,12 @@
-# Go CI
-
+# Go CI workflow
 name: Go CI
 
 on:
   push:
     paths:
-      - 'cli/**'
+      - cli/**
   pull_request:
-    branches: [ main, dev, feature/** ]
+    branches: [ main, release/**, feature/** ]
 
 jobs:
   build:
