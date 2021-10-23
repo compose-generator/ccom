@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-// GetCommentIdenFromLang retuns values for lineComIden, blockComIdenOpen and blockComIdenClose
+// GetCommentIdenFromLang returns values for lineComIden, blockComIdenOpen and blockComIdenClose
 func GetCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
 	if lang == "" || lang == "auto" {
 		if !FileExists(fileInput) {

@@ -20,7 +20,7 @@ func TestGetComIdenFromLang_Success1(t *testing.T) {
 	// Auto
 	langList = []string{"yaml", "yml"}
 	for _, lang := range langList {
-		lineComIden, blockComIdenOpen, blockComIdenClose := GetCommentIdenFromLang("auto", "./test-files/test."+lang)
+		lineComIden, blockComIdenOpen, blockComIdenClose := GetCommentIdenFromLang("auto", "../test-files/test."+lang)
 		assert.Equal(t, "#", lineComIden)
 		assert.Empty(t, blockComIdenOpen)
 		assert.Empty(t, blockComIdenClose)
@@ -39,7 +39,7 @@ func TestGetComIdenFromLang_Success2(t *testing.T) {
 	// Auto
 	langList = []string{"py"}
 	for _, lang := range langList {
-		lineComIden, blockComIdenOpen, blockComIdenClose := GetCommentIdenFromLang("auto", "./test-files/test."+lang)
+		lineComIden, blockComIdenOpen, blockComIdenClose := GetCommentIdenFromLang("auto", "../test-files/test."+lang)
 		assert.Equal(t, "#", lineComIden)
 		assert.Equal(t, "\"\"\"", blockComIdenOpen)
 		assert.Equal(t, "\"\"\"", blockComIdenClose)
@@ -58,7 +58,7 @@ func TestGetComIdenFromLang_Success3(t *testing.T) {
 	// Auto
 	langList = []string{"java", "go", "js", "ts", "rs"}
 	for _, lang := range langList {
-		lineComIden, blockComIdenOpen, blockComIdenClose := GetCommentIdenFromLang("auto", "./test-files/test."+lang)
+		lineComIden, blockComIdenOpen, blockComIdenClose := GetCommentIdenFromLang("auto", "../test-files/test."+lang)
 		assert.Equal(t, "//", lineComIden)
 		assert.Equal(t, "/*", blockComIdenOpen)
 		assert.Equal(t, "*/", blockComIdenClose)
@@ -76,7 +76,7 @@ func TestGetComIdenFromLang_Success4(t *testing.T) {
 	}
 	// Auto
 	for _, lang := range langList {
-		lineComIden, blockComIdenOpen, blockComIdenClose := GetCommentIdenFromLang("auto", "./test-files/test."+lang)
+		lineComIden, blockComIdenOpen, blockComIdenClose := GetCommentIdenFromLang("auto", "../test-files/test."+lang)
 		assert.Empty(t, lineComIden)
 		assert.Equal(t, "<!--", blockComIdenOpen)
 		assert.Equal(t, "-->", blockComIdenClose)

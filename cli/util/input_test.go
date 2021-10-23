@@ -9,7 +9,7 @@ import (
 // -------------------------------------- ensureFileInputString -------------------------------------
 
 func TestEnsureFileInputString_File(t *testing.T) {
-	testInput := "./test-files/test.txt"
+	testInput := "../test-files/test.txt"
 	ensureFileInputString(&testInput)
 	assert.Equal(t, "This is a test content", testInput)
 }
@@ -23,7 +23,7 @@ func TestEnsureFileInputString_String(t *testing.T) {
 // -------------------------------------- ensureDataInputString -------------------------------------
 
 func TestEnsureDataInputString_File(t *testing.T) {
-	testData := "./test-files/test-data.json"
+	testData := "../test-files/test-data.json"
 	ensureDataInputString(&testData)
 	assert.Equal(t, "{\"attribute1\": true, \"attribute2\": \"test\"}", testData)
 }
