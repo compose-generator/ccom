@@ -1,4 +1,4 @@
-# https://docs.github.com/en/actions/guides/building-and-testing-java-with-maven
+# Java CI workflow
 name: Java CI
 
 on:
@@ -6,12 +6,11 @@ on:
     paths:
       - compiler/java/**
   pull_request:
-    branches: [ main, dev, feature/** ]
+    branches: [ main, release/**, feature/** ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
