@@ -45,9 +45,13 @@ nfpms:
         dst: /usr/lib/ccom/
 dockers:
   - image_templates:
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Major }}-amd64
       - ghcr.io/compose-generator/ccom:latest-amd64
-      - chillibits/ccom:{{ .Version }}-amd64
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-amd64
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}-amd64
+      - chillibits/ccom:{{ .Major }}-amd64
       - chillibits/ccom:latest-amd64
     dockerfile: Dockerfile
     use: buildx
@@ -63,9 +67,13 @@ dockers:
       - --build-arg=COMPILER_PATH=linux-amd64
       - --platform=linux/amd64
   - image_templates:
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Major }}-i386
       - ghcr.io/compose-generator/ccom:latest-i386
-      - chillibits/ccom:{{ .Version }}-i386
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-i386
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}-i386
+      - chillibits/ccom:{{ .Major }}-i386
       - chillibits/ccom:latest-i386
     dockerfile: Dockerfile
     use: buildx
@@ -81,9 +89,13 @@ dockers:
       - --build-arg=COMPILER_PATH=linux-386
       - --platform=linux/i386
   - image_templates:
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Major }}-arm32v7
       - ghcr.io/compose-generator/ccom:latest-arm32v7
-      - chillibits/ccom:{{ .Version }}-arm32v7
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-arm32v7
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}-arm32v7
+      - chillibits/ccom:{{ .Major }}-arm32v7
       - chillibits/ccom:latest-arm32v7
     dockerfile: Dockerfile
     use: buildx
@@ -100,9 +112,13 @@ dockers:
       - --build-arg=COMPILER_PATH=linux-armv7
       - --platform=linux/arm/v7
   - image_templates:
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-arm64v8
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}-arm64v8
+      - ghcr.io/compose-generator/ccom:{{ .Major }}-arm64v8
       - ghcr.io/compose-generator/ccom:latest-arm64v8
-      - chillibits/ccom:{{ .Version }}-arm64v8
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-arm64v8
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}-arm64v8
+      - chillibits/ccom:{{ .Major }}-arm64v8
       - chillibits/ccom:latest-arm64v8
     dockerfile: Dockerfile
     use: buildx
@@ -118,30 +134,63 @@ dockers:
       - --build-arg=COMPILER_PATH=linux-arm64
       - --platform=linux/arm64/v8
 docker_manifests:
-  - name_template: chillibits/ccom:{{ .Version }}
+  - name_template: chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}
     image_templates:
-      - chillibits/ccom:{{ .Version }}-amd64
-      - chillibits/ccom:{{ .Version }}-i386
-      - chillibits/ccom:{{ .Version }}-arm32v7
-      - chillibits/ccom:{{ .Version }}-arm64v8
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-amd64
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-i386
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-arm32v7
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-arm64v8
+    skip_push: auto
+  - name_template: chillibits/ccom:{{ .Major }}.{{ .Minor }}
+    image_templates:
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}-amd64
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}-i386
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}-arm32v7
+      - chillibits/ccom:{{ .Major }}.{{ .Minor }}-arm64v8
+    skip_push: auto
+  - name_template: chillibits/ccom:{{ .Major }}
+    image_templates:
+      - chillibits/ccom:{{ .Major }}-amd64
+      - chillibits/ccom:{{ .Major }}-i386
+      - chillibits/ccom:{{ .Major }}-arm32v7
+      - chillibits/ccom:{{ .Major }}-arm64v8
+    skip_push: auto
   - name_template: chillibits/ccom:latest
     image_templates:
-      - chillibits/ccom:{{ .Version }}-amd64
-      - chillibits/ccom:{{ .Version }}-i386
-      - chillibits/ccom:{{ .Version }}-arm32v7
-      - chillibits/ccom:{{ .Version }}-arm64v8
-  - name_template: ghcr.io/compose-generator/ccom:{{ .Version }}
+      - chillibits/ccom:latest-amd64
+      - chillibits/ccom:latest-i386
+      - chillibits/ccom:latest-arm32v7
+      - chillibits/ccom:latest-arm64v8
+    skip_push: auto
+
+  - name_template: ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}
     image_templates:
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}.{{ .Patch }}-arm64v8
+    skip_push: auto
+  - name_template: ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}
+    image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Major }}.{{ .Minor }}-arm64v8
+    skip_push: auto
+  - name_template: ghcr.io/compose-generator/ccom:{{ .Major }}
+    image_templates:
+      - ghcr.io/compose-generator/ccom:{{ .Major }}-amd64
+      - ghcr.io/compose-generator/ccom:{{ .Major }}-i386
+      - ghcr.io/compose-generator/ccom:{{ .Major }}-arm32v7
+      - ghcr.io/compose-generator/ccom:{{ .Major }}-arm64v8
+    skip_push: auto
   - name_template: ghcr.io/compose-generator/ccom:latest
     image_templates:
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-amd64
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-i386
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm32v7
-      - ghcr.io/compose-generator/ccom:{{ .Version }}-arm64v8
+      - ghcr.io/compose-generator/ccom:latest-amd64
+      - ghcr.io/compose-generator/ccom:latest-i386
+      - ghcr.io/compose-generator/ccom:latest-arm32v7
+      - ghcr.io/compose-generator/ccom:latest-arm64v8
+    skip_push: auto
 release:
   name_template: v{{ .Tag }}
   prerelease: auto
