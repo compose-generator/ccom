@@ -5,7 +5,7 @@ site_author: Marc Auberer
 copyright: Made with ❤️ by Compose Generator contributors, powered by <a href="https://www.chillibits.com" target="_blank">ChilliBits</a>.
 repo_name: compose-generator/ccom
 repo_url: https://github.com/compose-generator/ccom
-edit_uri: edit/main/docs/docs/
+edit_uri: edit/release/v1.2.x/docs/docs/
 
 theme:
   name: material
@@ -21,15 +21,15 @@ theme:
   palette:
     - media: "(prefers-color-scheme: light)"  # Light mode
       scheme: default
-      primary: teal
-      accent: teal
+      primary: green
+      accent: green
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
     - media: "(prefers-color-scheme: dark)"  # Dark mode
       scheme: slate
-      primary: teal
-      accent: teal
+      primary: green
+      accent: green
       toggle:
         icon: material/weather-night
         name: Switch to dark mode

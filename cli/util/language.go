@@ -5,10 +5,36 @@ All rights reserved.
 
 package util
 
-import "ccom/model"
+import (
+	"ccom/model"
+	"path/filepath"
+	"strings"
+)
 
-// GetLanguageList returns a list of language descriptors for each supported language
-func GetLanguageList() map[string]model.LanguageDescriptor {
+// GetCommentIdenFromLang returns values for lineComIden, blockComIdenOpen and blockComIdenClose
+func GetCommentIdenFromLang(lang string, fileInput string) (lineCommentIden string, blockCommentIdenOpen string, blockCommentIdenClose string) {
+	if lang == "" || lang == "auto" {
+		if !FileExists(fileInput) {
+			Error("Please use lang 'auto' only in combination of valid file paths as file input", 1)
+		}
+		if filepath.Ext(fileInput) != "" {
+			lang = filepath.Ext(fileInput)[1:]
+		} else {
+			lang = filepath.Base(fileInput)
+		}
+	}
+
+	language, found := getLanguageList()[strings.ToLower(lang)]
+	if !found {
+		Error("Unknown lang", 1)
+	}
+	lineCommentIden = language.LineComIden
+	blockCommentIdenOpen = language.BlockComIdenOpen
+	blockCommentIdenClose = language.BlockComIdenClose
+	return
+}
+
+func getLanguageList() map[string]model.LanguageDescriptor {
 	languages := make(map[string]model.LanguageDescriptor)
 
 	// Assembly

@@ -12,10 +12,48 @@ import (
 	"strings"
 	"syscall"
 
+	"github.com/kardianos/osext"
+
 	"github.com/AlecAivazis/survey/v2"
 	"github.com/AlecAivazis/survey/v2/terminal"
 	"github.com/cli/safeexec"
 )
+
+// RunCompilerExecutable passes all inputs to the compiler executable and returns with the result string
+func RunCompilerExecutable(
+	compiler string,
+	modeSingle bool,
+	fileInput string,
+	dataInput string,
+	lineCommentIden string,
+	blockCommentIdenOpen string,
+	blockCommentIdenClose string,
+) string {
+	// Determine executeable path based on the environment
+	executablePath, _ := osext.Executable()
+	executablePath = strings.ReplaceAll(executablePath, "\\", "/")
+	executablePath = executablePath[:strings.LastIndex(executablePath, "/")] + "/"
+	if FileExists("/usr/lib/ccom") {
+		executablePath = "/usr/lib/ccom/"
+	}
+
+	// Determine executeable name by name of compiler
+	executableName := "ccomc"
+	switch compiler {
+	case "cpp", "c++":
+		executableName = "ccomc"
+	case "java":
+		executableName = "ccomc-java.jar"
+	default:
+		Error("Invalid compiler name. Only 'cpp' and 'java' are allowed values.", 1)
+	}
+	// Check if executable exists
+	if !CommandExists(executablePath + executableName) {
+		Error("Compiler executable not found. Please check your installation", 1)
+	}
+	// Execute compiler with user inputs
+	return ExecuteAndWaitWithOutput(executablePath+executableName, strconv.FormatBool(modeSingle), fileInput, dataInput, lineCommentIden, blockCommentIdenOpen, blockCommentIdenClose)
+}
 
 // ExecuteAndWaitWithOutput executes a command and return the command output as string
 func ExecuteAndWaitWithOutput(c ...string) string {

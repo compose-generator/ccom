@@ -8,11 +8,11 @@ updates:
       time: "04:00"
       timezone: Europe/Berlin
     open-pull-requests-limit: 15
-    target-branch: dev
+    target-branch: release/v1.2.x
     reviewers:
       - compose-generator/compiler-team
     assignees:
-      - compose-generator/compiler-team
+      - marcauberer
 
   # Java compiler dependency updates
   - package-ecosystem: maven
@@ -22,8 +22,8 @@ updates:
       time: "04:00"
       timezone: Europe/Berlin
     open-pull-requests-limit: 15
-    target-branch: dev
+    target-branch: release/v1.2.x
     reviewers:
       - compose-generator/compiler-team
     assignees:
-      - compose-generator/compiler-team
+      - marcauberer
