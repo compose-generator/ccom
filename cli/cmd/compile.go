@@ -7,6 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// CompileCliFlags are the cli flags for the compile command
 var CompileCliFlags = []cli.Flag{
 	&cli.StringFlag{
 		Name:    "block-comment-iden-open",
@@ -63,6 +64,7 @@ var CompileCliFlags = []cli.Flag{
 	},
 }
 
+// Compile compiles a source file or a single condition
 func Compile(c *cli.Context) error {
 	// Extract flags
 	fileInput := c.Args().Get(0)

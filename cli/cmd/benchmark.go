@@ -8,6 +8,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
+// BenchmarkCliFlags are the cli flags of the benchmark command
 var BenchmarkCliFlags = []cli.Flag{
 	&cli.StringFlag{
 		Name:    "block-comment-iden-open",
@@ -64,6 +65,7 @@ var BenchmarkCliFlags = []cli.Flag{
 	},
 }
 
+// Benchmark executes a CCom benchmark
 func Benchmark(c *cli.Context) error {
 	// Extract flags
 	benchmarkRuns := c.Int("number")
