@@ -2,6 +2,7 @@ package util
 
 import "strings"
 
+// EnsureInput checks if all inputs are given and apply the default values if not so
 func EnsureInput(
 	fileInput *string,
 	dataInput *string,
