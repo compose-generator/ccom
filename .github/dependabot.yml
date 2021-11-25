@@ -27,3 +27,17 @@ updates:
       - compose-generator/compiler-team
     assignees:
       - marcauberer
+
+  # Main Dockerfile
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: daily
+      time: "04:00"
+      timezone: Europe/Berlin
+    open-pull-requests-limit: 15
+    target-branch: release/v1.3.x
+    reviewers:
+      - compose-generator/compiler-team
+    assignees:
+      - marcauberer
