@@ -3,11 +3,6 @@ Copyright © 2021-2022 Compose Generator Contributors
 All rights reserved.
 */
 
-/*
-Copyright © 2021 Compose Generator Contributors
-All rights reserved.
-*/
-
 #include "TopLevelExprAST.h"
 #include "ContentExprAST.h" // This import cant be in the header file for some reason
 #include "StmtLstExprAST.h" // This import cant be in the header file for some reason

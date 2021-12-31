@@ -3,11 +3,6 @@ Copyright © 2021-2022 Compose Generator Contributors
 All rights reserved.
 */
 
-/*
-Copyright © 2021 Compose Generator Contributors
-All rights reserved.
-*/
-
 #include "IfBlockExprAST.h"
 
 std::unique_ptr<StmtLstExprAST> const &IfBlockExprAST::getStmtList() {

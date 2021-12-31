@@ -3,11 +3,6 @@ Copyright © 2021-2022 Compose Generator Contributors
 All rights reserved.
 */
 
-/*
-Copyright © 2021 Compose Generator Contributors
-All rights reserved.
-*/
-
 #include "Reader.h"
 
 Reader::Reader(std::string fileInput, unsigned int maxLookahead):
