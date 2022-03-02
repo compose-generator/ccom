@@ -199,6 +199,12 @@ release:
     - [Install CCom](https://ccom.compose-generator.com/install/linux/)
     - Visit [ccom.compose-generator.com](https://ccom.compose-generator.com) to test the new features
     - Follow [@composegen](https://twitter.com/composegen) on Twitter
+changelog:
+  use: github
+  filters:
+    exclude:
+    - Merge pull request
+    - Merge branch
 milestones:
   - close: true
     fail_on_error: false

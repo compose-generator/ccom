@@ -312,4 +312,4 @@ UNICODE               --> Any unicode character
 ## Contribute to the project
 If you want to contribute to this project, please ensure you comply with the [contribution guidelines](./CONTRIBUTING.md).
 
-© Marc Auberer 2021
+© Marc Auberer 2021-2022

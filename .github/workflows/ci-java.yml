@@ -6,7 +6,10 @@ on:
     paths:
       - compiler/java/**
   pull_request:
-    branches: [ main, release/**, feature/** ]
+    branches:
+      - main
+      - release/**
+      - feature/**
 
 jobs:
   build:
