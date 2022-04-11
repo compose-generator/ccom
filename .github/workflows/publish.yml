@@ -57,7 +57,7 @@ jobs:
         run: mv ./src/CCom_run.exe ccomc.exe
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: ccomc-${{ matrix.arch_name }}
           path: ./bin/ccomc**
@@ -133,7 +133,7 @@ jobs:
           #TWITTER_ACCESS_TOKEN: ${{ secrets.TWITTER_ACCESS_TOKEN }}
           #TWITTER_ACCESS_TOKEN_SECRET: ${{ secrets.TWITTER_ACCESS_TOKEN_SECRET }}
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: dist-output
           path: dist/
