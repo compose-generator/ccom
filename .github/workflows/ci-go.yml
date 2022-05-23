@@ -10,7 +10,6 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         go-version:
@@ -19,21 +18,19 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
       - name: Install Go
         uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
 
       - name: Prepare environment
-        working-directory: cli
-        run: |
-          go get -u golang.org/x/lint/golint
-          go mod vendor
+        run: go install golang.org/x/lint/golint@latest
+
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Run vet & lint
         working-directory: cli
