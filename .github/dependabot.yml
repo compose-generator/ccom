@@ -22,7 +22,7 @@ updates:
       time: "04:00"
       timezone: Europe/Berlin
     open-pull-requests-limit: 15
-    target-branch: release/v1.6.x
+    target-branch: release/v1.5.x
     reviewers:
       - compose-generator/compiler-team
     assignees:
