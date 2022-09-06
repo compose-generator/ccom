@@ -5,24 +5,24 @@ line Go applications. cli is designed to be easy to understand and write,
 the most simple cli application can be written as follows:
 
     func main() {
-      (&cli.App{}).Run(os.Args)
+    	(&cli.App{}).Run(os.Args)
     }
 
 Of course this application does not do much, so let's make this an actual
 application:
 
-      func main() {
-        app := &cli.App{
-    			 Name: "greet",
-    			 Usage: "say a greeting",
-    			 Action: func(c *cli.Context) error {
-    				 fmt.Println("Greetings")
-    				 return nil
-    			 },
-    		 }
+    func main() {
+    	app := &cli.App{
+      		Name: "greet",
+      		Usage: "say a greeting",
+      		Action: func(c *cli.Context) error {
+      			fmt.Println("Greetings")
+      			return nil
+      		},
+    	}
 
-        app.Run(os.Args)
-      }
+    	app.Run(os.Args)
+    }
 
 VARIABLES
 
@@ -32,16 +32,16 @@ var (
 	SuggestDidYouMeanTemplate string             = suggestDidYouMeanTemplate
 )
 var AppHelpTemplate = `NAME:
-   {{.Name}}{{if .Usage}} - {{.Usage}}{{end}}
+   {{$v := offset .Name 6}}{{wrap .Name 3}}{{if .Usage}} - {{wrap .Usage $v}}{{end}}
 
 USAGE:
-   {{if .UsageText}}{{.UsageText | nindent 3 | trim}}{{else}}{{.HelpName}} {{if .VisibleFlags}}[global options]{{end}}{{if .Commands}} command [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{end}}{{if .Version}}{{if not .HideVersion}}
+   {{if .UsageText}}{{wrap .UsageText 3}}{{else}}{{.HelpName}} {{if .VisibleFlags}}[global options]{{end}}{{if .Commands}} command [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{end}}{{if .Version}}{{if not .HideVersion}}
 
 VERSION:
    {{.Version}}{{end}}{{end}}{{if .Description}}
 
 DESCRIPTION:
-   {{.Description | nindent 3 | trim}}{{end}}{{if len .Authors}}
+   {{wrap .Description 3}}{{end}}{{if len .Authors}}
 
 AUTHOR{{with $length := len .Authors}}{{if ne 1 $length}}S{{end}}{{end}}:
    {{range $index, $author := .Authors}}{{if $index}}
@@ -59,26 +59,26 @@ GLOBAL OPTIONS:{{range .VisibleFlagCategories}}
 
 GLOBAL OPTIONS:
    {{range $index, $option := .VisibleFlags}}{{if $index}}
-   {{end}}{{$option}}{{end}}{{end}}{{end}}{{if .Copyright}}
+   {{end}}{{wrap $option.String 6}}{{end}}{{end}}{{end}}{{if .Copyright}}
 
 COPYRIGHT:
-   {{.Copyright}}{{end}}
+   {{wrap .Copyright 3}}{{end}}
 `
-    AppHelpTemplate is the text template for the Default help topic. cli.go uses
-    text/template to render templates. You can render custom help text by
+    AppHelpTemplate is the text template for the Default help topic. cli.go
+    uses text/template to render templates. You can render custom help text by
     setting this variable.
 
 var CommandHelpTemplate = `NAME:
-   {{.HelpName}} - {{.Usage}}
+   {{$v := offset .HelpName 6}}{{wrap .HelpName 3}}{{if .Usage}} - {{wrap .Usage $v}}{{end}}
 
 USAGE:
-   {{if .UsageText}}{{.UsageText | nindent 3 | trim}}{{else}}{{.HelpName}}{{if .VisibleFlags}} [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{end}}{{if .Category}}
+   {{if .UsageText}}{{wrap .UsageText 3}}{{else}}{{.HelpName}}{{if .VisibleFlags}} [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{end}}{{if .Category}}
 
 CATEGORY:
    {{.Category}}{{end}}{{if .Description}}
 
 DESCRIPTION:
-   {{.Description | nindent 3 | trim}}{{end}}{{if .VisibleFlagCategories}}
+   {{wrap .Description 3}}{{end}}{{if .VisibleFlagCategories}}
 
 OPTIONS:{{range .VisibleFlagCategories}}
    {{if .Name}}{{.Name}}
@@ -150,10 +150,10 @@ var SubcommandHelpTemplate = `NAME:
    {{.HelpName}} - {{.Usage}}
 
 USAGE:
-   {{if .UsageText}}{{.UsageText | nindent 3 | trim}}{{else}}{{.HelpName}} command{{if .VisibleFlags}} [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{end}}{{if .Description}}
+   {{if .UsageText}}{{wrap .UsageText 3}}{{else}}{{.HelpName}} command{{if .VisibleFlags}} [command options]{{end}} {{if .ArgsUsage}}{{.ArgsUsage}}{{else}}[arguments...]{{end}}{{end}}{{if .Description}}
 
 DESCRIPTION:
-   {{.Description | nindent 3 | trim}}{{end}}
+   {{wrap .Description 3}}{{end}}
 
 COMMANDS:{{range .VisibleCategories}}{{if .Name}}
    {{.Name}}:{{range .VisibleCommands}}
@@ -186,6 +186,11 @@ var HelpPrinterCustom helpPrinterCustom = printHelpCustom
     the default implementation of HelpPrinter, and may be called directly if the
     ExtraInfo field is set on an App.
 
+    In the default implementation, if the customFuncs argument contains a
+    "wrapAt" key, which is a function which takes no arguments and returns an
+    int, this int value will be used to produce a "wrap" function used by the
+    default template to wrap long lines.
+
 
 FUNCTIONS
 
@@ -196,9 +201,9 @@ func DefaultAppComplete(cCtx *Context)
 func DefaultCompleteWithFlags(cmd *Command) func(cCtx *Context)
 func FlagNames(name string, aliases []string) []string
 func HandleAction(action interface{}, cCtx *Context) (err error)
-    HandleAction attempts to figure out which Action signature was used. If it's
-    an ActionFunc or a func with the legacy signature for Action, the func is
-    run!
+    HandleAction attempts to figure out which Action signature was used.
+    If it's an ActionFunc or a func with the legacy signature for Action,
+    the func is run!
 
 func HandleExitCoder(err error)
     HandleExitCoder handles errors implementing ExitCoder by printing their
@@ -264,6 +269,9 @@ type App struct {
 	Version string
 	// Description of the program
 	Description string
+	// DefaultCommand is the (optional) name of a command
+	// to run if no command names are passed as CLI arguments.
+	DefaultCommand string
 	// List of commands to execute
 	Commands []*Command
 	// List of flags to parse
@@ -352,14 +360,14 @@ func (a *App) RunAsSubcommand(ctx *Context) (err error)
     to generate command-specific flags
 
 func (a *App) RunContext(ctx context.Context, arguments []string) (err error)
-    RunContext is like Run except it takes a Context that will be passed to its
-    commands and sub-commands. Through this, you can propagate timeouts and
+    RunContext is like Run except it takes a Context that will be passed to
+    its commands and sub-commands. Through this, you can propagate timeouts and
     cancellation requests
 
 func (a *App) Setup()
-    Setup runs initialization code to ensure all data structures are ready for
-    `Run` or inspection prior to `Run`. It is internally called by `Run`, but
-    will return early if setup has already happened.
+    Setup runs initialization code to ensure all data structures are ready
+    for `Run` or inspection prior to `Run`. It is internally called by `Run`,
+    but will return early if setup has already happened.
 
 func (a *App) ToFishCompletion() (string, error)
     ToFishCompletion creates a fish completion string for the `*App` The
@@ -791,9 +799,9 @@ func Exit(message interface{}, exitCode int) ExitCoder
     Exit wraps a message and exit code into an error, which by default is
     handled with a call to os.Exit during default error handling.
 
-    This is the simplest way to trigger a non-zero exit code for an App without
-    having to call os.Exit manually. During testing, this behavior can be
-    avoided by overiding the ExitErrHandler function on an App or the
+    This is the simplest way to trigger a non-zero exit code for an App
+    without having to call os.Exit manually. During testing, this behavior
+    can be avoided by overiding the ExitErrHandler function on an App or the
     package-global OsExiter function.
 
 func NewExitError(message interface{}, exitCode int) ExitCoder
@@ -1003,6 +1011,8 @@ func (f *Float64SliceFlag) GetCategory() string
 func (f *Float64SliceFlag) GetDefaultText() string
     GetDefaultText returns the default text for this flag
 
+func (f *Float64SliceFlag) GetDestination() []float64
+
 func (f *Float64SliceFlag) GetEnvVars() []string
     GetEnvVars returns the env vars for this flag
 
@@ -1024,6 +1034,10 @@ func (f *Float64SliceFlag) IsVisible() bool
 
 func (f *Float64SliceFlag) Names() []string
     Names returns the names of the flag
+
+func (f *Float64SliceFlag) SetDestination(slice []float64)
+
+func (f *Float64SliceFlag) SetValue(slice []float64)
 
 func (f *Float64SliceFlag) String() string
     String returns a readable representation of this value (for usage defaults)
@@ -1059,7 +1073,7 @@ type GenericFlag struct {
 }
     GenericFlag is a flag with type Generic
 
-func (f GenericFlag) Apply(set *flag.FlagSet) error
+func (f *GenericFlag) Apply(set *flag.FlagSet) error
     Apply takes the flagset and calls Set on the generic flag with the value
     provided by the user for parsing by the flag
 
@@ -1117,6 +1131,8 @@ type Int64Flag struct {
 
 	Aliases []string
 	EnvVars []string
+
+	Base int
 }
     Int64Flag is a flag with type int64
 
@@ -1215,6 +1231,8 @@ func (f *Int64SliceFlag) GetCategory() string
 func (f *Int64SliceFlag) GetDefaultText() string
     GetDefaultText returns the default text for this flag
 
+func (f *Int64SliceFlag) GetDestination() []int64
+
 func (f *Int64SliceFlag) GetEnvVars() []string
     GetEnvVars returns the env vars for this flag
 
@@ -1236,6 +1254,10 @@ func (f *Int64SliceFlag) IsVisible() bool
 
 func (f *Int64SliceFlag) Names() []string
     Names returns the names of the flag
+
+func (f *Int64SliceFlag) SetDestination(slice []int64)
+
+func (f *Int64SliceFlag) SetValue(slice []int64)
 
 func (f *Int64SliceFlag) String() string
     String returns a readable representation of this value (for usage defaults)
@@ -1260,6 +1282,8 @@ type IntFlag struct {
 
 	Aliases []string
 	EnvVars []string
+
+	Base int
 }
     IntFlag is a flag with type int
 
@@ -1362,6 +1386,8 @@ func (f *IntSliceFlag) GetCategory() string
 func (f *IntSliceFlag) GetDefaultText() string
     GetDefaultText returns the default text for this flag
 
+func (f *IntSliceFlag) GetDestination() []int
+
 func (f *IntSliceFlag) GetEnvVars() []string
     GetEnvVars returns the env vars for this flag
 
@@ -1384,6 +1410,10 @@ func (f *IntSliceFlag) IsVisible() bool
 func (f *IntSliceFlag) Names() []string
     Names returns the names of the flag
 
+func (f *IntSliceFlag) SetDestination(slice []int)
+
+func (f *IntSliceFlag) SetValue(slice []int)
+
 func (f *IntSliceFlag) String() string
     String returns a readable representation of this value (for usage defaults)
 
@@ -1395,6 +1425,22 @@ type MultiError interface {
 	Errors() []error
 }
     MultiError is an error that wraps multiple errors.
+
+type MultiFloat64Flag = SliceFlag[*Float64SliceFlag, []float64, float64]
+    MultiFloat64Flag extends Float64SliceFlag with support for using slices
+    directly, as Value and/or Destination. See also SliceFlag.
+
+type MultiInt64Flag = SliceFlag[*Int64SliceFlag, []int64, int64]
+    MultiInt64Flag extends Int64SliceFlag with support for using slices
+    directly, as Value and/or Destination. See also SliceFlag.
+
+type MultiIntFlag = SliceFlag[*IntSliceFlag, []int, int]
+    MultiIntFlag extends IntSliceFlag with support for using slices directly,
+    as Value and/or Destination. See also SliceFlag.
+
+type MultiStringFlag = SliceFlag[*StringSliceFlag, []string, string]
+    MultiStringFlag extends StringSliceFlag with support for using slices
+    directly, as Value and/or Destination. See also SliceFlag.
 
 type OnUsageErrorFunc func(cCtx *Context, err error, isSubcommand bool) error
     OnUsageErrorFunc is executed if a usage error occurs. This is useful for
@@ -1471,14 +1517,75 @@ type RequiredFlag interface {
 
 	IsRequired() bool
 }
-    RequiredFlag is an interface that allows us to mark flags as required it
-    allows flags required flags to be backwards compatible with the Flag
+    RequiredFlag is an interface that allows us to mark flags as required
+    it allows flags required flags to be backwards compatible with the Flag
     interface
 
 type Serializer interface {
 	Serialize() string
 }
     Serializer is used to circumvent the limitations of flag.FlagSet.Set
+
+type SliceFlag[T SliceFlagTarget[E], S ~[]E, E any] struct {
+	Target      T
+	Value       S
+	Destination *S
+}
+    SliceFlag extends implementations like StringSliceFlag and IntSliceFlag
+    with support for using slices directly, as Value and/or Destination.
+    See also SliceFlagTarget, MultiStringFlag, MultiFloat64Flag, MultiInt64Flag,
+    MultiIntFlag.
+
+func (x *SliceFlag[T, S, E]) Apply(set *flag.FlagSet) error
+
+func (x *SliceFlag[T, S, E]) GetCategory() string
+
+func (x *SliceFlag[T, S, E]) GetDefaultText() string
+
+func (x *SliceFlag[T, S, E]) GetDestination() S
+
+func (x *SliceFlag[T, S, E]) GetEnvVars() []string
+
+func (x *SliceFlag[T, S, E]) GetUsage() string
+
+func (x *SliceFlag[T, S, E]) GetValue() string
+
+func (x *SliceFlag[T, S, E]) IsRequired() bool
+
+func (x *SliceFlag[T, S, E]) IsSet() bool
+
+func (x *SliceFlag[T, S, E]) IsVisible() bool
+
+func (x *SliceFlag[T, S, E]) Names() []string
+
+func (x *SliceFlag[T, S, E]) SetDestination(slice S)
+
+func (x *SliceFlag[T, S, E]) SetValue(slice S)
+
+func (x *SliceFlag[T, S, E]) String() string
+
+func (x *SliceFlag[T, S, E]) TakesValue() bool
+
+type SliceFlagTarget[E any] interface {
+	Flag
+	RequiredFlag
+	DocGenerationFlag
+	VisibleFlag
+	CategorizableFlag
+
+	// SetValue should propagate the given slice to the target, ideally as a new value.
+	// Note that a nil slice should nil/clear any existing value (modelled as ~[]E).
+	SetValue(slice []E)
+	// SetDestination should propagate the given slice to the target, ideally as a new value.
+	// Note that a nil slice should nil/clear any existing value (modelled as ~*[]E).
+	SetDestination(slice []E)
+	// GetDestination should return the current value referenced by any destination, or nil if nil/unset.
+	GetDestination() []E
+}
+    SliceFlagTarget models a target implementation for use with SliceFlag. The
+    three methods, SetValue, SetDestination, and GetDestination, are necessary
+    to propagate Value and Destination, where Value is propagated inwards
+    (initially), and Destination is propagated outwards (on every update).
 
 type StringFlag struct {
 	Name string
@@ -1599,6 +1706,8 @@ func (f *StringSliceFlag) GetCategory() string
 func (f *StringSliceFlag) GetDefaultText() string
     GetDefaultText returns the default text for this flag
 
+func (f *StringSliceFlag) GetDestination() []string
+
 func (f *StringSliceFlag) GetEnvVars() []string
     GetEnvVars returns the env vars for this flag
 
@@ -1620,6 +1729,10 @@ func (f *StringSliceFlag) IsVisible() bool
 
 func (f *StringSliceFlag) Names() []string
     Names returns the names of the flag
+
+func (f *StringSliceFlag) SetDestination(slice []string)
+
+func (f *StringSliceFlag) SetValue(slice []string)
 
 func (f *StringSliceFlag) String() string
     String returns a readable representation of this value (for usage defaults)
@@ -1647,6 +1760,9 @@ func (t *Timestamp) Set(value string) error
 
 func (t *Timestamp) SetLayout(layout string)
     Set the timestamp string layout for future parsing
+
+func (t *Timestamp) SetLocation(loc *time.Location)
+    Set perceived timezone of the to-be parsed time string
 
 func (t *Timestamp) SetTimestamp(value time.Time)
     Set the timestamp value directly
@@ -1676,6 +1792,8 @@ type TimestampFlag struct {
 	EnvVars []string
 
 	Layout string
+
+	Timezone *time.Location
 }
     TimestampFlag is a flag with type *Timestamp
 
@@ -1736,6 +1854,8 @@ type Uint64Flag struct {
 
 	Aliases []string
 	EnvVars []string
+
+	Base int
 }
     Uint64Flag is a flag with type uint64
 
@@ -1796,6 +1916,8 @@ type UintFlag struct {
 
 	Aliases []string
 	EnvVars []string
+
+	Base int
 }
     UintFlag is a flag with type uint
 
@@ -1872,9 +1994,9 @@ func InitInputSource(flags []cli.Flag, createInputSource func() (InputSourceCont
     that are supported by the input source
 
 func InitInputSourceWithContext(flags []cli.Flag, createInputSource func(cCtx *cli.Context) (InputSourceContext, error)) cli.BeforeFunc
-    InitInputSourceWithContext is used to to setup an InputSourceContext on a
-    cli.Command Before method. It will create a new input source based on the
-    func provided with potentially using existing cli.Context values to
+    InitInputSourceWithContext is used to to setup an InputSourceContext on
+    a cli.Command Before method. It will create a new input source based on
+    the func provided with potentially using existing cli.Context values to
     initialize itself. If there is no error it will then apply the new input
     source to any flags that are supported by the input source
 
