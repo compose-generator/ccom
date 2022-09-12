@@ -13,8 +13,8 @@ jobs:
     strategy:
       matrix:
         go-version:
-          - 1.17.x
           - 1.18.x
+          - 1.19.x
         os:
           - ubuntu-latest
           - windows-latest
@@ -48,7 +48,7 @@ jobs:
 
       - name: Install GoSec
         shell: bash
-        run: curl -sfL https://raw.githubusercontent.com/securego/gosec/v2.11.0/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.11.0
+        run: curl -sfL https://raw.githubusercontent.com/securego/gosec/v2.13.1/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.13.1
 
       - name: Run security scan
         working-directory: cli
