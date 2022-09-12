@@ -52,7 +52,7 @@ jobs:
           mkdir -p ./lib/json
           cd lib
           git clone https://github.com/google/googletest.git
-          curl -sSL "https://github.com/nlohmann/json/releases/download/v3.10.5/json.hpp" --output json/json.hpp
+          curl -sSL "https://github.com/nlohmann/json/releases/download/v3.11.2/json.hpp" --output json/json.hpp
 
       - name: Build project
         uses: nicledomaS/cmake_build_action@v1.4

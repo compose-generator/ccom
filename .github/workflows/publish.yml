@@ -35,8 +35,8 @@ jobs:
         run: |
           mkdir -p ./compiler/cpp/lib/json
           cd ./compiler/cpp/lib
-          git clone https://github.com/google/googletest.git
-          curl -sSL https://github.com/nlohmann/json/releases/download/v3.10.5/json.hpp --output json/json.hpp
+          git clone --depth 1 --branch release-1.12.1 https://github.com/google/googletest.git
+          curl -sSL https://github.com/nlohmann/json/releases/download/v3.11.2/json.hpp --output json/json.hpp
       
       - name: Configure
         run: ./dockcross cmake -Bbin -H./compiler/cpp -GNinja
@@ -84,7 +84,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: 1.18
+          go-version: 1.19
 
       - name: Restore Go modules cache
         uses: actions/cache@v3
@@ -124,7 +124,7 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v3
         with:
-          version: v1.9.1
+          version: v1.11.2
           args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
