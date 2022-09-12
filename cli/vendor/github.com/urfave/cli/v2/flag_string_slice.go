@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -73,7 +74,7 @@ func (s *StringSlice) Get() interface{} {
 // String returns a readable representation of this value
 // (for usage defaults)
 func (f *StringSliceFlag) String() string {
-	return withEnvHint(f.GetEnvVars(), stringifyStringSliceFlag(f))
+	return withEnvHint(f.GetEnvVars(), f.stringify())
 }
 
 // TakesValue returns true of the flag takes a value, otherwise false
@@ -115,41 +116,36 @@ func (f *StringSliceFlag) GetEnvVars() []string {
 
 // Apply populates the flag given the flag set and environment
 func (f *StringSliceFlag) Apply(set *flag.FlagSet) error {
-
+	// apply any default
 	if f.Destination != nil && f.Value != nil {
 		f.Destination.slice = make([]string, len(f.Value.slice))
 		copy(f.Destination.slice, f.Value.slice)
+	}
 
+	// resolve setValue (what we will assign to the set)
+	var setValue *StringSlice
+	switch {
+	case f.Destination != nil:
+		setValue = f.Destination
+	case f.Value != nil:
+		setValue = f.Value.clone()
+	default:
+		setValue = new(StringSlice)
 	}
 
 	if val, source, found := flagFromEnvOrFile(f.EnvVars, f.FilePath); found {
-		if f.Value == nil {
-			f.Value = &StringSlice{}
-		}
-		destination := f.Value
-		if f.Destination != nil {
-			destination = f.Destination
-		}
-
 		for _, s := range flagSplitMultiValues(val) {
-			if err := destination.Set(strings.TrimSpace(s)); err != nil {
+			if err := setValue.Set(strings.TrimSpace(s)); err != nil {
 				return fmt.Errorf("could not parse %q as string value from %s for flag %s: %s", val, source, f.Name, err)
 			}
 		}
 
 		// Set this to false so that we reset the slice if we then set values from
 		// flags that have already been set by the environment.
-		destination.hasBeenSet = false
+		setValue.hasBeenSet = false
 		f.HasBeenSet = true
 	}
 
-	if f.Value == nil {
-		f.Value = &StringSlice{}
-	}
-	setValue := f.Destination
-	if f.Destination == nil {
-		setValue = f.Value.clone()
-	}
 	for _, name := range f.Names() {
 		set.Var(setValue, name, f.Usage)
 	}
@@ -160,6 +156,19 @@ func (f *StringSliceFlag) Apply(set *flag.FlagSet) error {
 // Get returns the flag’s value in the given Context.
 func (f *StringSliceFlag) Get(ctx *Context) []string {
 	return ctx.StringSlice(f.Name)
+}
+
+func (f *StringSliceFlag) stringify() string {
+	var defaultVals []string
+	if f.Value != nil && len(f.Value.Value()) > 0 {
+		for _, s := range f.Value.Value() {
+			if len(s) > 0 {
+				defaultVals = append(defaultVals, strconv.Quote(s))
+			}
+		}
+	}
+
+	return stringifySliceFlag(f.Usage, f.Names(), defaultVals)
 }
 
 // StringSlice looks up the value of a local StringSliceFlag, returns
@@ -174,7 +183,7 @@ func (cCtx *Context) StringSlice(name string) []string {
 func lookupStringSlice(name string, set *flag.FlagSet) []string {
 	f := set.Lookup(name)
 	if f != nil {
-		if slice, ok := f.Value.(*StringSlice); ok {
+		if slice, ok := unwrapFlagValue(f.Value).(*StringSlice); ok {
 			return slice.Value()
 		}
 	}
