@@ -3,7 +3,7 @@ module ccom
 go 1.18
 
 require (
-	github.com/AlecAivazis/survey/v2 v2.3.5
+	github.com/AlecAivazis/survey/v2 v2.3.6
 	github.com/cli/safeexec v1.0.0
 	github.com/fatih/color v1.13.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
