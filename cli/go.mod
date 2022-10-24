@@ -8,7 +8,7 @@ require (
 	github.com/fatih/color v1.13.0
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
 	github.com/stretchr/testify v1.8.0
-	github.com/urfave/cli/v2 v2.20.2
+	github.com/urfave/cli/v2 v2.20.3
 )
 
 require (
