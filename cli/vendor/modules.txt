@@ -3,7 +3,7 @@
 github.com/AlecAivazis/survey/v2
 github.com/AlecAivazis/survey/v2/core
 github.com/AlecAivazis/survey/v2/terminal
-# github.com/cli/safeexec v1.0.0
+# github.com/cli/safeexec v1.0.1
 ## explicit; go 1.15
 github.com/cli/safeexec
 # github.com/cpuguy83/go-md2man/v2 v2.0.2
