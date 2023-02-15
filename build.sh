@@ -9,6 +9,4 @@ cd ../bin
 cmake -DCMAKE_BUILD_TYPE=Release ../compiler/cpp
 make
 
-mv ./src/CCom_run ./ccomc
-
 cd ..
