@@ -5,16 +5,17 @@ All rights reserved.
 
 #pragma once
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
 
 class FileReader {
 private:
-    std::string dirPath;
+  std::string dirPath;
+
 public:
-    FileReader(): dirPath("../test-files/") {}
-    explicit FileReader(std::string folderPath): dirPath(std::move(folderPath)) {}
-    std::string fileToString(const std::string& subDir, const std::string& fileName);
+  FileReader() : dirPath("../test-files/") {}
+  explicit FileReader(std::string folderPath) : dirPath(std::move(folderPath)) {}
+  std::string fileToString(const std::string &subDir, const std::string &fileName);
 };
