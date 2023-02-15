@@ -5,35 +5,40 @@ All rights reserved.
 
 #pragma once
 
-#include <string>
 #include <stdexcept>
+#include <string>
+
+#include <exception/IncompatibleTypesException.h>
+#include <exception/UnknownDataTypeException.h>
+#include <parser/ASTNodes.h>
+#include <parser/Parser.h>
+#include <util/JSONParser.h>
+
 #include "../../lib/json/json.hpp"
-#include "../parser/Parser.h"
-#include "../util/JSONParser.h"
-#include "../exception/IncompatibleTypesException.h"
-#include "../exception/UnknownDataTypeException.h"
 
 using json = nlohmann::json;
 
 class Analyzer {
 public:
-    // Constructors
-    explicit Analyzer() {}
-    Analyzer(bool, const std::string&, JSONParser, const std::string&, const std::string&, const std::string&);
+  // Constructors
+  Analyzer() = default;
+  Analyzer(bool, const std::string &, JSONParser, const std::string &, const std::string &, const std::string &);
 
-    // Public methods
-    TopLevelExprAST* getAST();
-    void executeAnalysis();
+  // Public methods
+  void executeAnalysis();
+
+  // Members
+  ASTRootNode *ast = nullptr;
+
 private:
-    // Private methods
-    void checkDataTypeCompatibility();
-    void checkDataTypeCompatibilityContent(ContentExprAST*);
-    void checkDataTypeCompatibilityStmtList(StmtLstExprAST*);
-    void checkDataTypeCompatibilityCompStmt(CompStmtExprAST*);
+  // Private methods
+  void checkDataTypeCompatibility();
+  void checkDataTypeCompatibilityContent(ASTContentExprNode *);
+  void checkDataTypeCompatibilityStmtList(ASTStmtListNode *);
+  void checkDataTypeCompatibilityCompStmt(ASTCompStmtNode *);
 
-    // Members
-    Parser parser;
-    JSONParser jsonParser;
-    TopLevelExprAST* ast = nullptr;
-    bool isSingleStatement = false;
+  // Members
+  Parser parser;
+  JSONParser jsonParser;
+  bool isSingleStatement = false;
 };

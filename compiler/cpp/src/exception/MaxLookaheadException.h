@@ -9,14 +9,15 @@ All rights reserved.
 
 class MaxLookaheadException : public std::exception {
 public:
-    // Constructors
-    explicit MaxLookaheadException(unsigned int maxLookahead) {
-        errorMessage = "Invalid maximum lookahead '" + std::to_string(maxLookahead) + "' specified. Must be >= 1";
-    }
+  // Constructors
+  explicit MaxLookaheadException(unsigned int maxLookahead) {
+    errorMessage = "Invalid maximum lookahead '" + std::to_string(maxLookahead) + "' specified. Must be >= 1";
+  }
 
-    // Public methods
-    const char * what() const noexcept override;
+  // Public methods
+  [[nodiscard]] const char *what() const noexcept override { return errorMessage.c_str(); }
+
 private:
-    // Members
-    std::string errorMessage {};
+  // Members
+  std::string errorMessage{};
 };
