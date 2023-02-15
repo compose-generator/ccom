@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - name: Prepare builder
         run: |
           docker run --rm dockcross/${{ matrix.arch_name }} > ./dockcross
@@ -37,7 +37,7 @@ jobs:
           cd ./compiler/cpp/lib
           git clone --depth 1 --branch release-1.12.1 https://github.com/google/googletest.git
           curl -sSL https://github.com/nlohmann/json/releases/download/v3.11.2/json.hpp --output json/json.hpp
-      
+
       - name: Configure
         run: ./dockcross cmake -Bbin -H./compiler/cpp -GNinja
 
@@ -47,14 +47,7 @@ jobs:
       - name: Process build output - Linux
         if: ${{ startsWith(matrix.arch_name, 'linux') }}
         working-directory: bin
-        run: |
-          mv ./src/CCom_run ccomc
-          chmod +x ccomc
-          
-      - name: Process build output - Windows
-        if: ${{ startsWith(matrix.arch_name, 'windows') }}
-        working-directory: bin
-        run: mv ./src/CCom_run.exe ccomc.exe
+        run: chmod +x ccomc
 
       - name: Upload artifact
         uses: actions/upload-artifact@v3
@@ -77,7 +70,7 @@ jobs:
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
-        
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
@@ -186,11 +179,11 @@ jobs:
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-xenial/"
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-trusty/"
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-jammy/"
-      
+
       - name: Deploy to CentOS repo
         run: |
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --upload-file ./ccom_${{ matrix.arch }}.rpm ${{ secrets.NEXUS_URL }}/centos/ccom/${{ steps.get_version.outputs.version }}/compose-generator-${{ matrix.arch }}.rpm
-      
+
       - name: Deploy to Fedora repo
         run: |
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --upload-file ./ccom_${{ matrix.arch }}.rpm ${{ secrets.NEXUS_URL }}/fedora/ccom/${{ steps.get_version.outputs.version }}/compose-generator-${{ matrix.arch }}.rpm
@@ -261,14 +254,6 @@ jobs:
           asset_name: ccom_${{ matrix.config.label }}_setup.msi
           tag: ${{ github.ref }}
 
-
-      - uses: vedantmgoyal2009/winget-releaser@v1
-        with:
-          identifier: ChilliBits.CCom
-          version: ${{ github.ref_name }}
-          release-tag: ${{ github.ref_name }}
-          token: ${{ secrets.CR_PAT }}
-
   deploy-win-installers:
     name: Deploy installers
     if: startsWith(github.ref, 'refs/tags/')
@@ -276,10 +261,9 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: vedantmgoyal2009/winget-releaser@v1
+      - uses: vedantmgoyal2009/winget-releaser@v2
         with:
           identifier: ChilliBits.CCom
           version: ${{ github.ref }}
           release-tag: ${{ github.ref }}
           token: ${{ secrets.CR_PAT }}
-

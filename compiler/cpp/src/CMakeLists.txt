@@ -1,5 +1,3 @@
-set(BINARY ${CMAKE_PROJECT_NAME})
-
 set(SOURCES
         main.cpp
         util/JSONParser.cpp
@@ -13,6 +11,7 @@ set(SOURCES
         parser/Parser.cpp
         parser/Parser.h
         parser/ASTNodes.h
+        parser/ASTNodes.cpp
         analyzer/Analyzer.cpp
         analyzer/Analyzer.h
         interpreter/Interpreter.cpp
@@ -25,6 +24,6 @@ set(SOURCES
         exception/UnknownDataTypeException.h
         exception/UnexpectedDataTypeException.h)
 
-add_executable(${BINARY}_run ${SOURCES})
+add_executable(ccomc ${SOURCES})
 
-add_library(${BINARY}_lib STATIC ${SOURCES} parser/ASTNodes.cpp)
+add_library(ccomclib STATIC ${SOURCES})
