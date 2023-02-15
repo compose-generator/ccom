@@ -72,6 +72,6 @@ private:
     Reader reader;
     Context currentContext;
     Token curTok;
-    unsigned int tokenStartLineNum;
-    unsigned int tokenStartColNum;
+    unsigned int tokenStartLineNum = 0;
+    unsigned int tokenStartColNum = 0;
 };

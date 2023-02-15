@@ -9,14 +9,13 @@ All rights reserved.
 
 class UnknownDataTypeException : public std::exception {
 public:
-    // Constructors
-    explicit UnknownDataTypeException(const std::string& valueDump) {
-        errorMessage = "Unknown data type: '" + valueDump;
-    }
+  // Constructors
+  explicit UnknownDataTypeException(const std::string &valueDump) { errorMessage = "Unknown data type: '" + valueDump; }
 
-    // Public methods
-    const char * what() const noexcept override;
+  // Public methods
+  [[nodiscard]] const char *what() const noexcept override { return errorMessage.c_str(); }
+
 private:
-    // Members
-    std::string errorMessage {};
+  // Members
+  std::string errorMessage{};
 };
