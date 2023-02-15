@@ -261,6 +261,14 @@ jobs:
           asset_name: ccom_${{ matrix.config.label }}_setup.msi
           tag: ${{ github.ref }}
 
+
+      - uses: vedantmgoyal2009/winget-releaser@v1
+        with:
+          identifier: ChilliBits.CCom
+          version: ${{ github.ref_name }}
+          release-tag: ${{ github.ref_name }}
+          token: ${{ secrets.CR_PAT }}
+
   deploy-win-installers:
     name: Deploy installers
     if: startsWith(github.ref, 'refs/tags/')
@@ -268,8 +276,10 @@ jobs:
     runs-on: windows-latest
 
     steps:
-      - uses: vedantmgoyal2009/winget-releaser@latest
+      - uses: vedantmgoyal2009/winget-releaser@v1
         with:
           identifier: ChilliBits.CCom
+          version: ${{ github.ref }}
           release-tag: ${{ github.ref }}
           token: ${{ secrets.CR_PAT }}
+
