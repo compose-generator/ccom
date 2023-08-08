@@ -1,4 +1,4 @@
-FROM alpine:3.18.2
+FROM alpine:3.18.3
 WORKDIR /ccom/out
 
 # Set env variables
