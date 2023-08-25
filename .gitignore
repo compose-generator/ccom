@@ -6,4 +6,5 @@
 
 # Build output
 bin/*
+build/*
 *.exe

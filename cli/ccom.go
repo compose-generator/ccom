@@ -1,5 +1,5 @@
 /*
-Copyright © 2021-2022 Compose Generator Contributors
+Copyright © 2021-2023 Compose Generator Contributors
 All rights reserved.
 */
 
@@ -37,7 +37,7 @@ func main() {
 		Authors: []*cli.Author{
 			{Name: "Marc Auberer", Email: "marc.auberer@chillibits.com"},
 		},
-		Copyright: "© 2021-2022 Marc Auberer",
+		Copyright: "© 2021-2023 Marc Auberer",
 		Usage:     "Evaluate conditional comment sections of data files.",
 		Flags:     cmd.CompileCliFlags,
 		Action:    cmd.Compile,
