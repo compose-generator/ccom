@@ -359,8 +359,12 @@ type PtraceIoDesc struct {
 	Addr *byte
 =======
 	Offs uintptr
+<<<<<<< HEAD
 	Addr uintptr
 >>>>>>> 76eeb1a (Bump github.com/fatih/color from 1.13.0 to 1.14.0 in /cli (#199))
+=======
+	Addr *byte
+>>>>>>> 20c770a (Update dependencies)
 	Len  uint64
 }
 
