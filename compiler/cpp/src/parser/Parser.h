@@ -1,65 +1,49 @@
 /*
-Copyright © 2021-2022 Compose Generator Contributors
+Copyright © 2021-2023 Compose Generator Contributors
 All rights reserved.
 */
 
-# pragma once
+#pragma once
 
+#include <lexer/Lexer.h>
 #include <memory>
+#include <parser/ASTNodes.h>
 #include <stdexcept>
-#include "../lexer/Lexer.h"
-#include "ast/TopLevelExprAST.h"
-#include "ast/ArbitraryExprAST.h"
-#include "ast/NumberExprAST.h"
-#include "ast/BooleanExprAST.h"
-#include "ast/StringExprAST.h"
-#include "ast/IdentifierExprAST.h"
-#include "ast/StmtExprAST.h"
-#include "ast/StmtLstExprAST.h"
-#include "ast/KeyExprAST.h"
-#include "ast/PayloadExprAST.h"
-#include "ast/IfBlockExprAST.h"
-#include "ast/CompStmtExprAST.h"
-#include "ast/HasStmtExprAST.h"
-#include "ast/ContainsStmtExprAST.h"
-#include "ast/ComBlockBlockExprAST.h"
-#include "ast/ComLineBlockExprAST.h"
-#include "ast/SectionExprAST.h"
-#include "ast/ContentExprAST.h"
 
 class Parser {
 public:
-    // Constructors
-    explicit Parser() {}
-    Parser(bool, const std::string&, const std::string&, const std::string&, const std::string&);
+  // Constructors
+  Parser() = default;
+  Parser(bool, const std::string &, const std::string &, const std::string &, const std::string &);
 
-    // Public methods
-    TopLevelExprAST* parseAST();
+  // Public methods
+  ASTRootNode *parseAST();
+
 private:
-    // Private methods
-    std::unique_ptr<ContentExprAST> parseContent();
-    std::unique_ptr<ArbitraryExprAST> parseArbitrary();
-    std::unique_ptr<PayloadExprAST> parsePayload();
-    std::unique_ptr<SectionExprAST> parseSection();
-    std::unique_ptr<StmtLstExprAST> parseStmtList();
-    std::unique_ptr<StmtExprAST> parseStmt();
-    std::unique_ptr<HasStmtExprAST> parseHasStmt();
-    std::unique_ptr<StmtExprAST> parseCompOrContainsStmt();
-    std::unique_ptr<CompStmtExprAST> parseCompStmt(std::unique_ptr<KeyExprAST>);
-    std::unique_ptr<ContainsStmtExprAST> parseContainsStmt(std::unique_ptr<KeyExprAST>);
-    std::unique_ptr<IfBlockExprAST> parseIfBlockComLine();
-    std::unique_ptr<IfBlockExprAST> parseIfBlockComBlock();
-    std::unique_ptr<ComLineBlockExprAST> parseComLineBlock();
-    std::unique_ptr<ComBlockBlockExprAST> parseComBlockBlock();
-    std::unique_ptr<KeyExprAST> parseKey();
-    std::unique_ptr<IdentifierExprAST> parseIdentifier();
-    std::unique_ptr<ValueExprAST> parseValue();
-    std::unique_ptr<StringExprAST> parseString();
-    std::unique_ptr<BooleanExprAST> parseBoolean();
-    std::unique_ptr<NumberExprAST> parseNumber();
-    Operator parseOperator();
+  // Private methods
+  std::unique_ptr<ASTContentExprNode> parseContent();
+  std::unique_ptr<ASTArbitraryExprNode> parseArbitrary();
+  std::unique_ptr<ASTPayloadExprNode> parsePayload();
+  std::unique_ptr<ASTSectionExprNode> parseSection();
+  std::unique_ptr<ASTStmtListNode> parseStmtList();
+  std::unique_ptr<ASTStmtNode> parseStmt();
+  std::unique_ptr<ASTHasStmtNode> parseHasStmt();
+  std::unique_ptr<ASTStmtNode> parseCompOrContainsStmt();
+  std::unique_ptr<ASTCompStmtNode> parseCompStmt(std::unique_ptr<ASTKeyExprNode>);
+  std::unique_ptr<ASTContainsStmtNode> parseContainsStmt(std::unique_ptr<ASTKeyExprNode>);
+  std::unique_ptr<ASTIfBlockExprNode> parseIfBlockComLine();
+  std::unique_ptr<ASTIfBlockExprNode> parseIfBlockComBlock();
+  std::unique_ptr<ASTComLineBlockExprNode> parseComLineBlock();
+  std::unique_ptr<ASTComBlockBlockExprNode> parseComBlockBlock();
+  std::unique_ptr<ASTKeyExprNode> parseKey();
+  std::unique_ptr<ASTIdentifierExprNode> parseIdentifier();
+  std::unique_ptr<ASTValueExprNode> parseValue();
+  std::unique_ptr<ASTStringExprNode> parseString();
+  std::unique_ptr<ASTBooleanExprNode> parseBoolean();
+  std::unique_ptr<ASTNumberExprNode> parseNumber();
+  Operator parseOperator();
 
-    // Members
-    bool isSingleStatement;
-    Lexer lexer;
+  // Members
+  bool isSingleStatement;
+  Lexer lexer;
 };

@@ -1,5 +1,5 @@
 /*
-Copyright © 2021-2022 Compose Generator Contributors
+Copyright © 2021-2023 Compose Generator Contributors
 All rights reserved.
 */
 
@@ -72,6 +72,6 @@ private:
     Reader reader;
     Context currentContext;
     Token curTok;
-    unsigned int tokenStartLineNum;
-    unsigned int tokenStartColNum;
+    unsigned int tokenStartLineNum = 0;
+    unsigned int tokenStartColNum = 0;
 };
