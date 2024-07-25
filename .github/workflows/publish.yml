@@ -24,7 +24,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Prepare builder
         run: |
           docker run --rm dockcross/${{ matrix.arch_name }} > ./dockcross
