@@ -1,6 +1,4 @@
-set(BINARY ${CMAKE_PROJECT_NAME}_test)
-
-add_executable(${BINARY}
+add_executable(ccomctest
         main.cpp
         ReaderTest.cpp
         LexerTest.cpp
@@ -12,8 +10,8 @@ add_executable(${BINARY}
         util/FileReader.cpp
         util/FileReader.h)
 
-add_test(NAME ${BINARY} COMMAND ${BINARY})
+add_test(NAME ccomctest COMMAND ccomctest)
 
-target_link_libraries(${BINARY} PUBLIC ${CMAKE_PROJECT_NAME}_lib gtest)
+target_link_libraries(ccomctest PUBLIC ccomclib gtest)
 
-file(COPY test-files DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(CREATE_LINK ${CMAKE_CURRENT_SOURCE_DIR}/test-files ${CMAKE_CURRENT_BINARY_DIR}/test-files SYMBOLIC)
