@@ -1,6 +1,6 @@
 module ccom
 
-go 1.21
+go 1.23
 
 require (
 	github.com/AlecAivazis/survey/v2 v2.3.7
