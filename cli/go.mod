@@ -21,14 +21,8 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1 // indirect
-<<<<<<< HEAD
-	golang.org/x/sys v0.18.0 // indirect
->>>>>>> 3d19add (Bump github.com/fatih/color from 1.16.0 to 1.17.0 in /cli (#278))
-=======
 	golang.org/x/sys v0.25.0 // indirect
->>>>>>> 7109b45 (Bump github.com/fatih/color from 1.17.0 to 1.18.0 in /cli (#311))
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	golang.org/x/text v0.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
->>>>>>> 20c770a (Update dependencies)

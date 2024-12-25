@@ -309,8 +309,6 @@ type __Siginfo struct {
 	Addr   *byte
 	Value  [4]byte
 	_      [32]byte
-<<<<<<< HEAD
-=======
 }
 
 type __PtraceSiginfo struct {
@@ -323,7 +321,6 @@ type __PtraceSiginfo struct {
 	Addr   uintptr
 	Value  [4]byte
 	_      [32]byte
->>>>>>> 76eeb1a (Bump github.com/fatih/color from 1.13.0 to 1.14.0 in /cli (#199))
 }
 
 type Sigset_t struct {

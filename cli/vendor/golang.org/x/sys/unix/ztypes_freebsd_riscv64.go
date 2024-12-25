@@ -290,11 +290,7 @@ type PtraceLwpInfoStruct struct {
 	Flags        int32
 	Sigmask      Sigset_t
 	Siglist      Sigset_t
-<<<<<<< HEAD
-	Siginfo      __Siginfo
-=======
 	Siginfo      __PtraceSiginfo
->>>>>>> 76eeb1a (Bump github.com/fatih/color from 1.13.0 to 1.14.0 in /cli (#199))
 	Tdname       [20]int8
 	Child_pid    int32
 	Syscall_code uint32
@@ -313,8 +309,6 @@ type __Siginfo struct {
 	_      [40]byte
 }
 
-<<<<<<< HEAD
-=======
 type __PtraceSiginfo struct {
 	Signo  int32
 	Errno  int32
@@ -327,7 +321,6 @@ type __PtraceSiginfo struct {
 	_      [40]byte
 }
 
->>>>>>> 76eeb1a (Bump github.com/fatih/color from 1.13.0 to 1.14.0 in /cli (#199))
 type Sigset_t struct {
 	Val [4]uint32
 }
@@ -353,17 +346,8 @@ type FpExtendedPrecision struct{}
 
 type PtraceIoDesc struct {
 	Op   int32
-<<<<<<< HEAD
-	Offs *byte
-	Addr *byte
-=======
 	Offs uintptr
-<<<<<<< HEAD
-	Addr uintptr
->>>>>>> 76eeb1a (Bump github.com/fatih/color from 1.13.0 to 1.14.0 in /cli (#199))
-=======
 	Addr *byte
->>>>>>> 20c770a (Update dependencies)
 	Len  uint64
 }
 

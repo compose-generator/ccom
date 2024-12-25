@@ -1545,11 +1545,7 @@ func sendmsgN(fd int, iov []Iovec, oob []byte, ptr unsafe.Pointer, salen _Sockle
 	var dummy byte
 	var empty bool
 	if len(oob) > 0 {
-<<<<<<< HEAD
-		empty := emptyIovecs(iov)
-=======
 		empty = emptyIovecs(iov)
->>>>>>> 76eeb1a (Bump github.com/fatih/color from 1.13.0 to 1.14.0 in /cli (#199))
 		if empty {
 			var sockType int
 			sockType, err = GetsockoptInt(fd, SOL_SOCKET, SO_TYPE)
@@ -1561,10 +1557,7 @@ func sendmsgN(fd int, iov []Iovec, oob []byte, ptr unsafe.Pointer, salen _Sockle
 				var iova [1]Iovec
 				iova[0].Base = &dummy
 				iova[0].SetLen(1)
-<<<<<<< HEAD
-=======
 				iov = iova[:]
->>>>>>> 76eeb1a (Bump github.com/fatih/color from 1.13.0 to 1.14.0 in /cli (#199))
 			}
 		}
 		msg.Control = &oob[0]

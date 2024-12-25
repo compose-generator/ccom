@@ -47,24 +47,14 @@ github.com/urfave/cli/v2
 # github.com/xrash/smetrics v0.0.0-20240521201337-686a1a2994c1
 ## explicit; go 1.15
 github.com/xrash/smetrics
-# golang.org/x/sys v0.0.0-20220722155257-8c9f86f7a55f
-## explicit; go 1.17
-golang.org/x/sys/internal/unsafeheader
+# golang.org/x/sys v0.25.0
+## explicit; go 1.18
 golang.org/x/sys/plan9
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # golang.org/x/term v0.0.0-20210927222741-03fcf44c2211
 ## explicit; go 1.17
 golang.org/x/term
-<<<<<<< HEAD
-<<<<<<< HEAD
-# golang.org/x/text v0.3.8
-## explicit; go 1.17
-=======
-# golang.org/x/text v0.3.3
-## explicit; go 1.11
->>>>>>> b5cac81 (Code optimizations)
-=======
 # golang.org/x/text v0.4.0
 ## explicit; go 1.17
 golang.org/x/text/cases
@@ -73,7 +63,6 @@ golang.org/x/text/internal/language
 golang.org/x/text/internal/language/compact
 golang.org/x/text/internal/tag
 golang.org/x/text/language
->>>>>>> 20c770a (Update dependencies)
 golang.org/x/text/transform
 golang.org/x/text/unicode/norm
 golang.org/x/text/width
