@@ -46,7 +46,16 @@ jobs:
       - name: Process build output - Linux
         if: ${{ startsWith(matrix.arch_name, 'linux') }}
         working-directory: bin
-        run: chmod +x ccomc
+        run: |
+          mv ./src/ccomc ccomc
+          chmod +x ccomc
+
+      - name: Process build output - Windows
+        if: ${{ startsWith(matrix.arch_name, 'windows') }}
+        working-directory: bin
+        run: |
+          mv ./src/ccomc.exe ccomc.exe
+          chmod +x ccomc.exe
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -117,7 +126,7 @@ jobs:
         uses: goreleaser/goreleaser-action@v6
         with:
           version: v2.5.0
-          args: release --rm-dist
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -157,7 +166,6 @@ jobs:
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-buster/"
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-stretch/"
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-jessie/"
-          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/debian-wheezy/"
 
       - name: Deploy to Raspbian
         run: |
@@ -167,13 +175,11 @@ jobs:
 
       - name: Deploy to Ubuntu repo
         run: |
-          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-hirsute/"
-          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-groovy/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-noble/"
+          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-jammy/"
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-focal/"
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-bionic/"
           curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-xenial/"
-          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-trusty/"
-          curl -sSf -u "${{ secrets.NEXUS_USERNAME }}:${{ secrets.NEXUS_PASSWORD }}" -H "Content-Type: multipart/form-data" --data-binary "@./ccom_${{ matrix.arch }}.deb" "${{ secrets.NEXUS_URL }}/ubuntu-jammy/"
 
       - name: Deploy to CentOS repo
         run: |
@@ -196,32 +202,31 @@ jobs:
       matrix:
         config:
           - {
-              arch: amd64, label: x64
+              arch: amd64,
+              label: x64
             }
           - {
-              arch: 386, label: x86
+              arch: 386,
+              label: x86
             }
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Get version name
-        id: get_version
-        uses: battila7/get-version-action@v2
+      - name: Install GoMSI
+        run: choco install -y go-msi
 
       - name: Download executables
         id: download_exe
         shell: bash
-        run: | # Remove the last command as soon as this is implemented: https://github.com/goreleaser/goreleaser/issues/1638
-          hub release download "${GITHUB_REF#refs/tags/}" -i '*windows_${{ matrix.config.arch }}*.zip'
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        run: |
+          gh release download "${GITHUB_REF#refs/tags/}" -p *windows_${{ matrix.config.arch }}*.zip
           printf "::set-output name=zip::%s\n" *.zip
           unzip -o *.zip && rm -v *.zip
           cp ./bin/ccomc-windows-${{ matrix.config.arch }}/ccomc.exe ./ccomc.exe
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-
-      - name: Install GoMSI
-        run: choco install -y go-msi
+          dir
 
       - name: Prepare PATH
         shell: bash
@@ -238,7 +243,7 @@ jobs:
           mkdir -p build
           msi="$(basename "$ZIP_FILE" ".zip").msi"
           printf "::set-output name=msi::%s\n" "$msi"
-          go-msi make --msi "$PWD/$msi" --out "$PWD/build" --version ${{ steps.get_version.outputs.version }}
+          go-msi make --msi "$PWD/$msi" --out "$PWD/build" --version ${{ github.ref_name }}
           printf "::set-output name=msi::%s\n" *.msi
 
       - name: Upload MSI
@@ -249,16 +254,12 @@ jobs:
           asset_name: ccom_${{ matrix.config.label }}_setup.msi
           tag: ${{ github.ref }}
 
-  deploy-win-installers:
-    name: Deploy installers
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: build-win-installers
-    runs-on: windows-latest
-
-    steps:
-      - uses: vedantmgoyal2009/winget-releaser@v2
+      - name: Deploy to WinGet
+        uses: vedantmgoyal2009/winget-releaser@v2
+        continue-on-error: true
         with:
           identifier: ChilliBits.CCom
-          version: ${{ github.ref }}
-          release-tag: ${{ github.ref }}
+          version: ${{ github.ref_name }}
+          release-tag: ${{ github.ref_name }}
           token: ${{ secrets.CR_PAT }}
+          max-versions-to-keep: 10
